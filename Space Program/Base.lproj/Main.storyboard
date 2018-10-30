@@ -1,22 +1,237 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13122.16" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BV1-FR-VrT">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="OrI-kO-Dhc">
+    <device id="retina5_9" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13104.12"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--Game View Controller-->
         <scene sceneID="tXr-a1-R10">
             <objects>
-                <viewController id="BV1-FR-VrT" customClass="GameViewController" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BV1-FR-VrT" customClass="GameViewController" customModule="Space_Program" customModuleProvider="target" sceneMemberID="viewController">
                     <sceneKitView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="3se-qz-xqx">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </sceneKitView>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SZV-WD-TEh" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="1670" y="-35"/>
+        </scene>
+        <!--SpaceCenter-->
+        <scene sceneID="G3c-Ec-JO6">
+            <objects>
+                <viewController title="SpaceCenter" id="AbV-6I-jUr" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="MN9-lG-PQY">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xMF-kc-pJr">
+                                <rect key="frame" x="89" y="232" width="47" height="44"/>
+                                <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="24"/>
+                                <state key="normal" title="VAB">
+                                    <color key="titleColor" red="1" green="0.36250000000000004" blue="0.15000000000000002" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="W4v-zH-nyU">
+                                <rect key="frame" x="80.666666666666671" y="168" width="64.000000000000014" height="64"/>
+                                <fontDescription key="fontDescription" name="Futura-Bold" family="Futura" pointSize="24"/>
+                                <state key="normal" image="VAB">
+                                    <color key="titleColor" red="1" green="0.33333333329999998" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JS3-x8-9YJ">
+                                <rect key="frame" x="230.66666666666663" y="212" width="64" height="64"/>
+                                <fontDescription key="fontDescription" name="Futura-Bold" family="Futura" pointSize="24"/>
+                                <state key="normal" image="LaunchPad">
+                                    <color key="titleColor" red="1" green="0.33333333329999998" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MbQ-yP-Hi0">
+                                <rect key="frame" x="216.66666666666663" y="464" width="92" height="44"/>
+                                <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="24"/>
+                                <state key="normal" title="Tracking">
+                                    <color key="titleColor" red="1" green="0.36250000000000004" blue="0.15000000000000002" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VOh-Xw-X2w">
+                                <rect key="frame" x="230.66666666666663" y="400" width="64" height="64"/>
+                                <fontDescription key="fontDescription" name="Futura-Bold" family="Futura" pointSize="24"/>
+                                <state key="normal" image="TrackingStation">
+                                    <color key="titleColor" red="1" green="0.33333333329999998" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pKL-Wo-fXb">
+                                <rect key="frame" x="71" y="420" width="83" height="44"/>
+                                <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="24"/>
+                                <state key="normal" title="Hangar">
+                                    <color key="titleColor" red="1" green="0.36250000000000004" blue="0.15000000000000002" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JUj-Qa-5aY">
+                                <rect key="frame" x="80.666666666666671" y="356" width="64.000000000000014" height="64"/>
+                                <fontDescription key="fontDescription" name="Futura-Bold" family="Futura" pointSize="24"/>
+                                <state key="normal" image="SPH">
+                                    <color key="titleColor" red="1" green="0.33333333329999998" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8YZ-q1-wcA">
+                                <rect key="frame" x="213" y="652" width="99" height="44"/>
+                                <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="24"/>
+                                <state key="normal" title="Research">
+                                    <color key="titleColor" red="1" green="0.36250000000000004" blue="0.15000000000000002" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Mxk-QX-E3F">
+                                <rect key="frame" x="230.66666666666663" y="588" width="64" height="64"/>
+                                <fontDescription key="fontDescription" name="Futura-Bold" family="Futura" pointSize="24"/>
+                                <state key="normal" image="SPH">
+                                    <color key="titleColor" red="1" green="0.33333333329999998" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QVv-ti-xjD">
+                                <rect key="frame" x="27.666666666666671" y="608" width="170" height="44"/>
+                                <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="24"/>
+                                <state key="normal" title="Mission Control">
+                                    <color key="titleColor" red="1" green="0.36250000000000004" blue="0.15000000000000002" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vhP-8S-9yb">
+                                <rect key="frame" x="80.666666666666671" y="544" width="64.000000000000014" height="64"/>
+                                <fontDescription key="fontDescription" name="Futura-Bold" family="Futura" pointSize="24"/>
+                                <state key="normal" image="SPH">
+                                    <color key="titleColor" red="1" green="0.33333333329999998" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                            </button>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1LN-K6-mju">
+                                <rect key="frame" x="104.66666666666667" y="276" width="16" height="80"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="16" id="Aff-9D-vkW"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wnK-ic-5eg">
+                                <rect key="frame" x="104.66666666666667" y="88" width="16" height="80"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="16" id="3Y1-02-Sjy"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MV6-fd-hh8">
+                                <rect key="frame" x="104.66666666666667" y="464" width="16" height="80"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="16" id="E0Y-ML-lxX"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="z0A-8Q-kkX">
+                                <rect key="frame" x="104.66666666666667" y="652" width="16" height="160"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="16" id="KJa-zE-Y5x"/>
+                                </constraints>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5db-kO-Ac7">
+                                <rect key="frame" x="200" y="276" width="125" height="44"/>
+                                <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="24"/>
+                                <state key="normal" title="Launch Pad">
+                                    <color key="titleColor" red="1" green="0.36250000000000004" blue="0.15000000000000002" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" red="0.95375569661458337" green="1" blue="0.93834092881944442" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="pKL-Wo-fXb" firstAttribute="top" secondItem="JUj-Qa-5aY" secondAttribute="bottom" id="1LH-r7-IwF"/>
+                            <constraint firstItem="JS3-x8-9YJ" firstAttribute="top" secondItem="W4v-zH-nyU" secondAttribute="top" constant="44" id="2np-b6-QKB"/>
+                            <constraint firstItem="ias-fd-tyh" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="8YZ-q1-wcA" secondAttribute="bottom" id="4y2-ns-WlO"/>
+                            <constraint firstItem="MV6-fd-hh8" firstAttribute="centerX" secondItem="W4v-zH-nyU" secondAttribute="centerX" id="7Fi-4G-H0Z"/>
+                            <constraint firstItem="W4v-zH-nyU" firstAttribute="top" secondItem="wnK-ic-5eg" secondAttribute="bottom" id="8ag-Sh-vW6"/>
+                            <constraint firstItem="z0A-8Q-kkX" firstAttribute="top" secondItem="QVv-ti-xjD" secondAttribute="bottom" id="8w8-h6-vJg"/>
+                            <constraint firstItem="JS3-x8-9YJ" firstAttribute="centerX" secondItem="MN9-lG-PQY" secondAttribute="centerX" multiplier="1.4" id="9Ty-fp-tkG"/>
+                            <constraint firstItem="xMF-kc-pJr" firstAttribute="centerX" secondItem="W4v-zH-nyU" secondAttribute="centerX" id="CWh-OQ-sTg"/>
+                            <constraint firstItem="vhP-8S-9yb" firstAttribute="top" secondItem="MV6-fd-hh8" secondAttribute="bottom" id="Cif-AA-k86"/>
+                            <constraint firstItem="VOh-Xw-X2w" firstAttribute="top" secondItem="JUj-Qa-5aY" secondAttribute="top" constant="44" id="DZm-Ci-WYf"/>
+                            <constraint firstItem="1LN-K6-mju" firstAttribute="top" secondItem="xMF-kc-pJr" secondAttribute="bottom" id="Ge9-D0-fos"/>
+                            <constraint firstItem="xMF-kc-pJr" firstAttribute="top" secondItem="W4v-zH-nyU" secondAttribute="bottom" id="H0i-ez-S8r"/>
+                            <constraint firstItem="z0A-8Q-kkX" firstAttribute="height" secondItem="MV6-fd-hh8" secondAttribute="height" multiplier="2" id="IY0-C2-TjA"/>
+                            <constraint firstItem="MbQ-yP-Hi0" firstAttribute="centerX" secondItem="JS3-x8-9YJ" secondAttribute="centerX" id="KDa-eI-coZ"/>
+                            <constraint firstItem="1LN-K6-mju" firstAttribute="height" secondItem="wnK-ic-5eg" secondAttribute="height" id="KbT-xj-G6t"/>
+                            <constraint firstItem="5db-kO-Ac7" firstAttribute="centerX" secondItem="JS3-x8-9YJ" secondAttribute="centerX" id="Lbw-Yk-hKE"/>
+                            <constraint firstItem="QVv-ti-xjD" firstAttribute="centerX" secondItem="W4v-zH-nyU" secondAttribute="centerX" id="OiW-hz-kjg"/>
+                            <constraint firstItem="JUj-Qa-5aY" firstAttribute="centerX" secondItem="W4v-zH-nyU" secondAttribute="centerX" id="PpU-Co-fQu"/>
+                            <constraint firstItem="wnK-ic-5eg" firstAttribute="centerX" secondItem="W4v-zH-nyU" secondAttribute="centerX" id="RY8-ou-Z1j"/>
+                            <constraint firstItem="W4v-zH-nyU" firstAttribute="centerX" secondItem="MN9-lG-PQY" secondAttribute="centerX" multiplier="0.6" id="SD7-Yf-bYe"/>
+                            <constraint firstItem="z0A-8Q-kkX" firstAttribute="centerX" secondItem="W4v-zH-nyU" secondAttribute="centerX" id="Sbb-AU-pZS"/>
+                            <constraint firstItem="QVv-ti-xjD" firstAttribute="top" secondItem="vhP-8S-9yb" secondAttribute="bottom" id="TAD-Gd-gQD"/>
+                            <constraint firstItem="vhP-8S-9yb" firstAttribute="centerX" secondItem="W4v-zH-nyU" secondAttribute="centerX" id="TLl-ZS-Qmg"/>
+                            <constraint firstItem="5db-kO-Ac7" firstAttribute="top" secondItem="JS3-x8-9YJ" secondAttribute="bottom" id="Ygw-ob-kIV"/>
+                            <constraint firstItem="8YZ-q1-wcA" firstAttribute="centerX" secondItem="JS3-x8-9YJ" secondAttribute="centerX" id="bZn-Oo-NCe"/>
+                            <constraint firstItem="MV6-fd-hh8" firstAttribute="height" secondItem="wnK-ic-5eg" secondAttribute="height" id="eRN-rZ-U4R"/>
+                            <constraint firstItem="JUj-Qa-5aY" firstAttribute="top" secondItem="1LN-K6-mju" secondAttribute="bottom" id="edQ-64-pvl"/>
+                            <constraint firstItem="wnK-ic-5eg" firstAttribute="top" secondItem="ias-fd-tyh" secondAttribute="top" id="gAa-kM-l6o"/>
+                            <constraint firstItem="8YZ-q1-wcA" firstAttribute="top" secondItem="Mxk-QX-E3F" secondAttribute="bottom" id="jkg-fs-X8m"/>
+                            <constraint firstItem="pKL-Wo-fXb" firstAttribute="centerX" secondItem="W4v-zH-nyU" secondAttribute="centerX" id="mcz-Wu-FPT"/>
+                            <constraint firstItem="Mxk-QX-E3F" firstAttribute="centerX" secondItem="JS3-x8-9YJ" secondAttribute="centerX" id="qd4-SH-OSU"/>
+                            <constraint firstAttribute="bottom" secondItem="z0A-8Q-kkX" secondAttribute="bottom" id="seM-0D-T2r"/>
+                            <constraint firstItem="MbQ-yP-Hi0" firstAttribute="top" secondItem="VOh-Xw-X2w" secondAttribute="bottom" id="smz-dh-2hZ"/>
+                            <constraint firstItem="VOh-Xw-X2w" firstAttribute="centerX" secondItem="JS3-x8-9YJ" secondAttribute="centerX" id="vEA-pb-wk4"/>
+                            <constraint firstItem="MV6-fd-hh8" firstAttribute="top" secondItem="pKL-Wo-fXb" secondAttribute="bottom" id="vhN-eP-Ucw"/>
+                            <constraint firstItem="1LN-K6-mju" firstAttribute="centerX" secondItem="xMF-kc-pJr" secondAttribute="centerX" id="xhE-3h-0Tg"/>
+                            <constraint firstItem="Mxk-QX-E3F" firstAttribute="top" secondItem="vhP-8S-9yb" secondAttribute="top" priority="200" constant="44" id="yFB-NU-CFV"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="ias-fd-tyh"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Space Center" id="af6-lg-Zt7"/>
+                    <connections>
+                        <segue destination="XyZ-Oe-0jd" kind="show" identifier="ShowMissionControl" id="33H-ua-HxV"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dfu-JN-WB1" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-22" y="-35"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="TVI-bs-SWB">
+            <objects>
+                <navigationController id="OrI-kO-Dhc" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="dW1-95-RD1">
+                        <rect key="frame" x="0.0" y="44" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="AbV-6I-jUr" kind="relationship" relationship="rootViewController" id="yU1-Ie-31C"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="94K-66-WGh" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-750" y="-35"/>
+        </scene>
+        <!--Mission Control-->
+        <scene sceneID="TRg-wZ-wsZ">
+            <objects>
+                <viewController title="Mission Control" id="XyZ-Oe-0jd" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="JHD-PA-KAP">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="v2v-pk-iKS"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="1VM-gt-MM9" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="796" y="-35"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="LaunchPad" width="64" height="64"/>
+        <image name="SPH" width="64" height="64"/>
+        <image name="TrackingStation" width="64" height="64"/>
+        <image name="VAB" width="64" height="64"/>
+    </resources>
+    <color key="tintColor" red="0.98823529409999999" green="0.33725490200000002" blue="0.1215686275" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
 </document>
