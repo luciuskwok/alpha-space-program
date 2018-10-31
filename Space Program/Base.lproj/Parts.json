@@ -1,0 +1,23 @@
+[
+	{
+		"title": "CMD-1",
+		"icon": "Command Pod"
+	},
+	{
+		"title": "FIN",
+		"icon": "Basic Fin"
+	},
+	{
+		"title": "SFB-1",
+		"icon": "Solid Rocket"
+	},
+	{
+		"title": "SCI-1",
+		"icon": "Mystery Biscuits"
+	},
+	{
+		"title": "Chute",
+		"icon": "Parachute"
+	},
+]
+	

@@ -227,7 +227,7 @@
                         <segue destination="XyZ-Oe-0jd" kind="show" identifier="ShowMissionControl" id="33H-ua-HxV"/>
                         <segue destination="5yH-fo-7ja" kind="show" identifier="ShowTracking" id="Cd3-Ae-g3A"/>
                         <segue destination="T9z-gm-WVm" kind="show" identifier="ShowResearch" id="spl-8L-qPt"/>
-                        <segue destination="DHt-iU-10T" kind="show" id="XwQ-Bw-S4P"/>
+                        <segue destination="DHt-iU-10T" kind="show" identifier="ShowVAB" id="XwQ-Bw-S4P"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dfu-JN-WB1" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -273,7 +273,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Tracking Placeholder" translatesAutoresizingMaskIntoConstraints="NO" id="iIA-AI-AYa">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Tracking Placeholder" translatesAutoresizingMaskIntoConstraints="NO" id="iIA-AI-AYa">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                             </imageView>
                         </subviews>
@@ -309,36 +309,41 @@
         <!--VAB-->
         <scene sceneID="X8h-kW-9xs">
             <objects>
-                <viewController title="VAB" id="DHt-iU-10T" sceneMemberID="viewController">
+                <viewController title="VAB" id="DHt-iU-10T" customClass="VehicleAssemblyBuildingViewController" customModule="Space_Program" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Efl-vf-Xhb">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="5rz-2D-Y3x">
-                                <rect key="frame" x="0.0" y="556" width="375" height="256"/>
+                                <rect key="frame" x="0.0" y="620" width="375" height="192"/>
                                 <color key="backgroundColor" white="0.12" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="256" id="c26-l8-akW"/>
+                                    <constraint firstAttribute="height" constant="192" id="c26-l8-akW"/>
                                 </constraints>
-                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="4" minimumInteritemSpacing="4" id="COt-bI-sJl">
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="8" minimumInteritemSpacing="8" id="COt-bI-sJl">
                                     <size key="itemSize" width="80" height="80"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                    <inset key="sectionInset" minX="8" minY="8" maxX="8" maxY="8"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="Giy-hS-4BH">
-                                        <rect key="frame" x="0.0" y="0.0" width="80" height="80"/>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Part" id="Giy-hS-4BH">
+                                        <rect key="frame" x="8" y="8" width="80" height="80"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
                                             <rect key="frame" x="0.0" y="0.0" width="80" height="80"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="bottom" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Command Pod" translatesAutoresizingMaskIntoConstraints="NO" id="tf0-sh-o1k">
+                                                <view tag="1" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4qa-86-6mp">
+                                                    <rect key="frame" x="0.0" y="0.0" width="80" height="80"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </view>
+                                                <imageView userInteractionEnabled="NO" tag="2" contentMode="bottom" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Command Pod" translatesAutoresizingMaskIntoConstraints="NO" id="tf0-sh-o1k">
                                                     <rect key="frame" x="0.0" y="0.0" width="80" height="60"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 </imageView>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="CMD-1" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="XYd-5i-MHT">
+                                                <label opaque="NO" userInteractionEnabled="NO" tag="3" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="CMD-1" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="XYd-5i-MHT">
                                                     <rect key="frame" x="0.0" y="60" width="80" height="20"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="12"/>
@@ -347,12 +352,16 @@
                                                 </label>
                                             </subviews>
                                         </view>
-                                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </collectionViewCell>
                                 </cells>
+                                <connections>
+                                    <outlet property="dataSource" destination="DHt-iU-10T" id="dC4-g6-21w"/>
+                                    <outlet property="delegate" destination="DHt-iU-10T" id="tom-mn-Xf4"/>
+                                </connections>
                             </collectionView>
                             <sceneKitView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="O0x-zp-Uf1">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="556"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="620"/>
                             </sceneKitView>
                         </subviews>
                         <color key="backgroundColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -367,6 +376,10 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="lOB-Y3-26l"/>
                     </view>
+                    <connections>
+                        <outlet property="partsCollectionView" destination="5rz-2D-Y3x" id="PzZ-ya-gpd"/>
+                        <outlet property="sceneView" destination="O0x-zp-Uf1" id="fMr-4V-rGY"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OvW-nh-oM0" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

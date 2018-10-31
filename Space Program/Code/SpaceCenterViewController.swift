@@ -15,7 +15,7 @@ class SpaceCenterViewController: UIViewController {
 	}
 	
 	@IBAction func showVAB(_ sender:Any?) {
-		//self.performSegue(withIdentifier: "ShowVAB", sender: nil)
+		self.performSegue(withIdentifier: "ShowVAB", sender: nil)
 	}
 	
 	@IBAction func showLaunchPad(_ sender:Any?) {

@@ -7,25 +7,29 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E07250082188243E004E4B07 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E07250072188243E004E4B07 /* AppDelegate.swift */; };
 		E072500A2188243E004E4B07 /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = E07250092188243E004E4B07 /* art.scnassets */; };
-		E072500C2188243E004E4B07 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E072500B2188243E004E4B07 /* GameViewController.swift */; };
 		E072500F2188243E004E4B07 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E072500D2188243E004E4B07 /* Main.storyboard */; };
 		E072501121882440004E4B07 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E072501021882440004E4B07 /* Assets.xcassets */; };
 		E072501421882440004E4B07 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E072501221882440004E4B07 /* LaunchScreen.storyboard */; };
-		E0ACC4C62188DFA1008915B2 /* SpaceCenterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ACC4C52188DFA1008915B2 /* SpaceCenterViewController.swift */; };
+		E0ACC4CE2189434B008915B2 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ACC4CA2189434B008915B2 /* GameViewController.swift */; };
+		E0ACC4CF2189434B008915B2 /* VehicleAssemblyBuildingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ACC4CB2189434B008915B2 /* VehicleAssemblyBuildingViewController.swift */; };
+		E0ACC4D02189434B008915B2 /* SpaceCenterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ACC4CC2189434B008915B2 /* SpaceCenterViewController.swift */; };
+		E0ACC4D12189434B008915B2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ACC4CD2189434B008915B2 /* AppDelegate.swift */; };
+		E0ACC4D421895224008915B2 /* Parts.json in Resources */ = {isa = PBXBuildFile; fileRef = E0ACC4D221895224008915B2 /* Parts.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		E07250042188243E004E4B07 /* Space Program.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Space Program.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		E07250072188243E004E4B07 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E07250092188243E004E4B07 /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
-		E072500B2188243E004E4B07 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
 		E072500E2188243E004E4B07 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		E072501021882440004E4B07 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E072501321882440004E4B07 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E072501521882440004E4B07 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		E0ACC4C52188DFA1008915B2 /* SpaceCenterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceCenterViewController.swift; sourceTree = "<group>"; };
+		E0ACC4CA2189434B008915B2 /* GameViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
+		E0ACC4CB2189434B008915B2 /* VehicleAssemblyBuildingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VehicleAssemblyBuildingViewController.swift; sourceTree = "<group>"; };
+		E0ACC4CC2189434B008915B2 /* SpaceCenterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpaceCenterViewController.swift; sourceTree = "<group>"; };
+		E0ACC4CD2189434B008915B2 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		E0ACC4D321895224008915B2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = Base; path = Base.lproj/Parts.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,16 +62,26 @@
 		E07250062188243E004E4B07 /* Space Program */ = {
 			isa = PBXGroup;
 			children = (
-				E07250072188243E004E4B07 /* AppDelegate.swift */,
-				E072500B2188243E004E4B07 /* GameViewController.swift */,
-				E0ACC4C52188DFA1008915B2 /* SpaceCenterViewController.swift */,
+				E0ACC4C92189434B008915B2 /* Code */,
 				E072501221882440004E4B07 /* LaunchScreen.storyboard */,
 				E072500D2188243E004E4B07 /* Main.storyboard */,
+				E0ACC4D221895224008915B2 /* Parts.json */,
 				E07250092188243E004E4B07 /* art.scnassets */,
 				E072501021882440004E4B07 /* Assets.xcassets */,
 				E072501521882440004E4B07 /* Info.plist */,
 			);
 			path = "Space Program";
+			sourceTree = "<group>";
+		};
+		E0ACC4C92189434B008915B2 /* Code */ = {
+			isa = PBXGroup;
+			children = (
+				E0ACC4CC2189434B008915B2 /* SpaceCenterViewController.swift */,
+				E0ACC4CB2189434B008915B2 /* VehicleAssemblyBuildingViewController.swift */,
+				E0ACC4CA2189434B008915B2 /* GameViewController.swift */,
+				E0ACC4CD2189434B008915B2 /* AppDelegate.swift */,
+			);
+			path = Code;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -131,6 +145,7 @@
 				E072500A2188243E004E4B07 /* art.scnassets in Resources */,
 				E072501421882440004E4B07 /* LaunchScreen.storyboard in Resources */,
 				E072501121882440004E4B07 /* Assets.xcassets in Resources */,
+				E0ACC4D421895224008915B2 /* Parts.json in Resources */,
 				E072500F2188243E004E4B07 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -142,9 +157,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E072500C2188243E004E4B07 /* GameViewController.swift in Sources */,
-				E0ACC4C62188DFA1008915B2 /* SpaceCenterViewController.swift in Sources */,
-				E07250082188243E004E4B07 /* AppDelegate.swift in Sources */,
+				E0ACC4D12189434B008915B2 /* AppDelegate.swift in Sources */,
+				E0ACC4CE2189434B008915B2 /* GameViewController.swift in Sources */,
+				E0ACC4D02189434B008915B2 /* SpaceCenterViewController.swift in Sources */,
+				E0ACC4CF2189434B008915B2 /* VehicleAssemblyBuildingViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -165,6 +181,14 @@
 				E072501321882440004E4B07 /* Base */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		E0ACC4D221895224008915B2 /* Parts.json */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E0ACC4D321895224008915B2 /* Base */,
+			);
+			name = Parts.json;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
