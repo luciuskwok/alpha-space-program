@@ -13,6 +13,7 @@
 		E072500F2188243E004E4B07 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E072500D2188243E004E4B07 /* Main.storyboard */; };
 		E072501121882440004E4B07 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E072501021882440004E4B07 /* Assets.xcassets */; };
 		E072501421882440004E4B07 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E072501221882440004E4B07 /* LaunchScreen.storyboard */; };
+		E0ACC4C62188DFA1008915B2 /* SpaceCenterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ACC4C52188DFA1008915B2 /* SpaceCenterViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		E072501021882440004E4B07 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E072501321882440004E4B07 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E072501521882440004E4B07 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E0ACC4C52188DFA1008915B2 /* SpaceCenterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceCenterViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,11 +59,12 @@
 			isa = PBXGroup;
 			children = (
 				E07250072188243E004E4B07 /* AppDelegate.swift */,
-				E07250092188243E004E4B07 /* art.scnassets */,
 				E072500B2188243E004E4B07 /* GameViewController.swift */,
-				E072500D2188243E004E4B07 /* Main.storyboard */,
-				E072501021882440004E4B07 /* Assets.xcassets */,
+				E0ACC4C52188DFA1008915B2 /* SpaceCenterViewController.swift */,
 				E072501221882440004E4B07 /* LaunchScreen.storyboard */,
+				E072500D2188243E004E4B07 /* Main.storyboard */,
+				E07250092188243E004E4B07 /* art.scnassets */,
+				E072501021882440004E4B07 /* Assets.xcassets */,
 				E072501521882440004E4B07 /* Info.plist */,
 			);
 			path = "Space Program";
@@ -140,6 +143,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E072500C2188243E004E4B07 /* GameViewController.swift in Sources */,
+				E0ACC4C62188DFA1008915B2 /* SpaceCenterViewController.swift in Sources */,
 				E07250082188243E004E4B07 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

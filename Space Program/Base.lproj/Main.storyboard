@@ -26,7 +26,7 @@
         <!--SpaceCenter-->
         <scene sceneID="G3c-Ec-JO6">
             <objects>
-                <viewController title="SpaceCenter" id="AbV-6I-jUr" sceneMemberID="viewController">
+                <viewController title="SpaceCenter" id="AbV-6I-jUr" customClass="SpaceCenterViewController" customModule="Space_Program" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="MN9-lG-PQY">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -37,13 +37,19 @@
                                 <state key="normal" title="VAB">
                                     <color key="titleColor" red="1" green="0.36250000000000004" blue="0.15000000000000002" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
+                                <connections>
+                                    <action selector="showVAB:" destination="AbV-6I-jUr" eventType="touchUpInside" id="7S3-2K-0Bo"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="W4v-zH-nyU">
-                                <rect key="frame" x="80.666666666666671" y="168" width="64.000000000000014" height="64"/>
+                                <rect key="frame" x="80.666666666666686" y="168" width="64.000000000000014" height="64"/>
                                 <fontDescription key="fontDescription" name="Futura-Bold" family="Futura" pointSize="24"/>
                                 <state key="normal" image="VAB">
                                     <color key="titleColor" red="1" green="0.33333333329999998" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
+                                <connections>
+                                    <action selector="showVAB:" destination="AbV-6I-jUr" eventType="touchUpInside" id="ycX-DK-i3P"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JS3-x8-9YJ">
                                 <rect key="frame" x="230.66666666666663" y="212" width="64" height="64"/>
@@ -51,6 +57,9 @@
                                 <state key="normal" image="LaunchPad">
                                     <color key="titleColor" red="1" green="0.33333333329999998" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
+                                <connections>
+                                    <action selector="showLaunchPad:" destination="AbV-6I-jUr" eventType="touchUpInside" id="OOn-wI-ALz"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MbQ-yP-Hi0">
                                 <rect key="frame" x="216.66666666666663" y="464" width="92" height="44"/>
@@ -58,6 +67,9 @@
                                 <state key="normal" title="Tracking">
                                     <color key="titleColor" red="1" green="0.36250000000000004" blue="0.15000000000000002" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
+                                <connections>
+                                    <action selector="showTracking:" destination="AbV-6I-jUr" eventType="touchUpInside" id="ci3-yg-kHY"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VOh-Xw-X2w">
                                 <rect key="frame" x="230.66666666666663" y="400" width="64" height="64"/>
@@ -65,6 +77,9 @@
                                 <state key="normal" image="TrackingStation">
                                     <color key="titleColor" red="1" green="0.33333333329999998" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
+                                <connections>
+                                    <action selector="showTracking:" destination="AbV-6I-jUr" eventType="touchUpInside" id="oYn-mP-9Z1"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pKL-Wo-fXb">
                                 <rect key="frame" x="71" y="420" width="83" height="44"/>
@@ -72,13 +87,19 @@
                                 <state key="normal" title="Hangar">
                                     <color key="titleColor" red="1" green="0.36250000000000004" blue="0.15000000000000002" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
+                                <connections>
+                                    <action selector="showHangar:" destination="AbV-6I-jUr" eventType="touchUpInside" id="ard-fF-PQc"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JUj-Qa-5aY">
-                                <rect key="frame" x="80.666666666666671" y="356" width="64.000000000000014" height="64"/>
+                                <rect key="frame" x="80.666666666666686" y="356" width="64.000000000000014" height="64"/>
                                 <fontDescription key="fontDescription" name="Futura-Bold" family="Futura" pointSize="24"/>
                                 <state key="normal" image="SPH">
                                     <color key="titleColor" red="1" green="0.33333333329999998" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
+                                <connections>
+                                    <action selector="showHangar:" destination="AbV-6I-jUr" eventType="touchUpInside" id="wvk-jV-BGN"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8YZ-q1-wcA">
                                 <rect key="frame" x="213" y="652" width="99" height="44"/>
@@ -86,6 +107,9 @@
                                 <state key="normal" title="Research">
                                     <color key="titleColor" red="1" green="0.36250000000000004" blue="0.15000000000000002" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
+                                <connections>
+                                    <action selector="showResearch:" destination="AbV-6I-jUr" eventType="touchUpInside" id="0Wj-99-WhP"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Mxk-QX-E3F">
                                 <rect key="frame" x="230.66666666666663" y="588" width="64" height="64"/>
@@ -93,44 +117,53 @@
                                 <state key="normal" image="SPH">
                                     <color key="titleColor" red="1" green="0.33333333329999998" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
+                                <connections>
+                                    <action selector="showResearch:" destination="AbV-6I-jUr" eventType="touchUpInside" id="rDx-5b-PfL"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QVv-ti-xjD">
-                                <rect key="frame" x="27.666666666666671" y="608" width="170" height="44"/>
+                                <rect key="frame" x="27.666666666666686" y="608" width="170" height="44"/>
                                 <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="24"/>
                                 <state key="normal" title="Mission Control">
                                     <color key="titleColor" red="1" green="0.36250000000000004" blue="0.15000000000000002" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
+                                <connections>
+                                    <action selector="showMissionControl:" destination="AbV-6I-jUr" eventType="touchUpInside" id="aZH-Yx-NOO"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vhP-8S-9yb">
-                                <rect key="frame" x="80.666666666666671" y="544" width="64.000000000000014" height="64"/>
+                                <rect key="frame" x="80.666666666666686" y="544" width="64.000000000000014" height="64"/>
                                 <fontDescription key="fontDescription" name="Futura-Bold" family="Futura" pointSize="24"/>
                                 <state key="normal" image="SPH">
                                     <color key="titleColor" red="1" green="0.33333333329999998" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
+                                <connections>
+                                    <action selector="showMissionControl:" destination="AbV-6I-jUr" eventType="touchUpInside" id="xN3-nj-7jj"/>
+                                </connections>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1LN-K6-mju">
-                                <rect key="frame" x="104.66666666666667" y="276" width="16" height="80"/>
+                                <rect key="frame" x="104.66666666666669" y="276" width="16" height="80"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="16" id="Aff-9D-vkW"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wnK-ic-5eg">
-                                <rect key="frame" x="104.66666666666667" y="88" width="16" height="80"/>
+                                <rect key="frame" x="104.66666666666669" y="88" width="16" height="80"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="16" id="3Y1-02-Sjy"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MV6-fd-hh8">
-                                <rect key="frame" x="104.66666666666667" y="464" width="16" height="80"/>
+                                <rect key="frame" x="104.66666666666669" y="464" width="16" height="80"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="16" id="E0Y-ML-lxX"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="z0A-8Q-kkX">
-                                <rect key="frame" x="104.66666666666667" y="652" width="16" height="160"/>
+                                <rect key="frame" x="104.66666666666669" y="652" width="16" height="160"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="16" id="KJa-zE-Y5x"/>
@@ -142,9 +175,12 @@
                                 <state key="normal" title="Launch Pad">
                                     <color key="titleColor" red="1" green="0.36250000000000004" blue="0.15000000000000002" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
+                                <connections>
+                                    <action selector="showLaunchPad:" destination="AbV-6I-jUr" eventType="touchUpInside" id="8ey-G5-rnY"/>
+                                </connections>
                             </button>
                         </subviews>
-                        <color key="backgroundColor" red="0.95375569661458337" green="1" blue="0.93834092881944442" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" red="0.13545000000000004" green="0.17999999999999999" blue="0.12059999999999998" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="pKL-Wo-fXb" firstAttribute="top" secondItem="JUj-Qa-5aY" secondAttribute="bottom" id="1LH-r7-IwF"/>
                             <constraint firstItem="JS3-x8-9YJ" firstAttribute="top" secondItem="W4v-zH-nyU" secondAttribute="top" constant="44" id="2np-b6-QKB"/>
@@ -189,6 +225,9 @@
                     <navigationItem key="navigationItem" title="Space Center" id="af6-lg-Zt7"/>
                     <connections>
                         <segue destination="XyZ-Oe-0jd" kind="show" identifier="ShowMissionControl" id="33H-ua-HxV"/>
+                        <segue destination="5yH-fo-7ja" kind="show" identifier="ShowTracking" id="Cd3-Ae-g3A"/>
+                        <segue destination="T9z-gm-WVm" kind="show" identifier="ShowResearch" id="spl-8L-qPt"/>
+                        <segue destination="DHt-iU-10T" kind="show" id="XwQ-Bw-S4P"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dfu-JN-WB1" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -199,7 +238,7 @@
         <scene sceneID="TVI-bs-SWB">
             <objects>
                 <navigationController id="OrI-kO-Dhc" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="dW1-95-RD1">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" barStyle="black" id="dW1-95-RD1">
                         <rect key="frame" x="0.0" y="44" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -218,20 +257,129 @@
                     <view key="view" contentMode="scaleToFill" id="JHD-PA-KAP">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="v2v-pk-iKS"/>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1VM-gt-MM9" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="796" y="-35"/>
+            <point key="canvasLocation" x="-23" y="737"/>
+        </scene>
+        <!--Tracking-->
+        <scene sceneID="QbN-4C-GSz">
+            <objects>
+                <viewController title="Tracking" id="5yH-fo-7ja" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Yaa-lD-X6x">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Tracking Placeholder" translatesAutoresizingMaskIntoConstraints="NO" id="iIA-AI-AYa">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="iIA-AI-AYa" firstAttribute="leading" secondItem="Yaa-lD-X6x" secondAttribute="leading" id="L6N-mL-PBI"/>
+                            <constraint firstAttribute="bottom" secondItem="iIA-AI-AYa" secondAttribute="bottom" id="Q9q-Ac-Jbt"/>
+                            <constraint firstItem="iIA-AI-AYa" firstAttribute="trailing" secondItem="Yaa-lD-X6x" secondAttribute="trailing" id="W3q-xh-yB9"/>
+                            <constraint firstItem="iIA-AI-AYa" firstAttribute="top" secondItem="Yaa-lD-X6x" secondAttribute="top" id="Y5N-fJ-KRb"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="1yJ-LI-hT3"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Mft-Wm-ghc" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="692" y="-35"/>
+        </scene>
+        <!--Research-->
+        <scene sceneID="hWe-8p-ZLV">
+            <objects>
+                <viewController title="Research" id="T9z-gm-WVm" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="GNY-OW-Kcy">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="AZh-1j-dzX"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="1fo-ec-Qsk" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="692" y="737"/>
+        </scene>
+        <!--VAB-->
+        <scene sceneID="X8h-kW-9xs">
+            <objects>
+                <viewController title="VAB" id="DHt-iU-10T" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Efl-vf-Xhb">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="5rz-2D-Y3x">
+                                <rect key="frame" x="0.0" y="556" width="375" height="256"/>
+                                <color key="backgroundColor" white="0.12" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="256" id="c26-l8-akW"/>
+                                </constraints>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="4" minimumInteritemSpacing="4" id="COt-bI-sJl">
+                                    <size key="itemSize" width="80" height="80"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="Giy-hS-4BH">
+                                        <rect key="frame" x="0.0" y="0.0" width="80" height="80"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                                            <rect key="frame" x="0.0" y="0.0" width="80" height="80"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView userInteractionEnabled="NO" contentMode="bottom" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Command Pod" translatesAutoresizingMaskIntoConstraints="NO" id="tf0-sh-o1k">
+                                                    <rect key="frame" x="0.0" y="0.0" width="80" height="60"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                </imageView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="CMD-1" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="XYd-5i-MHT">
+                                                    <rect key="frame" x="0.0" y="60" width="80" height="20"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="12"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </view>
+                                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </collectionViewCell>
+                                </cells>
+                            </collectionView>
+                            <sceneKitView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="O0x-zp-Uf1">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="556"/>
+                            </sceneKitView>
+                        </subviews>
+                        <color key="backgroundColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="O0x-zp-Uf1" firstAttribute="leading" secondItem="lOB-Y3-26l" secondAttribute="leading" id="5FM-uy-oUi"/>
+                            <constraint firstItem="5rz-2D-Y3x" firstAttribute="top" secondItem="O0x-zp-Uf1" secondAttribute="bottom" id="J2v-kh-O4S"/>
+                            <constraint firstAttribute="bottom" secondItem="5rz-2D-Y3x" secondAttribute="bottom" id="QeN-Mn-XrN"/>
+                            <constraint firstItem="5rz-2D-Y3x" firstAttribute="trailing" secondItem="lOB-Y3-26l" secondAttribute="trailing" id="g0H-hN-qag"/>
+                            <constraint firstItem="5rz-2D-Y3x" firstAttribute="leading" secondItem="lOB-Y3-26l" secondAttribute="leading" id="gaE-Q0-tNN"/>
+                            <constraint firstItem="O0x-zp-Uf1" firstAttribute="trailing" secondItem="lOB-Y3-26l" secondAttribute="trailing" id="qFS-4b-q3U"/>
+                            <constraint firstItem="O0x-zp-Uf1" firstAttribute="top" secondItem="Efl-vf-Xhb" secondAttribute="top" id="xao-Og-Tmb"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="lOB-Y3-26l"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="OvW-nh-oM0" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-751.20000000000005" y="736.69950738916259"/>
         </scene>
     </scenes>
     <resources>
+        <image name="Command Pod" width="32" height="40"/>
         <image name="LaunchPad" width="64" height="64"/>
         <image name="SPH" width="64" height="64"/>
+        <image name="Tracking Placeholder" width="600" height="424"/>
         <image name="TrackingStation" width="64" height="64"/>
         <image name="VAB" width="64" height="64"/>
     </resources>
-    <color key="tintColor" red="0.98823529409999999" green="0.33725490200000002" blue="0.1215686275" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+    <color key="tintColor" red="1" green="0.43665158371628099" blue="0.25" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
 </document>
