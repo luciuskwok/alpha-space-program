@@ -19,7 +19,7 @@ class SpaceCenterViewController: UIViewController {
 	}
 	
 	@IBAction func showLaunchPad(_ sender:Any?) {
-		//self.performSegue(withIdentifier: "ShowLaunchPad", sender: nil)
+		self.performSegue(withIdentifier: "ShowLaunchPad", sender: nil)
 	}
 	
 	@IBAction func showHangar(_ sender:Any?) {
