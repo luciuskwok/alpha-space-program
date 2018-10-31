@@ -58,7 +58,7 @@ class VehicleAssemblyBuildingViewController:
 		sceneView?.scene = scene
 		sceneView?.backgroundColor = UIColor.black
 		sceneView?.showsStatistics = true
-		sceneView?.allowsCameraControl = true // allows user camera control
+		//sceneView?.allowsCameraControl = true // allows user camera control
 	}
 	
 	func readJSON(file:String) -> [[String:Any]]? {

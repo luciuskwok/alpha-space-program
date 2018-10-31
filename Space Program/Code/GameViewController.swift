@@ -11,6 +11,9 @@ import QuartzCore
 import SceneKit
 
 class GameViewController: UIViewController {
+	
+	@IBOutlet weak var sceneView:SCNView?
+	
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,31 +49,27 @@ class GameViewController: UIViewController {
         // animate the 3d object
         ship.runAction(SCNAction.repeatForever(SCNAction.rotateBy(x: 0, y: 2, z: 0, duration: 1)))
         
-        // retrieve the SCNView
-        let scnView = self.view as! SCNView
-        
         // set the scene to the view
-        scnView.scene = scene
+        sceneView?.scene = scene
         
         // allows the user to manipulate the camera
-        scnView.allowsCameraControl = true
+        sceneView?.allowsCameraControl = true
         
         // show statistics such as fps and timing information
-        scnView.showsStatistics = true
+        sceneView?.showsStatistics = true
         
         // configure the view
-        scnView.backgroundColor = UIColor.black
+        sceneView?.backgroundColor = UIColor.black
         
         // add a tap gesture recognizer
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
-        scnView.addGestureRecognizer(tapGesture)
+        sceneView?.addGestureRecognizer(tapGesture)
     }
     
     @objc
     func handleTap(_ gestureRecognize: UIGestureRecognizer) {
-        // retrieve the SCNView
-        let scnView = self.view as! SCNView
-        
+		guard let scnView = sceneView else { return }
+		
         // check what nodes are tapped
         let p = gestureRecognize.location(in: scnView)
         let hitResults = scnView.hitTest(p, options: [:])
