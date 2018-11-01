@@ -57,6 +57,9 @@
                                 <state key="normal" title="FULL">
                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
+                                <connections>
+                                    <action selector="fullThrottle:" destination="BV1-FR-VrT" eventType="touchDown" id="6ia-pY-lA4"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CAE-Nk-cHH">
                                 <rect key="frame" x="0.0" y="512" width="44" height="40"/>
@@ -69,34 +72,43 @@
                                 <state key="normal" title="CUT">
                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
+                                <connections>
+                                    <action selector="cutThrottle:" destination="BV1-FR-VrT" eventType="touchDown" id="mOp-3Q-LbD"/>
+                                </connections>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ur5-wl-AUG" userLabel="Speed Group">
-                                <rect key="frame" x="100" y="306" width="120" height="42"/>
+                                <rect key="frame" x="113" y="306" width="94" height="42"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2,287m/s" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UUa-yc-GeZ">
-                                        <rect key="frame" x="4" y="2" width="112" height="21"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="112" id="CuE-UV-BiL"/>
-                                        </constraints>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2,287" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UUa-yc-GeZ">
+                                        <rect key="frame" x="25" y="2" width="44" height="21"/>
                                         <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="16"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Surface" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ab9-Mb-Rt8">
-                                        <rect key="frame" x="35.5" y="23" width="49" height="19"/>
+                                        <rect key="frame" x="22.5" y="23" width="49" height="19"/>
                                         <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="14"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="m/s" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GDS-Ko-LeF">
+                                        <rect key="frame" x="69" y="6" width="21" height="16"/>
+                                        <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="12"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.5" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
+                                    <constraint firstItem="UUa-yc-GeZ" firstAttribute="centerX" secondItem="Ur5-wl-AUG" secondAttribute="centerX" id="75x-kV-ym3"/>
                                     <constraint firstAttribute="bottom" secondItem="Ab9-Mb-Rt8" secondAttribute="bottom" id="9gB-4p-c3Q"/>
                                     <constraint firstItem="Ab9-Mb-Rt8" firstAttribute="top" secondItem="UUa-yc-GeZ" secondAttribute="bottom" id="Gyp-gh-W2u"/>
-                                    <constraint firstAttribute="trailing" secondItem="UUa-yc-GeZ" secondAttribute="trailing" constant="4" id="Jbf-dy-s1h"/>
+                                    <constraint firstAttribute="trailing" secondItem="GDS-Ko-LeF" secondAttribute="trailing" constant="4" id="Hgg-IC-yfG"/>
+                                    <constraint firstItem="GDS-Ko-LeF" firstAttribute="leading" secondItem="UUa-yc-GeZ" secondAttribute="trailing" id="SUn-a2-nci"/>
                                     <constraint firstItem="Ab9-Mb-Rt8" firstAttribute="centerX" secondItem="Ur5-wl-AUG" secondAttribute="centerX" id="Xzo-Gr-Vzx"/>
-                                    <constraint firstItem="UUa-yc-GeZ" firstAttribute="leading" secondItem="Ur5-wl-AUG" secondAttribute="leading" constant="4" id="nxT-RP-lzy"/>
+                                    <constraint firstItem="UUa-yc-GeZ" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Ur5-wl-AUG" secondAttribute="leading" constant="4" id="nxT-RP-lzy"/>
                                     <constraint firstItem="UUa-yc-GeZ" firstAttribute="top" secondItem="Ur5-wl-AUG" secondAttribute="top" constant="2" id="qk1-Px-00o"/>
+                                    <constraint firstItem="GDS-Ko-LeF" firstAttribute="firstBaseline" secondItem="UUa-yc-GeZ" secondAttribute="firstBaseline" id="uZx-yH-YXW"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JcD-2E-d1N" userLabel="Main Control Group">
@@ -113,6 +125,12 @@
                                         <state key="normal" title="⬇︎">
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
+                                        <connections>
+                                            <action selector="pitchDownOff:" destination="BV1-FR-VrT" eventType="touchCancel" id="PWg-Pp-sCc"/>
+                                            <action selector="pitchDownOff:" destination="BV1-FR-VrT" eventType="touchUpOutside" id="RTo-80-HyF"/>
+                                            <action selector="pitchDownOff:" destination="BV1-FR-VrT" eventType="touchUpInside" id="ee3-by-b4z"/>
+                                            <action selector="pitchDownOn:" destination="BV1-FR-VrT" eventType="touchDown" id="JJF-gd-Lfu"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="l23-rC-bBp">
                                         <rect key="frame" x="168" y="70" width="32" height="60"/>
@@ -125,6 +143,9 @@
                                         <state key="normal" title="➡︎">
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
+                                        <connections>
+                                            <action selector="yawRight:" destination="BV1-FR-VrT" eventType="touchUpInside" id="IVo-wC-7iB"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5qq-D5-d37">
                                         <rect key="frame" x="0.0" y="70" width="32" height="60"/>
@@ -137,6 +158,9 @@
                                         <state key="normal" title="⬅︎">
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
+                                        <connections>
+                                            <action selector="yawLeft:" destination="BV1-FR-VrT" eventType="touchUpInside" id="CyP-pA-0Mb"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EgW-5n-EHm">
                                         <rect key="frame" x="148" y="160" width="44" height="32"/>
@@ -149,6 +173,9 @@
                                         <state key="normal" title="↻">
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
+                                        <connections>
+                                            <action selector="rollRight:" destination="BV1-FR-VrT" eventType="touchUpInside" id="IIh-dC-m0w"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HdC-2A-Lt8">
                                         <rect key="frame" x="8" y="160" width="44" height="32"/>
@@ -161,6 +188,9 @@
                                         <state key="normal" title="↺">
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
+                                        <connections>
+                                            <action selector="rollLeft:" destination="BV1-FR-VrT" eventType="touchUpInside" id="qAS-52-o3q"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PA9-JC-0Qz">
                                         <rect key="frame" x="8" y="8" width="44" height="32"/>
@@ -173,6 +203,9 @@
                                         <state key="normal" title="RCS">
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
+                                        <connections>
+                                            <action selector="toggleRCS:" destination="BV1-FR-VrT" eventType="touchDown" id="vGH-Iu-gY4"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dGZ-0l-Ekc">
                                         <rect key="frame" x="70" y="0.0" width="60" height="32"/>
@@ -185,6 +218,12 @@
                                         <state key="normal" title="⬆︎">
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
+                                        <connections>
+                                            <action selector="pitchUpOff:" destination="BV1-FR-VrT" eventType="touchCancel" id="5l6-IN-xjb"/>
+                                            <action selector="pitchUpOff:" destination="BV1-FR-VrT" eventType="touchUpInside" id="LMR-Sb-Hld"/>
+                                            <action selector="pitchUpOff:" destination="BV1-FR-VrT" eventType="touchUpOutside" id="Ne3-Mi-xSO"/>
+                                            <action selector="pitchUpOn:" destination="BV1-FR-VrT" eventType="touchDown" id="PNn-Su-dRv"/>
+                                        </connections>
                                     </button>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="l05-XY-1oY" userLabel="Heading Group">
                                         <rect key="frame" x="71" y="36" width="58" height="21"/>
@@ -218,6 +257,9 @@
                                         <state key="normal" title="SAS">
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
+                                        <connections>
+                                            <action selector="toggleSAS:" destination="BV1-FR-VrT" eventType="touchDown" id="8Zx-up-BRU"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -351,8 +393,11 @@
                     </view>
                     <nil key="simulatedTopBarMetrics"/>
                     <connections>
+                        <outlet property="METReadout" destination="YXc-K7-2Xq" id="irj-6X-Mqd"/>
                         <outlet property="RCSButton" destination="PA9-JC-0Qz" id="HsF-Vt-dd3"/>
                         <outlet property="SASButton" destination="aHS-ma-sBJ" id="N5v-oM-ceO"/>
+                        <outlet property="UTCDayReadout" destination="t9T-jA-APp" id="bHO-k1-Prp"/>
+                        <outlet property="UTCTimeReadout" destination="Hg6-f3-M7x" id="9ha-CN-sHA"/>
                         <outlet property="altitudeReadout" destination="6DA-ed-kZb" id="sDH-YV-ZZz"/>
                         <outlet property="cutThrottleButton" destination="CAE-Nk-cHH" id="N8k-5z-BEL"/>
                         <outlet property="escapeButton" destination="3M8-86-q2w" id="rmE-Xx-ljn"/>
