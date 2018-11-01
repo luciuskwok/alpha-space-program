@@ -30,35 +30,35 @@ class VehicleAssemblyBuildingViewController:
 		// == 3-D Scene ==
 		
 		// Create a scene
-		let scene = SCNScene(named: "art.scnassets/ship.scn")!
+		let scene = SCNScene(named: "CMD-1.scnassets/CMD-1.dae")!
 
-		// create and add a camera to the scene
-		let cameraNode = SCNNode()
-		cameraNode.camera = SCNCamera()
-		scene.rootNode.addChildNode(cameraNode)
-		
-		// place the camera
-		cameraNode.position = SCNVector3(x: 0, y: 0, z: 15)
-		
-		// create and add a light to the scene
-		let lightNode = SCNNode()
-		lightNode.light = SCNLight()
-		lightNode.light!.type = .omni
-		lightNode.position = SCNVector3(x: 0, y: 10, z: 10)
-		scene.rootNode.addChildNode(lightNode)
-		
-		// create and add an ambient light to the scene
-		let ambientLightNode = SCNNode()
-		ambientLightNode.light = SCNLight()
-		ambientLightNode.light!.type = .ambient
-		ambientLightNode.light!.color = UIColor.darkGray
-		scene.rootNode.addChildNode(ambientLightNode)
+//		// create and add a camera to the scene
+//		let cameraNode = SCNNode()
+//		cameraNode.camera = SCNCamera()
+//		scene.rootNode.addChildNode(cameraNode)
+//		
+//		// place the camera
+//		cameraNode.position = SCNVector3(x: 0, y: 0, z: 15)
+//		
+//		// create and add a light to the scene
+//		let lightNode = SCNNode()
+//		lightNode.light = SCNLight()
+//		lightNode.light!.type = .omni
+//		lightNode.position = SCNVector3(x: 0, y: 10, z: 10)
+//		scene.rootNode.addChildNode(lightNode)
+//		
+//		// create and add an ambient light to the scene
+//		let ambientLightNode = SCNNode()
+//		ambientLightNode.light = SCNLight()
+//		ambientLightNode.light!.type = .ambient
+//		ambientLightNode.light!.color = UIColor.darkGray
+//		scene.rootNode.addChildNode(ambientLightNode)
 
 		// Configure scene view
 		sceneView?.scene = scene
 		sceneView?.backgroundColor = UIColor.black
 		sceneView?.showsStatistics = true
-		//sceneView?.allowsCameraControl = true // allows user camera control
+		sceneView?.allowsCameraControl = true // allows user camera control
 	}
 	
 	func readJSON(file:String) -> [[String:Any]]? {

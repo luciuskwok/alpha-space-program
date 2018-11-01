@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E0343E96218A04B3006C8C1B /* Spacecraft.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0343E95218A04B3006C8C1B /* Spacecraft.swift */; };
+		E0343E98218A0611006C8C1B /* CraftPart.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0343E97218A0611006C8C1B /* CraftPart.swift */; };
+		E0343E9A218A3822006C8C1B /* PartNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0343E99218A3822006C8C1B /* PartNode.swift */; };
+		E0343E9C218A6DA9006C8C1B /* CMD-1.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = E0343E9B218A6DA9006C8C1B /* CMD-1.scnassets */; };
 		E072500A2188243E004E4B07 /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = E07250092188243E004E4B07 /* art.scnassets */; };
 		E072500F2188243E004E4B07 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E072500D2188243E004E4B07 /* Main.storyboard */; };
 		E072501121882440004E4B07 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E072501021882440004E4B07 /* Assets.xcassets */; };
@@ -19,6 +23,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		E0343E95218A04B3006C8C1B /* Spacecraft.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spacecraft.swift; sourceTree = "<group>"; };
+		E0343E97218A0611006C8C1B /* CraftPart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CraftPart.swift; sourceTree = "<group>"; };
+		E0343E99218A3822006C8C1B /* PartNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartNode.swift; sourceTree = "<group>"; };
+		E0343E9B218A6DA9006C8C1B /* CMD-1.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = "CMD-1.scnassets"; sourceTree = "<group>"; };
 		E07250042188243E004E4B07 /* Space Program.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Space Program.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E07250092188243E004E4B07 /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
 		E072500E2188243E004E4B07 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -66,6 +74,7 @@
 				E072501221882440004E4B07 /* LaunchScreen.storyboard */,
 				E072500D2188243E004E4B07 /* Main.storyboard */,
 				E0ACC4D221895224008915B2 /* Parts.json */,
+				E0343E9B218A6DA9006C8C1B /* CMD-1.scnassets */,
 				E07250092188243E004E4B07 /* art.scnassets */,
 				E072501021882440004E4B07 /* Assets.xcassets */,
 				E072501521882440004E4B07 /* Info.plist */,
@@ -76,10 +85,13 @@
 		E0ACC4C92189434B008915B2 /* Code */ = {
 			isa = PBXGroup;
 			children = (
+				E0ACC4CD2189434B008915B2 /* AppDelegate.swift */,
 				E0ACC4CC2189434B008915B2 /* SpaceCenterViewController.swift */,
 				E0ACC4CB2189434B008915B2 /* VehicleAssemblyBuildingViewController.swift */,
 				E0ACC4CA2189434B008915B2 /* GameViewController.swift */,
-				E0ACC4CD2189434B008915B2 /* AppDelegate.swift */,
+				E0343E95218A04B3006C8C1B /* Spacecraft.swift */,
+				E0343E99218A3822006C8C1B /* PartNode.swift */,
+				E0343E97218A0611006C8C1B /* CraftPart.swift */,
 			);
 			path = Code;
 			sourceTree = "<group>";
@@ -142,6 +154,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E0343E9C218A6DA9006C8C1B /* CMD-1.scnassets in Resources */,
 				E072500A2188243E004E4B07 /* art.scnassets in Resources */,
 				E072501421882440004E4B07 /* LaunchScreen.storyboard in Resources */,
 				E072501121882440004E4B07 /* Assets.xcassets in Resources */,
@@ -159,6 +172,9 @@
 			files = (
 				E0ACC4D12189434B008915B2 /* AppDelegate.swift in Sources */,
 				E0ACC4CE2189434B008915B2 /* GameViewController.swift in Sources */,
+				E0343E9A218A3822006C8C1B /* PartNode.swift in Sources */,
+				E0343E96218A04B3006C8C1B /* Spacecraft.swift in Sources */,
+				E0343E98218A0611006C8C1B /* CraftPart.swift in Sources */,
 				E0ACC4D02189434B008915B2 /* SpaceCenterViewController.swift in Sources */,
 				E0ACC4CF2189434B008915B2 /* VehicleAssemblyBuildingViewController.swift in Sources */,
 			);
