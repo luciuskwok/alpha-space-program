@@ -14,6 +14,13 @@ class SpaceCenterViewController: UIViewController {
 		super.viewDidLoad()
 	}
 	
+	override func viewWillAppear(_ animated: Bool) {
+		super.viewWillAppear(animated)
+		navigationController?.isNavigationBarHidden = false
+	}
+	
+	// MARK: -
+	
 	@IBAction func showVAB(_ sender:Any?) {
 		self.performSegue(withIdentifier: "ShowVAB", sender: nil)
 	}

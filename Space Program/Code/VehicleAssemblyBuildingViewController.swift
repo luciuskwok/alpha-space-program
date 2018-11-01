@@ -30,7 +30,7 @@ class VehicleAssemblyBuildingViewController:
 		// == 3-D Scene ==
 		
 		// Create a scene
-		let scene = SCNScene(named: "CMD-1.scnassets/CMD-1.dae")!
+		let scene = SCNScene(named: "CMD-1.scnassets/CMD-1.scn")!
 
 //		// create and add a camera to the scene
 //		let cameraNode = SCNNode()
