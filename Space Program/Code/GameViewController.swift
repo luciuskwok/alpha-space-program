@@ -10,13 +10,14 @@ import UIKit
 import QuartzCore
 import SceneKit
 
-class GameViewController: UIViewController {
+class GameViewController: UIViewController, SCNSceneRendererDelegate {
 	
 	@IBOutlet weak var sceneView: SCNView?
 	
 	@IBOutlet weak var escapeButton: UIButton?
 	
 	@IBOutlet weak var altitudeReadout: UILabel?
+	@IBOutlet weak var altitudeUnitsLabel: UILabel?
 
 	@IBOutlet weak var METReadout: UILabel?
 	@IBOutlet weak var UTCDayReadout: UILabel?
@@ -45,33 +46,40 @@ class GameViewController: UIViewController {
 	var throttle = 1.0
 	var altitude = 70002.0
 	var velocityVectors:[Double] = [2287.0, 0.0, 0.0]
-	var rotationVectors:[Double] = [0.0, 0.0, 0.0]
-	var rotationDeltas:[Double] = [0.0, 0.0, 0.0]
+	var angularVelocity:[Double] = [0.0, 0.0, 0.0]
+	var angularAcceleration:[Double] = [0.0, 0.0, 0.0]
 	var universalTime = 0.0
 	var missionStartTime = 0.0
 	var missionHasStarted = false
-	var craft:SCNNode?
 	
+	var craft:SCNNode?
+	var earth:SCNNode?
+
 	// Other variables
 	let buttonGreenlightBackgroundColor = UIColor(hue: 135.0/360.0, saturation: 0.67, brightness: 1.0, alpha: 0.67)
 	let buttonNormalBackgroundColor = UIColor(white: 1.0, alpha: 0.67)
 
 	let numberFormatter = NumberFormatter()
-	let physicsUpdateInterval = 1.0/30.0
-	var physicsTimer:Timer?
-	
+	let userInterfaceUpdateInterval = 1.0/15.0
+	var userInterfaceUpdateTimer:Timer?
 	
 	// MARK: -
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let scene = SCNScene(named: "CMD-1.scnassets/CMD-1.scn")!
-        craft = scene.rootNode.childNode(withName: "Craft-1", recursively: true)
+        let scene = SCNScene(named: "Scene.scnassets/Universe.scn")!
 		
-		// Remove floor plane
-		let floor = scene.rootNode.childNode(withName: "Floor_Plane", recursively: true)
-		floor?.removeFromParentNode()
+		// Get the earth
+		earth = scene.rootNode.childNode(withName: "Earth", recursively: true)
+
+		// Add craft from CMD-1
+		if let craftScene = SCNScene(named: "Scene.scnassets/CMD-1.dae") {
+			if let loadedCraft = craftScene.rootNode.childNode(withName: "Craft", recursively: true) {
+				scene.rootNode.addChildNode(loadedCraft)
+				craft = loadedCraft
+			}
+		}
 		
 		// Add space skybox
 		scene.background.contents = [
@@ -84,6 +92,7 @@ class GameViewController: UIViewController {
 		]
         
         sceneView?.scene = scene
+		sceneView?.delegate = self
         sceneView?.allowsCameraControl = true
         sceneView?.showsStatistics = true
         sceneView?.backgroundColor = UIColor.black
@@ -95,8 +104,8 @@ class GameViewController: UIViewController {
 		// Number formatter
 		numberFormatter.numberStyle = .decimal
 		
-		// Physics
-		startPhysicsTimer()
+		// UI Update Loop
+		startUserInterfaceUpdateTimer()
 		missionHasStarted = true
     }
 	
@@ -122,15 +131,38 @@ class GameViewController: UIViewController {
 		}
 	}
 	
+	// MARK: - SceneKit
+	
+	func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
+		
+	}
+	
 	// MARK: - Update UI
 	
 	func updateReadouts() {
-		// Craft stats
-		altitudeReadout?.text = numberFormatter.string(from: altitude as NSNumber)
+		// Altitude
+		let roundedAltitude = round(altitude)
+		if roundedAltitude > 999999 {
+			let altKm = roundedAltitude / 1000.0
+			let dec = (altKm >= 10000.0) ? 0 : 1
+			numberFormatter.maximumFractionDigits = dec
+			numberFormatter.minimumFractionDigits = dec
+			altitudeReadout?.text = numberFormatter.string(from: roundedAltitude/1000.0 as NSNumber)
+			altitudeUnitsLabel?.text = "km"
+		} else {
+			numberFormatter.maximumFractionDigits = 0
+			numberFormatter.minimumFractionDigits = 0
+			altitudeReadout?.text = numberFormatter.string(from: roundedAltitude as NSNumber)
+			altitudeUnitsLabel?.text = "m"
+		}
+		
+		// Velocity
+		numberFormatter.maximumFractionDigits = 1
+		numberFormatter.minimumFractionDigits = 1
 		velocityReadout?.text = numberFormatter.string(from: velocityVectors[0] as NSNumber)
 		
 		// MET: Mission Elapsed Time
-		let met = universalTime * 60.0 - missionStartTime
+		let met = universalTime - missionStartTime
 		let (metN, metY, metD, metH, metM, metS) = componentsFromTimeInterval(met)
 		var metString = ""
 		if metY > 0 {
@@ -152,7 +184,7 @@ class GameViewController: UIViewController {
 		METReadout?.text = metString
 		
 		// UT: Universal Time
-		let (_, utY, utD, utH, utM, utS) = componentsFromTimeInterval(universalTime * 60.0)
+		let (_, utY, utD, utH, utM, utS) = componentsFromTimeInterval(universalTime)
 		UTCDayReadout?.text = String(format:"Y%d, d%d", utY+1, utD+1)
 		UTCTimeReadout?.text = String(format:"%02d:%02d:%02.0f", utH, utM, utS)
 
@@ -193,25 +225,26 @@ class GameViewController: UIViewController {
 	func updateCraft(interval:TimeInterval) {
 		// Update the craft position and rotation
 		
-		// Update rotation vectors
-		rotationVectors[0] += rotationDeltas[0] * interval
-		rotationVectors[1] += rotationDeltas[1] * interval
-		rotationVectors[2] += rotationDeltas[2] * interval
+		// Add angular acceleration to angular velocity
+		let initialAngularVelocity = angularVelocity
+		angularVelocity[0] += angularAcceleration[0] * interval
+		angularVelocity[1] += angularAcceleration[1] * interval
+		angularVelocity[2] += angularAcceleration[2] * interval
 
 		// Rotation
-		let x = CGFloat(rotationVectors[0] * interval)
-		let y = CGFloat(rotationVectors[1] * interval)
-		let z = CGFloat(rotationVectors[2] * interval)
+		let x = CGFloat ( interval * (initialAngularVelocity[0] + angularVelocity[0]) * 0.5)
+		let y = CGFloat ( interval * (initialAngularVelocity[1] + angularVelocity[1]) * 0.5)
+		let z = CGFloat ( interval * (initialAngularVelocity[2] + angularVelocity[2]) * 0.5)
 
 		let action = SCNAction.rotateBy(x: x, y: y, z: z, duration: interval)
 		craft?.runAction(action)
 	}
 	
-	// MARK: - Physics
+	// MARK: - UI Update Loop
 	
-	func startPhysicsTimer() {
-		let interval = physicsUpdateInterval
-		physicsTimer = Timer.scheduledTimer(withTimeInterval: interval, repeats: true, block: { _ in
+	func startUserInterfaceUpdateTimer() {
+		let interval = userInterfaceUpdateInterval
+		userInterfaceUpdateTimer = Timer.scheduledTimer(withTimeInterval: interval, repeats: true, block: { _ in
 			// Update physics and UI
 			self.universalTime += interval
 			self.updateCraft(interval: interval)
@@ -219,22 +252,24 @@ class GameViewController: UIViewController {
 		})
 	}
 	
-	func stopPhysicsTimer() {
-		physicsTimer?.invalidate()
-		physicsTimer = nil
+	func stopUserInterfaceUpdateTimer() {
+		userInterfaceUpdateTimer?.invalidate()
+		userInterfaceUpdateTimer = nil
 	}
 	
 	// MARK: - Handle Buttons
 	
 	@IBAction func handleEscape(_ sender: Any?) {
-		// Stop physics while in pause menu.
-		stopPhysicsTimer()
+		// Pause physics while in pause menu.
+		sceneView?.pause(nil)
+		stopUserInterfaceUpdateTimer()
 		
 		let alert = UIAlertController(title: "Paused", message: nil, preferredStyle: .actionSheet)
 		
 		alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { [weak self] _ in
 			// Resume physics
-			self?.startPhysicsTimer()
+			self?.sceneView?.play(nil)
+			self?.startUserInterfaceUpdateTimer()
 		}))
 		
 		alert.addAction(UIAlertAction(title: "Space Center", style: .default, handler: { [weak self] _ in
@@ -261,29 +296,29 @@ class GameViewController: UIViewController {
 		updateButtonStates()
 		
 		if enableSAS {
-			rotationVectors = [0.0, 0.0, 0.0]
+			angularVelocity = [0.0, 0.0, 0.0]
 		}
 	}
 	
 	@IBAction func pitchUpOn(_ sender: Any?) {
-		rotationDeltas[0] = Double.pi / 32.0
+		angularAcceleration[0] = Double.pi / 16.0
 	}
 
 	@IBAction func pitchUpOff(_ sender: Any?) {
-		rotationDeltas[0] = 0.0
+		angularAcceleration[0] = 0.0
 		if enableSAS {
-			rotationVectors = [0.0, 0.0, 0.0]
+			angularVelocity = [0.0, 0.0, 0.0]
 		}
 	}
 
 	@IBAction func pitchDownOn(_ sender: Any?) {
-		rotationDeltas[0] = -Double.pi / 32.0
+		angularAcceleration[0] = -Double.pi / 32.0
 	}
 	
 	@IBAction func pitchDownOff(_ sender: Any?) {
-		rotationDeltas[0] = 0.0
+		angularAcceleration[0] = 0.0
 		if enableSAS {
-			rotationVectors = [0.0, 0.0, 0.0]
+			angularVelocity = [0.0, 0.0, 0.0]
 		}
 	}
 	

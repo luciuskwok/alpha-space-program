@@ -29,8 +29,18 @@ class VehicleAssemblyBuildingViewController:
 		
 		// == 3-D Scene ==
 		
-		// Create a scene
-		let scene = SCNScene(named: "CMD-1.scnassets/CMD-1.scn")!
+		// Load the VAB scene
+		let vabScene = SCNScene(named: "Scene.scnassets/VAB.dae")!
+		
+		// Add the CMD-1 craft and position it
+		let craftScene = SCNScene(named: "Scene.scnassets/CMD-1.dae")!
+		if let craft = craftScene.rootNode.childNode(withName: "Craft", recursively: true) {
+			vabScene.rootNode.addChildNode(craft)
+			craft.localTranslate(by: SCNVector3(x:0.0, y:5.0, z:0.0))
+		} else {
+			print("[LK] Craft not found in scene CMD-1.dae")
+		}
+		
 
 //		// create and add a camera to the scene
 //		let cameraNode = SCNNode()
@@ -55,7 +65,7 @@ class VehicleAssemblyBuildingViewController:
 //		scene.rootNode.addChildNode(ambientLightNode)
 
 		// Configure scene view
-		sceneView?.scene = scene
+		sceneView?.scene = vabScene
 		sceneView?.backgroundColor = UIColor.black
 		sceneView?.showsStatistics = true
 		sceneView?.allowsCameraControl = true // allows user camera control
