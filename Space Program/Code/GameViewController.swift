@@ -129,12 +129,49 @@ class GameViewController: UIViewController {
 		altitudeReadout?.text = numberFormatter.string(from: altitude as NSNumber)
 		velocityReadout?.text = numberFormatter.string(from: velocityVectors[0] as NSNumber)
 		
-		// Time stats
+		// MET: Mission Elapsed Time
+		let (metN, metY, metD, metH, metM, metS) = componentsFromTimeInterval(universalTime * 60.0 - missionStartTime)
+		var metString = String(format:"%1.0fs", metS)
+		if metM > 0 {
+			metString = String(format:"%dm %@", metM, metString)
+		}
+		if metH > 0 {
+			metString = String(format:"%dh %@", metH, metString)
+		}
+		if metD > 0 {
+			metString = String(format:"%dd %@", metD, metString)
+		}
+		if metY > 0 {
+			metString = String(format:"%dY %@", metY, metString)
+		}
+		if metN < 0 {
+			metString = "-" + metString
+		}
+		METReadout?.text = metString
 		
+		// UT: Universal Time
+		let (_, utY, utD, utH, utM, utS) = componentsFromTimeInterval(universalTime * 60.0)
+		UTCDayReadout?.text = String(format:"Y%d, d%d", utY, utD)
+		UTCTimeReadout?.text = String(format:"%02d:%02d:%02.0f", utH, utM, utS)
+
 	}
 	
-	func stringFromTimeInterval(_ interval:Double, formatAsUTC:Bool) {
+	func componentsFromTimeInterval(_ interval:Double) -> (sign: Int, year: Int, day: Int, hour: Int, minute: Int, second: Double) {
+		var sec = interval
+		var sign = 1
 		
+		if sec < 0.0 {
+			sec = -sec
+			sign = -1
+		}
+		
+		let min = Int(floor(sec / 60.0))
+		let hr = min / 60
+		let day = hr / 6
+		let year = day / 426
+		let secRemainder = sec.truncatingRemainder(dividingBy:60.0)
+		
+		return (sign, year, day % 426, hr % 6, min % 60, secRemainder)
 	}
 
 	func updateButtonStates() {
