@@ -43,11 +43,13 @@ class GameViewController: UIViewController {
 	var enableRCS = false
 	var enableSAS = true
 	var throttle = 1.0
-	var altitude = 0.0
-	var velocityVectors:[Double] = [0.0, 0.0, 0.0]
+	var altitude = 70002.0
+	var velocityVectors:[Double] = [2287.0, 0.0, 0.0]
 	var rotationVectors:[Double] = [0.0, 0.0, 0.0]
+	var rotationDeltas:[Double] = [0.0, 0.0, 0.0]
 	var universalTime = 0.0
 	var missionStartTime = 0.0
+	var missionHasStarted = false
 	var craft:SCNNode?
 	
 	// Other variables
@@ -55,6 +57,9 @@ class GameViewController: UIViewController {
 	let buttonNormalBackgroundColor = UIColor(white: 1.0, alpha: 0.67)
 
 	let numberFormatter = NumberFormatter()
+	let physicsUpdateInterval = 1.0/30.0
+	var physicsTimer:Timer?
+	
 	
 	// MARK: -
 
@@ -83,13 +88,16 @@ class GameViewController: UIViewController {
         sceneView?.showsStatistics = true
         sceneView?.backgroundColor = UIColor.black
         
-        // add a tap gesture recognizer
+        // Tap gesture recognizer that highlights part in red
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
         sceneView?.addGestureRecognizer(tapGesture)
 		
 		// Number formatter
 		numberFormatter.numberStyle = .decimal
 		
+		// Physics
+		startPhysicsTimer()
+		missionHasStarted = true
     }
 	
 	override func viewWillAppear(_ animated: Bool) {
@@ -117,8 +125,16 @@ class GameViewController: UIViewController {
 	// MARK: - Update UI
 	
 	func updateReadouts() {
+		// Craft stats
 		altitudeReadout?.text = numberFormatter.string(from: altitude as NSNumber)
 		velocityReadout?.text = numberFormatter.string(from: velocityVectors[0] as NSNumber)
+		
+		// Time stats
+		
+	}
+	
+	func stringFromTimeInterval(_ interval:Double, formatAsUTC:Bool) {
+		
 	}
 
 	func updateButtonStates() {
@@ -135,14 +151,55 @@ class GameViewController: UIViewController {
 		}
 	}
 	
+	func updateCraft(interval:TimeInterval) {
+		// Update the craft position and rotation
+		
+		// Update rotation vectors
+		rotationVectors[0] += rotationDeltas[0] * interval
+		rotationVectors[1] += rotationDeltas[1] * interval
+		rotationVectors[2] += rotationDeltas[2] * interval
+
+		// Rotation
+		let x = CGFloat(rotationVectors[0] * interval)
+		let y = CGFloat(rotationVectors[1] * interval)
+		let z = CGFloat(rotationVectors[2] * interval)
+
+		let action = SCNAction.rotateBy(x: x, y: y, z: z, duration: interval)
+		craft?.runAction(action)
+	}
+	
+	// MARK: - Physics
+	
+	func startPhysicsTimer() {
+		let interval = physicsUpdateInterval
+		physicsTimer = Timer.scheduledTimer(withTimeInterval: interval, repeats: true, block: { _ in
+			// Update physics and UI
+			self.universalTime += interval
+			self.updateCraft(interval: interval)
+			self.updateReadouts()
+		})
+	}
+	
+	func stopPhysicsTimer() {
+		physicsTimer?.invalidate()
+		physicsTimer = nil
+	}
+	
 	// MARK: - Handle Buttons
 	
 	@IBAction func handleEscape(_ sender: Any?) {
-		let alert = UIAlertController(title: "Paused", message: nil, preferredStyle: .actionSheet)
-		alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+		// Stop physics while in pause menu.
+		stopPhysicsTimer()
 		
-		// Go back to Space Center
+		let alert = UIAlertController(title: "Paused", message: nil, preferredStyle: .actionSheet)
+		
+		alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { [weak self] _ in
+			// Resume physics
+			self?.startPhysicsTimer()
+		}))
+		
 		alert.addAction(UIAlertAction(title: "Space Center", style: .default, handler: { [weak self] _ in
+			// Go back to Space Center
 			self?.navigationController?.popViewController(animated: true)
 		}))
 		
@@ -170,15 +227,25 @@ class GameViewController: UIViewController {
 	}
 	
 	@IBAction func pitchUpOn(_ sender: Any?) {
+		rotationDeltas[0] = Double.pi / 32.0
 	}
 
 	@IBAction func pitchUpOff(_ sender: Any?) {
+		rotationDeltas[0] = 0.0
+		if enableSAS {
+			rotationVectors = [0.0, 0.0, 0.0]
+		}
 	}
 
 	@IBAction func pitchDownOn(_ sender: Any?) {
+		rotationDeltas[0] = -Double.pi / 32.0
 	}
 	
 	@IBAction func pitchDownOff(_ sender: Any?) {
+		rotationDeltas[0] = 0.0
+		if enableSAS {
+			rotationVectors = [0.0, 0.0, 0.0]
+		}
 	}
 	
 	@IBAction func yawLeft(_ sender: Any?) {
