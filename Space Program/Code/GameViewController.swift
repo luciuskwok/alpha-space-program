@@ -130,20 +130,22 @@ class GameViewController: UIViewController {
 		velocityReadout?.text = numberFormatter.string(from: velocityVectors[0] as NSNumber)
 		
 		// MET: Mission Elapsed Time
-		let (metN, metY, metD, metH, metM, metS) = componentsFromTimeInterval(universalTime * 60.0 - missionStartTime)
-		var metString = String(format:"%1.0fs", metS)
-		if metM > 0 {
-			metString = String(format:"%dm %@", metM, metString)
-		}
-		if metH > 0 {
-			metString = String(format:"%dh %@", metH, metString)
-		}
-		if metD > 0 {
-			metString = String(format:"%dd %@", metD, metString)
-		}
+		let met = universalTime * 60.0 - missionStartTime
+		let (metN, metY, metD, metH, metM, metS) = componentsFromTimeInterval(met)
+		var metString = ""
 		if metY > 0 {
-			metString = String(format:"%dY %@", metY, metString)
+			metString = String(format:"%dY", metY)
 		}
+		if metD > 0 || metString.count > 0 {
+			metString = String(format:"%@ %dd", metString, metD)
+		}
+		if metH > 0 || metString.count > 0 {
+			metString = String(format:"%@ %dh", metString, metH)
+		}
+		if metM > 0 || metString.count > 0 {
+			metString = String(format:"%@ %dm", metString, metM)
+		}
+		metString = String(format:"%@ %1.0fs", metString, metS)
 		if metN < 0 {
 			metString = "-" + metString
 		}
@@ -151,7 +153,7 @@ class GameViewController: UIViewController {
 		
 		// UT: Universal Time
 		let (_, utY, utD, utH, utM, utS) = componentsFromTimeInterval(universalTime * 60.0)
-		UTCDayReadout?.text = String(format:"Y%d, d%d", utY, utD)
+		UTCDayReadout?.text = String(format:"Y%d, d%d", utY+1, utD+1)
 		UTCTimeReadout?.text = String(format:"%02d:%02d:%02.0f", utH, utM, utS)
 
 	}
