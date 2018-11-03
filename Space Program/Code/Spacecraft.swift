@@ -52,16 +52,17 @@ class Spacecraft {
 		let initialAngularVelocity = angularVelocity
 		angularVelocity.x += angularAcceleration.x * interval
 		angularVelocity.y += angularAcceleration.y * interval
-		angularVelocity.y += angularAcceleration.z * interval
+		angularVelocity.z += angularAcceleration.z * interval
 		
 		// Rotation delta
 		let dx = interval * (initialAngularVelocity.x + angularVelocity.x) * 0.5
 		let dy = interval * (initialAngularVelocity.y + angularVelocity.y) * 0.5
 		let dz = interval * (initialAngularVelocity.z + angularVelocity.z) * 0.5
+		let eulerAngles = DoubleVector3(x:dx, y:dy, z:dz)
 		
 		// Apply rotation
-		// old: let action = SCNAction.rotateBy(x: x, y: y, z: z, duration: interval)
-		//sceneNode?.localRotate(by: SCNQuaternion)
+		let quat = DoubleQuaternion(fromEulerAngles: eulerAngles)
+		sceneNode?.localRotate(by: SCNQuaternion(quat.x, quat.y, quat.z, quat.w))
 	}
 	
 	func killRotation() {

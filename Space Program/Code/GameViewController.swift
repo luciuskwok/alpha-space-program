@@ -64,8 +64,14 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
         
         let scene = SCNScene(named: "Scene.scnassets/Universe.scn")!
 		
-		// Get the earth and camera
-		earth = scene.rootNode.childNode(withName: "Earth", recursively: true)
+		// Add Earth and scale and position it
+		let earthScene = SCNScene(named: "Scene.scnassets/Earth.scn")!
+		let earthNode = earthScene.rootNode.childNode(withName: "Earth", recursively: true)!
+		scene.rootNode.addChildNode(earthNode)
+		let earthRadius = Float(600000)
+		earthNode.scale = SCNVector3(earthRadius, earthRadius, earthRadius)
+		earthNode.position = SCNVector3(x:0.0, y:0.0, z:-(70002 + earthRadius))
+		earth = earthNode
 
 		// Add craft from CMD-1
 		if let craftScene = SCNScene(named: "Scene.scnassets/CMD-1.dae") {
@@ -170,9 +176,10 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
 	}
 	
 	func updatePlanets(time:TimeInterval) {
-		let earthSecondsPerDay = Double(6 * 60 * 60)
+		//let earthSecondsPerDay = Double(6 * 60 * 60)
+		let earthSecondsPerDay = Double(40 * 60) // Fast rotation for testing
 		let earthRotation = (time / earthSecondsPerDay + 1.0).truncatingRemainder(dividingBy: 1.0)
-		let earthAngle = Float(-earthDay * 2.0 * .pi)
+		let earthAngle = Float(-earthRotation * 2.0 * .pi)
 		earth?.eulerAngles = SCNVector3(x:0, y:earthAngle, z:0)
 	}
 	
@@ -216,7 +223,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
 		if metM > 0 || metString.count > 0 {
 			metString = String(format:"%@ %dm", metString, metM)
 		}
-		metString = String(format:"%@ %1.0fs", metString, metS)
+		metString = String(format:"%@ %1.0fs", metString, floor(metS))
 		if metN < 0 {
 			metString = "-" + metString
 		}
@@ -225,7 +232,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
 		// UT: Universal Time
 		let (_, utY, utD, utH, utM, utS) = componentsFromTimeInterval(universalTime)
 		UTCDayReadout?.text = String(format:"Y%d, d%d", utY+1, utD+1)
-		UTCTimeReadout?.text = String(format:"%02d:%02d:%02.0f", utH, utM, utS)
+		UTCTimeReadout?.text = String(format:"%02d:%02d:%02.0f", utH, utM, floor(utS))
 
 	}
 	
@@ -287,6 +294,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
 		
 		alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { [weak self] _ in
 			// Resume physics
+			self?.scenePreviousRenderTime = -1.0
 			self?.sceneView?.play(nil)
 			self?.startUserInterfaceUpdateTimer()
 		}))
