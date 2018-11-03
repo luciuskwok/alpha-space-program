@@ -52,6 +52,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
 	var missionStartTime = 0.0
 	var missionHasStarted = false
 	
+	var camera:SCNNode?
 	var craft:SCNNode?
 	var earth:SCNNode?
 
@@ -70,7 +71,8 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
         
         let scene = SCNScene(named: "Scene.scnassets/Universe.scn")!
 		
-		// Get the earth
+		// Get the earth and camera
+		camera = scene.rootNode.childNode(withName: "Camera", recursively: true)
 		earth = scene.rootNode.childNode(withName: "Earth", recursively: true)
 
 		// Add craft from CMD-1
@@ -97,15 +99,6 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
         sceneView?.allowsCameraControl = false
         sceneView?.showsStatistics = true
         sceneView?.backgroundColor = UIColor.black
-		
-		// Scene camera
-//		if let cameraCtrl = sceneView?.defaultCameraController {
-//			cameraCtrl.interactionMode = .orbitTurntable
-//			cameraCtrl.minimumVerticalAngle = -90
-//			cameraCtrl.maximumVerticalAngle = 90
-//			cameraCtrl.automaticTarget = false
-//			cameraCtrl.target = SCNVector3(x:0.0, y:0.0, z:0.0)
-//		}
 		
         // Tap gesture recognizer that highlights part in red
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))

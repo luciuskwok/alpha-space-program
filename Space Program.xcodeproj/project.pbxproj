@@ -19,6 +19,7 @@
 		E0ACC4D02189434B008915B2 /* SpaceCenterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ACC4CC2189434B008915B2 /* SpaceCenterViewController.swift */; };
 		E0ACC4D12189434B008915B2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ACC4CD2189434B008915B2 /* AppDelegate.swift */; };
 		E0ACC4D421895224008915B2 /* Parts.json in Resources */ = {isa = PBXBuildFile; fileRef = E0ACC4D221895224008915B2 /* Parts.json */; };
+		E0C36B0E218D5F52006FCD30 /* CraftCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C36B0D218D5F52006FCD30 /* CraftCamera.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +37,7 @@
 		E0ACC4CC2189434B008915B2 /* SpaceCenterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpaceCenterViewController.swift; sourceTree = "<group>"; };
 		E0ACC4CD2189434B008915B2 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E0ACC4D321895224008915B2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = Base; path = Base.lproj/Parts.json; sourceTree = "<group>"; };
+		E0C36B0D218D5F52006FCD30 /* CraftCamera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CraftCamera.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,6 +88,7 @@
 				E0ACC4CC2189434B008915B2 /* SpaceCenterViewController.swift */,
 				E0ACC4CB2189434B008915B2 /* VehicleAssemblyBuildingViewController.swift */,
 				E0ACC4CA2189434B008915B2 /* GameViewController.swift */,
+				E0C36B0D218D5F52006FCD30 /* CraftCamera.swift */,
 				E0343E95218A04B3006C8C1B /* Spacecraft.swift */,
 				E0343E99218A3822006C8C1B /* PartNode.swift */,
 				E0343E97218A0611006C8C1B /* CraftPart.swift */,
@@ -171,6 +174,7 @@
 				E0343E9A218A3822006C8C1B /* PartNode.swift in Sources */,
 				E0343E96218A04B3006C8C1B /* Spacecraft.swift in Sources */,
 				E0343E98218A0611006C8C1B /* CraftPart.swift in Sources */,
+				E0C36B0E218D5F52006FCD30 /* CraftCamera.swift in Sources */,
 				E0ACC4D02189434B008915B2 /* SpaceCenterViewController.swift in Sources */,
 				E0ACC4CF2189434B008915B2 /* VehicleAssemblyBuildingViewController.swift in Sources */,
 			);
