@@ -90,13 +90,23 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
 			UIImage(named:"space_skybox_front"),
 			UIImage(named:"space_skybox_back")
 		]
-        
+		
+		// == SceneView ==
         sceneView?.scene = scene
 		sceneView?.delegate = self
-        sceneView?.allowsCameraControl = true
+        sceneView?.allowsCameraControl = false
         sceneView?.showsStatistics = true
         sceneView?.backgroundColor = UIColor.black
-        
+		
+		// Scene camera
+//		if let cameraCtrl = sceneView?.defaultCameraController {
+//			cameraCtrl.interactionMode = .orbitTurntable
+//			cameraCtrl.minimumVerticalAngle = -90
+//			cameraCtrl.maximumVerticalAngle = 90
+//			cameraCtrl.automaticTarget = false
+//			cameraCtrl.target = SCNVector3(x:0.0, y:0.0, z:0.0)
+//		}
+		
         // Tap gesture recognizer that highlights part in red
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
         sceneView?.addGestureRecognizer(tapGesture)

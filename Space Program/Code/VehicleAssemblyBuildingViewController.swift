@@ -19,6 +19,17 @@ class VehicleAssemblyBuildingViewController:
 	var parts:[[String:Any]]?
 	var currentCellSize = CGSize(width: 80, height: 80)
 	
+	var camera:SCNNode?
+	var cameraTarget = SCNVector3(x:0.0, y:5.0, z:0.0)
+	var cameraDistance:Float = 5.0
+	var cameraPanAngle:Float = 0.0 // radians
+	var cameraTiltAngle:Float = 0.0 // radians
+	var panPreviousLocation = CGPoint()
+	var tiltPreviousLocation = CGPoint()
+	var pinchInitialCameraDistance:Float = 0.0
+
+	let tau = 2.0 * Float.pi
+
 	// MARK: -
 
 	override func viewDidLoad() {
@@ -41,35 +52,100 @@ class VehicleAssemblyBuildingViewController:
 			print("[LK] Craft not found in scene CMD-1.dae")
 		}
 		
-
-//		// create and add a camera to the scene
-//		let cameraNode = SCNNode()
-//		cameraNode.camera = SCNCamera()
-//		scene.rootNode.addChildNode(cameraNode)
-//		
-//		// place the camera
-//		cameraNode.position = SCNVector3(x: 0, y: 0, z: 15)
-//		
-//		// create and add a light to the scene
-//		let lightNode = SCNNode()
-//		lightNode.light = SCNLight()
-//		lightNode.light!.type = .omni
-//		lightNode.position = SCNVector3(x: 0, y: 10, z: 10)
-//		scene.rootNode.addChildNode(lightNode)
-//		
-//		// create and add an ambient light to the scene
-//		let ambientLightNode = SCNNode()
-//		ambientLightNode.light = SCNLight()
-//		ambientLightNode.light!.type = .ambient
-//		ambientLightNode.light!.color = UIColor.darkGray
-//		scene.rootNode.addChildNode(ambientLightNode)
-
+		// Get camera
+		camera = vabScene.rootNode.childNode(withName: "Camera", recursively: true)
+		if camera == nil {
+			print("[LK] Camera not found.")
+		}
+		updateCameraPosition()
+	
 		// Configure scene view
 		sceneView?.scene = vabScene
 		sceneView?.backgroundColor = UIColor.black
 		sceneView?.showsStatistics = true
-		sceneView?.allowsCameraControl = true // allows user camera control
+		sceneView?.allowsCameraControl = false
+		
+		// Add gesture recognizers
+		let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(handlePinch(_:)))
+		sceneView?.addGestureRecognizer(pinchGesture)
+		
+		let tiltGesture = UIPanGestureRecognizer(target: self, action: #selector(handleTilt(_:)))
+		tiltGesture.minimumNumberOfTouches = 2
+		tiltGesture.maximumNumberOfTouches = 2
+		sceneView?.addGestureRecognizer(tiltGesture)
+		
+		let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan(_:)))
+		panGesture.minimumNumberOfTouches = 1
+		panGesture.maximumNumberOfTouches = 1
+		sceneView?.addGestureRecognizer(panGesture)
+		
+		
 	}
+	
+	// MARK: - Camera
+	
+	func updateCameraPosition() {
+		if let camera = camera {
+			// Point camera by moving camera to target, changing its rotation, and translating by the distance while rotated.
+			camera.position = cameraTarget
+			camera.eulerAngles = SCNVector3(x: -cameraTiltAngle, y: cameraPanAngle, z:0.0)
+			camera.localTranslate(by: SCNVector3(x:0, y:0, z:cameraDistance))
+			
+ 		}
+	}
+	
+	@objc func handlePan(_ sender:UIGestureRecognizer) {
+		if let sceneView = sceneView {
+			let currentLocation = sender.location(in: sceneView)
+			if sender.state == .changed || sender.state == .ended {
+				// Orbit angle around point
+				let deltaX = Float(currentLocation.x - panPreviousLocation.x)
+				let tau = 2.0 * Float.pi
+				cameraPanAngle = (cameraPanAngle - deltaX * tau / 360.0 + tau).truncatingRemainder(dividingBy: tau)
+
+				// Height of target
+				let deltaY = Float(currentLocation.y - panPreviousLocation.y)
+				cameraTarget.y += deltaY * cameraDistance / 320.0
+				cameraTarget.y = max(0.25, cameraTarget.y)
+				cameraTarget.y = min(19.75, cameraTarget.y) // replace with actual max height limit
+				
+				updateCameraPosition()
+			}
+			panPreviousLocation = currentLocation
+		}
+	}
+
+	@objc func handleTilt(_ sender:UIGestureRecognizer) {
+		if let sceneView = sceneView {
+			let currentLocation = sender.location(in: sceneView)
+			if sender.state == .changed || sender.state == .ended {
+				// Tilt camera from -85° to +85°
+				let deltaY = Float(currentLocation.y - tiltPreviousLocation.y)
+				let tiltLimitMax = 85.0/180.0 * Float.pi
+				let tiltLimitMin = -85.0/180.0 * Float.pi
+				cameraTiltAngle = min(tiltLimitMax, max(tiltLimitMin, cameraTiltAngle - deltaY * tau / 720.0))
+				updateCameraPosition()
+			}
+			tiltPreviousLocation = currentLocation
+		}
+	}
+
+	@objc func handlePinch(_ sender:UIGestureRecognizer) {
+		if let pinch = sender as? UIPinchGestureRecognizer {
+			if pinch.state == .began {
+				pinchInitialCameraDistance = cameraDistance
+			} else if pinch.state == .changed || pinch.state == .ended {
+				// Change camera distance within limits
+				cameraDistance = pinchInitialCameraDistance / Float(pinch.scale)
+				cameraDistance = max(1.25, min(20.0, cameraDistance))
+				updateCameraPosition()
+			} else if pinch.state == .cancelled {
+				cameraDistance = pinchInitialCameraDistance
+			}
+		}
+	}
+	
+	// MARK: - Parts
 	
 	func readJSON(file:String) -> [[String:Any]]? {
 		guard let url = Bundle.main.url(forResource: file, withExtension:"json") else {
