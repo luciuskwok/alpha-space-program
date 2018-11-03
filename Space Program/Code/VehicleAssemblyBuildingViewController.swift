@@ -58,6 +58,7 @@ class VehicleAssemblyBuildingViewController:
 				print("[LK] Camera not found.")
 			}
 			camera.camera = cameraNode
+			camera.vabMode = true
 			camera.addGestureRecognizers(to: sceneView)
 			camera.updateCameraPosition()
 		}

@@ -14,13 +14,15 @@ class CraftCamera {
 	let tau = 2.0 * Float.pi
 
 	var camera:SCNNode?
-	var cameraTarget = SCNVector3(x:0.0, y:5.0, z:0.0)
-	var cameraDistance:Float = 5.0
-	var cameraPanAngle:Float = 0.0 // radians
-	var cameraTiltAngle:Float = (15.0/180.0) * .pi // radians
+	var vabMode = true
+	var target = SCNVector3(x:0.0, y:5.0, z:0.0)
+	var distance = Float(5.0)
+	var panAngle = Float(0.0) // radians
+	var tiltAngle = Float(15.0/180.0 * .pi)
+	var tiltMax = Float(89.0 / 180.0 * .pi)
+	var tiltMin = Float(-89.0 / 180.0 * .pi)
 	var panPreviousLocation = CGPoint()
-	var tiltPreviousLocation = CGPoint()
-	var pinchInitialCameraDistance:Float = 0.0
+	var pinchInitialDistance:Float = 0.0
 
 	// MARK: -
 	
@@ -43,27 +45,34 @@ class CraftCamera {
 	func updateCameraPosition() {
 		if let camera = camera {
 			// Point camera by moving camera to target, changing its rotation, and translating by the distance while rotated.
-			camera.position = cameraTarget
-			camera.eulerAngles = SCNVector3(x: -cameraTiltAngle, y: cameraPanAngle, z:0.0)
-			camera.localTranslate(by: SCNVector3(x:0, y:0, z:cameraDistance))
+			camera.position = target
+			camera.eulerAngles = SCNVector3(x: -tiltAngle, y: panAngle, z:0.0)
+			camera.localTranslate(by: SCNVector3(x:0, y:0, z:distance))
 		}
 	}
 	
 	@objc func handlePan(_ sender:UIGestureRecognizer) {
 		let currentLocation = sender.location(in: sender.view)
 		if sender.state == .changed || sender.state == .ended {
-			// Orbit angle around point
+			// Horizontal axis
 			let deltaX = Float(currentLocation.x - panPreviousLocation.x)
 			if deltaX != 0.0 {
-				cameraPanAngle = (cameraPanAngle - deltaX * tau / 360.0 + tau).truncatingRemainder(dividingBy: tau)
+				// Pan around point horizontally
+				panAngle = (panAngle - deltaX * tau / 360.0 + tau).truncatingRemainder(dividingBy: tau)
 			}
 			
-			// Height of target
+			// Vertical axis
 			let deltaY = Float(currentLocation.y - panPreviousLocation.y)
 			if deltaY != 0.0 {
-				cameraTarget.y += deltaY * cameraDistance / 320.0
-				cameraTarget.y = max(0.25, cameraTarget.y)
-				cameraTarget.y = min(19.75, cameraTarget.y) // replace with actual max height limit
+				if vabMode {
+					// In VAB mode, vertical pan gestures move the camera target up and down.
+					target.y += deltaY * distance / 320.0
+					target.y = max(0.25, target.y)
+					target.y = min(19.75, target.y) // replace with actual max height limit
+				} else {
+					// In game mode, vertical gestures adjust the tilt
+					tiltAngle = min(tiltMax, max(tiltMin, tiltAngle - deltaY * tau / 360.0))
+				}
 			}
 			
 			if deltaX != 0.0 || deltaY != 0.0 {
@@ -80,31 +89,29 @@ class CraftCamera {
 		let currentLocation = sender.location(in: sender.view)
 		if (sender.state == .changed || sender.state == .ended) && sender.numberOfTouches == 2 {
 			// Tilt camera from -85° to +85°
-			let deltaY = Float(currentLocation.y - tiltPreviousLocation.y)
+			let deltaY = Float(currentLocation.y - panPreviousLocation.y)
 			if deltaY != 0.0 {
-				let tiltLimitMax = 85.0/180.0 * Float.pi
-				let tiltLimitMin = -85.0/180.0 * Float.pi
-				cameraTiltAngle = min(tiltLimitMax, max(tiltLimitMin, cameraTiltAngle - deltaY * tau / 720.0))
+				tiltAngle = min(tiltMax, max(tiltMin, tiltAngle - deltaY * tau / 360.0))
 				updateCameraPosition()
 			}
 		}
 		if sender.state == .cancelled {
 			print("[LK] Tilt cancelled")
 		}
-		tiltPreviousLocation = currentLocation
+		panPreviousLocation = currentLocation
 	}
 	
 	@objc func handlePinch(_ sender:UIGestureRecognizer) {
 		if let pinch = sender as? UIPinchGestureRecognizer {
 			if pinch.state == .began {
-				pinchInitialCameraDistance = cameraDistance
+				pinchInitialDistance = distance
 			} else if pinch.state == .changed || pinch.state == .ended {
 				// Change camera distance within limits
-				cameraDistance = pinchInitialCameraDistance / Float(pinch.scale)
-				cameraDistance = max(1.25, min(20.0, cameraDistance))
+				distance = pinchInitialDistance / Float(pinch.scale)
+				distance = max(1.25, min(20.0, distance))
 				updateCameraPosition()
 			} else if pinch.state == .cancelled {
-				cameraDistance = pinchInitialCameraDistance
+				distance = pinchInitialDistance
 			}
 		}
 	}
