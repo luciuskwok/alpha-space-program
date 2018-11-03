@@ -13,6 +13,8 @@ import SceneKit
 class VehicleAssemblyBuildingViewController:
 	UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout
 {
+	let tau = 2.0 * Float.pi
+	
 	@IBOutlet weak var sceneView: SCNView?
 	@IBOutlet weak var partsCollectionView: UICollectionView?
 	
@@ -23,12 +25,10 @@ class VehicleAssemblyBuildingViewController:
 	var cameraTarget = SCNVector3(x:0.0, y:5.0, z:0.0)
 	var cameraDistance:Float = 5.0
 	var cameraPanAngle:Float = 0.0 // radians
-	var cameraTiltAngle:Float = 0.0 // radians
+	var cameraTiltAngle:Float = (15.0/180.0) * .pi // radians
 	var panPreviousLocation = CGPoint()
 	var tiltPreviousLocation = CGPoint()
 	var pinchInitialCameraDistance:Float = 0.0
-
-	let tau = 2.0 * Float.pi
 
 	// MARK: -
 
@@ -41,7 +41,7 @@ class VehicleAssemblyBuildingViewController:
 		// == 3-D Scene ==
 		
 		// Load the VAB scene
-		let vabScene = SCNScene(named: "Scene.scnassets/VAB.dae")!
+		let vabScene = SCNScene(named: "Scene.scnassets/VAB.scn")!
 		
 		// Add the CMD-1 craft and position it
 		let craftScene = SCNScene(named: "Scene.scnassets/CMD-1.dae")!
@@ -100,16 +100,24 @@ class VehicleAssemblyBuildingViewController:
 			if sender.state == .changed || sender.state == .ended {
 				// Orbit angle around point
 				let deltaX = Float(currentLocation.x - panPreviousLocation.x)
-				let tau = 2.0 * Float.pi
-				cameraPanAngle = (cameraPanAngle - deltaX * tau / 360.0 + tau).truncatingRemainder(dividingBy: tau)
+				if deltaX != 0.0 {
+					cameraPanAngle = (cameraPanAngle - deltaX * tau / 360.0 + tau).truncatingRemainder(dividingBy: tau)
+				}
 
 				// Height of target
 				let deltaY = Float(currentLocation.y - panPreviousLocation.y)
-				cameraTarget.y += deltaY * cameraDistance / 320.0
-				cameraTarget.y = max(0.25, cameraTarget.y)
-				cameraTarget.y = min(19.75, cameraTarget.y) // replace with actual max height limit
+				if deltaY != 0.0 {
+					cameraTarget.y += deltaY * cameraDistance / 320.0
+					cameraTarget.y = max(0.25, cameraTarget.y)
+					cameraTarget.y = min(19.75, cameraTarget.y) // replace with actual max height limit
+				}
 				
-				updateCameraPosition()
+				if deltaX != 0.0 || deltaY != 0.0 {
+					updateCameraPosition()
+				}
+			}
+			if sender.state == .cancelled {
+				print("[LK] Pan cancelled")
 			}
 			panPreviousLocation = currentLocation
 		}
@@ -118,13 +126,18 @@ class VehicleAssemblyBuildingViewController:
 	@objc func handleTilt(_ sender:UIGestureRecognizer) {
 		if let sceneView = sceneView {
 			let currentLocation = sender.location(in: sceneView)
-			if sender.state == .changed || sender.state == .ended {
+			if (sender.state == .changed || sender.state == .ended) && sender.numberOfTouches == 2 {
 				// Tilt camera from -85° to +85°
 				let deltaY = Float(currentLocation.y - tiltPreviousLocation.y)
-				let tiltLimitMax = 85.0/180.0 * Float.pi
-				let tiltLimitMin = -85.0/180.0 * Float.pi
-				cameraTiltAngle = min(tiltLimitMax, max(tiltLimitMin, cameraTiltAngle - deltaY * tau / 720.0))
-				updateCameraPosition()
+				if deltaY != 0.0 {
+					let tiltLimitMax = 85.0/180.0 * Float.pi
+					let tiltLimitMin = -85.0/180.0 * Float.pi
+					cameraTiltAngle = min(tiltLimitMax, max(tiltLimitMin, cameraTiltAngle - deltaY * tau / 720.0))
+					updateCameraPosition()
+				}
+			}
+			if sender.state == .cancelled {
+				print("[LK] Tilt cancelled")
 			}
 			tiltPreviousLocation = currentLocation
 		}
