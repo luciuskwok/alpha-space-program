@@ -52,7 +52,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
 	var missionStartTime = 0.0
 	var missionHasStarted = false
 	
-	var camera:SCNNode?
+	var camera: CraftCamera?
 	var craft:SCNNode?
 	var earth:SCNNode?
 
@@ -72,7 +72,6 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
         let scene = SCNScene(named: "Scene.scnassets/Universe.scn")!
 		
 		// Get the earth and camera
-		camera = scene.rootNode.childNode(withName: "Camera", recursively: true)
 		earth = scene.rootNode.childNode(withName: "Earth", recursively: true)
 
 		// Add craft from CMD-1
@@ -94,15 +93,30 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
 		]
 		
 		// == SceneView ==
-        sceneView?.scene = scene
-		sceneView?.delegate = self
-        sceneView?.allowsCameraControl = false
-        sceneView?.showsStatistics = true
-        sceneView?.backgroundColor = UIColor.black
-		
-        // Tap gesture recognizer that highlights part in red
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
-        sceneView?.addGestureRecognizer(tapGesture)
+		if let sceneView = sceneView {
+			sceneView.scene = scene
+			sceneView.delegate = self
+			sceneView.allowsCameraControl = false
+			sceneView.showsStatistics = true
+			sceneView.backgroundColor = UIColor.black
+
+			// Set up camera
+			if let cameraNode = scene.rootNode.childNode(withName: "Camera", recursively: true) {
+				let craftCamera = CraftCamera(camera: cameraNode)
+				craftCamera.camera = cameraNode
+				craftCamera.vabMode = false
+				craftCamera.target = SCNVector3(x:0.0, y:0.0, z:0.0)
+				craftCamera.addGestureRecognizers(to: sceneView)
+				craftCamera.updateCameraPosition()
+				camera = craftCamera
+			} else {
+				print("[LK] Camera not found.")
+			}
+
+			// Testing: Tap gesture recognizer that highlights part in red
+			let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
+			sceneView.addGestureRecognizer(tapGesture)
+		}
 		
 		// Number formatter
 		numberFormatter.numberStyle = .decimal

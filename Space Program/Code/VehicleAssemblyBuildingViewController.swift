@@ -21,7 +21,7 @@ class VehicleAssemblyBuildingViewController:
 	var parts:[[String:Any]]?
 	var currentCellSize = CGSize(width: 80, height: 80)
 	
-	var camera = CraftCamera()
+	var camera: CraftCamera?
 
 	// MARK: -
 
@@ -53,14 +53,17 @@ class VehicleAssemblyBuildingViewController:
 			sceneView.allowsCameraControl = false
 			
 			// Set up camera
-			let cameraNode = vabScene.rootNode.childNode(withName: "Camera", recursively: true)
-			if cameraNode == nil {
+			if let cameraNode = vabScene.rootNode.childNode(withName: "Camera", recursively: true) {
+				let craftCamera = CraftCamera(camera: cameraNode)
+				craftCamera.camera = cameraNode
+				craftCamera.vabMode = true
+				craftCamera.target = SCNVector3(x:0.0, y:5.0, z:0.0)
+				craftCamera.addGestureRecognizers(to: sceneView)
+				craftCamera.updateCameraPosition()
+				camera = craftCamera
+			} else {
 				print("[LK] Camera not found.")
 			}
-			camera.camera = cameraNode
-			camera.vabMode = true
-			camera.addGestureRecognizers(to: sceneView)
-			camera.updateCameraPosition()
 		}
 	}
 	

@@ -13,9 +13,9 @@ import SceneKit
 class CraftCamera {
 	let tau = 2.0 * Float.pi
 
-	var camera:SCNNode?
+	var camera:SCNNode
 	var vabMode = true
-	var target = SCNVector3(x:0.0, y:5.0, z:0.0)
+	var target = SCNVector3()
 	var distance = Float(5.0)
 	var panAngle = Float(0.0) // radians
 	var tiltAngle = Float(15.0/180.0 * .pi)
@@ -26,15 +26,21 @@ class CraftCamera {
 
 	// MARK: -
 	
+	init(camera:SCNNode) {
+		self.camera = camera
+	}
+	
 	func addGestureRecognizers(to view:UIView) {
 		// Add gesture recognizers
 		let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(handlePinch(_:)))
 		view.addGestureRecognizer(pinchGesture)
 		
-		let tiltGesture = UIPanGestureRecognizer(target: self, action: #selector(handleTilt(_:)))
-		tiltGesture.minimumNumberOfTouches = 2
-		tiltGesture.maximumNumberOfTouches = 2
-		view.addGestureRecognizer(tiltGesture)
+		if vabMode {
+			let twoFingerPanGesture = UIPanGestureRecognizer(target: self, action: #selector(handleTwoFingerPan(_:)))
+			twoFingerPanGesture.minimumNumberOfTouches = 2
+			twoFingerPanGesture.maximumNumberOfTouches = 2
+			view.addGestureRecognizer(twoFingerPanGesture)
+		}
 		
 		let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan(_:)))
 		panGesture.minimumNumberOfTouches = 1
@@ -43,12 +49,10 @@ class CraftCamera {
 	}
 	
 	func updateCameraPosition() {
-		if let camera = camera {
-			// Point camera by moving camera to target, changing its rotation, and translating by the distance while rotated.
-			camera.position = target
-			camera.eulerAngles = SCNVector3(x: -tiltAngle, y: panAngle, z:0.0)
-			camera.localTranslate(by: SCNVector3(x:0, y:0, z:distance))
-		}
+		// Point camera by moving camera to target, changing its rotation, and translating by the distance while rotated.
+		camera.position = target
+		camera.eulerAngles = SCNVector3(x: -tiltAngle, y: panAngle, z:0.0)
+		camera.localTranslate(by: SCNVector3(x:0, y:0, z:distance))
 	}
 	
 	@objc func handlePan(_ sender:UIGestureRecognizer) {
@@ -71,7 +75,7 @@ class CraftCamera {
 					target.y = min(19.75, target.y) // replace with actual max height limit
 				} else {
 					// In game mode, vertical gestures adjust the tilt
-					tiltAngle = min(tiltMax, max(tiltMin, tiltAngle - deltaY * tau / 360.0))
+					tiltAngle = min(tiltMax, max(tiltMin, tiltAngle + deltaY * tau / 360.0))
 				}
 			}
 			
@@ -85,13 +89,13 @@ class CraftCamera {
 		panPreviousLocation = currentLocation
 	}
 	
-	@objc func handleTilt(_ sender:UIGestureRecognizer) {
+	@objc func handleTwoFingerPan(_ sender:UIGestureRecognizer) {
 		let currentLocation = sender.location(in: sender.view)
 		if (sender.state == .changed || sender.state == .ended) && sender.numberOfTouches == 2 {
 			// Tilt camera from -85° to +85°
 			let deltaY = Float(currentLocation.y - panPreviousLocation.y)
 			if deltaY != 0.0 {
-				tiltAngle = min(tiltMax, max(tiltMin, tiltAngle - deltaY * tau / 360.0))
+				tiltAngle = min(tiltMax, max(tiltMin, tiltAngle + deltaY * tau / 360.0))
 				updateCameraPosition()
 			}
 		}
