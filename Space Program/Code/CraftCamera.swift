@@ -17,6 +17,8 @@ class CraftCamera {
 	var vabMode = true
 	var target = SCNVector3()
 	var distance = Float(5.0)
+	var distanceMax = Float(20.0)
+	var distanceMin = Float(1.25)
 	var panAngle = Float(0.0) // radians
 	var tiltAngle = Float(15.0/180.0 * .pi)
 	var tiltMax = Float(89.0 / 180.0 * .pi)
@@ -112,7 +114,7 @@ class CraftCamera {
 			} else if pinch.state == .changed || pinch.state == .ended {
 				// Change camera distance within limits
 				distance = pinchInitialDistance / Float(pinch.scale)
-				distance = max(1.25, min(20.0, distance))
+				distance = max(distanceMin, min(distanceMax, distance))
 				updateCameraPosition()
 			} else if pinch.state == .cancelled {
 				distance = pinchInitialDistance

@@ -58,6 +58,8 @@ class VehicleAssemblyBuildingViewController:
 				craftCamera.camera = cameraNode
 				craftCamera.vabMode = true
 				craftCamera.target = SCNVector3(x:0.0, y:5.0, z:0.0)
+				craftCamera.distanceMax = 20.0
+				craftCamera.distanceMin = 1.25
 				craftCamera.addGestureRecognizers(to: sceneView)
 				craftCamera.updateCameraPosition()
 				camera = craftCamera

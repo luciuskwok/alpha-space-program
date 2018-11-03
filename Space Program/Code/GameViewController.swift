@@ -106,6 +106,9 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
 				craftCamera.camera = cameraNode
 				craftCamera.vabMode = false
 				craftCamera.target = SCNVector3(x:0.0, y:0.0, z:0.0)
+				craftCamera.distance = 10.0
+				craftCamera.distanceMax = 600.0
+				craftCamera.distanceMin = 2.5
 				craftCamera.addGestureRecognizers(to: sceneView)
 				craftCamera.updateCameraPosition()
 				camera = craftCamera
@@ -318,7 +321,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
 	}
 	
 	@IBAction func pitchUpOn(_ sender: Any?) {
-		angularAcceleration[0] = Double.pi / 16.0
+		angularAcceleration[0] = -Double.pi / 16.0
 	}
 
 	@IBAction func pitchUpOff(_ sender: Any?) {
@@ -329,7 +332,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
 	}
 
 	@IBAction func pitchDownOn(_ sender: Any?) {
-		angularAcceleration[0] = -Double.pi / 32.0
+		angularAcceleration[0] = Double.pi / 32.0
 	}
 	
 	@IBAction func pitchDownOff(_ sender: Any?) {
