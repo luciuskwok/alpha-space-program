@@ -40,21 +40,12 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
 	@IBOutlet weak var rollLeftButton: UIButton?
 	@IBOutlet weak var rollRightButton: UIButton?
 	
-	// Variables for spacecraft state, which should probably be moved into the Spacecraft object.
-	var enableRCS = false
-	var enableSAS = true
-	var throttle = 1.0
-	var altitude = 70002.0
-	var velocityVectors:[Double] = [2287.0, 0.0, 0.0]
-	var angularVelocity:[Double] = [0.0, 0.0, 0.0]
-	var angularAcceleration:[Double] = [0.0, 0.0, 0.0]
+	var theSpacecraft = Spacecraft()
 	var universalTime = 0.0
-	var missionStartTime = 0.0
-	var missionHasStarted = false
 	
 	var camera: CraftCamera?
-	var craft:SCNNode?
-	var earth:SCNNode?
+	var craft: SCNNode?
+	var earth: SCNNode?
 
 	// Other variables
 	let buttonGreenlightBackgroundColor = UIColor(hue: 135.0/360.0, saturation: 0.67, brightness: 1.0, alpha: 0.67)
@@ -63,6 +54,8 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
 	let numberFormatter = NumberFormatter()
 	let userInterfaceUpdateInterval = 1.0/15.0
 	var userInterfaceUpdateTimer:Timer?
+	
+	var scenePreviousRenderTime = -1.0
 	
 	// MARK: -
 
@@ -76,9 +69,9 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
 
 		// Add craft from CMD-1
 		if let craftScene = SCNScene(named: "Scene.scnassets/CMD-1.dae") {
-			if let loadedCraft = craftScene.rootNode.childNode(withName: "Craft", recursively: true) {
-				scene.rootNode.addChildNode(loadedCraft)
-				craft = loadedCraft
+			if let craftNode = craftScene.rootNode.childNode(withName: "Craft", recursively: true) {
+				scene.rootNode.addChildNode(craftNode)
+				theSpacecraft.sceneNode = craftNode
 			}
 		}
 		
@@ -96,10 +89,11 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
 		if let sceneView = sceneView {
 			sceneView.scene = scene
 			sceneView.delegate = self
+			sceneView.rendersContinuously = true
 			sceneView.allowsCameraControl = false
 			sceneView.showsStatistics = true
 			sceneView.backgroundColor = UIColor.black
-
+			
 			// Set up camera
 			if let cameraNode = scene.rootNode.childNode(withName: "Camera", recursively: true) {
 				let craftCamera = CraftCamera(camera: cameraNode)
@@ -121,12 +115,15 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
 			sceneView.addGestureRecognizer(tapGesture)
 		}
 		
+		// Set up spacecraft
+		theSpacecraft.position = DoubleVector3(x: 0.0, y: 0.0, z: -670002.0)
+		
 		// Number formatter
 		numberFormatter.numberStyle = .decimal
 		
 		// UI Update Loop
 		startUserInterfaceUpdateTimer()
-		missionHasStarted = true
+		theSpacecraft.missionHasStarted = true
     }
 	
 	override func viewWillAppear(_ animated: Bool) {
@@ -154,14 +151,36 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
 	// MARK: - SceneKit
 	
 	func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
+		// Skip physics updates in initial frame, in order to get an accurate system time.
+		if scenePreviousRenderTime != -1.0 {
+			let interval = time - scenePreviousRenderTime
+			universalTime += interval
+			updateCraft(interval: interval)
+			updatePlanets(time: universalTime)
+		}
+		scenePreviousRenderTime = time
+	}
+	
+	func updateCraft(interval:TimeInterval) {
+		// Update the craft position and rotation
+		theSpacecraft.updatePhysics(interval: interval)
 		
+		//		let action = SCNAction.rotateBy(x: x, y: y, z: z, duration: interval)
+		//		craft?.runAction(action)
+	}
+	
+	func updatePlanets(time:TimeInterval) {
+		let earthSecondsPerDay = Double(6 * 60 * 60)
+		let earthRotation = (time / earthSecondsPerDay + 1.0).truncatingRemainder(dividingBy: 1.0)
+		let earthAngle = Float(-earthDay * 2.0 * .pi)
+		earth?.eulerAngles = SCNVector3(x:0, y:earthAngle, z:0)
 	}
 	
 	// MARK: - Update UI
 	
 	func updateReadouts() {
 		// Altitude
-		let roundedAltitude = round(altitude)
+		let roundedAltitude = round(theSpacecraft.altitude())
 		if roundedAltitude > 999999 {
 			let altKm = roundedAltitude / 1000.0
 			let dec = (altKm >= 10000.0) ? 0 : 1
@@ -179,10 +198,10 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
 		// Velocity
 		numberFormatter.maximumFractionDigits = 1
 		numberFormatter.minimumFractionDigits = 1
-		velocityReadout?.text = numberFormatter.string(from: velocityVectors[0] as NSNumber)
+		velocityReadout?.text = numberFormatter.string(from: theSpacecraft.velocityScalar() as NSNumber)
 		
 		// MET: Mission Elapsed Time
-		let met = universalTime - missionStartTime
+		let met = universalTime - theSpacecraft.missionStartTime
 		let (metN, metY, metD, metH, metM, metS) = componentsFromTimeInterval(met)
 		var metString = ""
 		if metY > 0 {
@@ -229,35 +248,17 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
 	}
 
 	func updateButtonStates() {
-		if enableRCS {
+		if theSpacecraft.enableRCS {
 			RCSButton?.backgroundColor = buttonGreenlightBackgroundColor
 		} else {
 			RCSButton?.backgroundColor = buttonNormalBackgroundColor
 		}
 		
-		if enableSAS {
+		if theSpacecraft.enableSAS {
 			SASButton?.backgroundColor = buttonGreenlightBackgroundColor
 		} else {
 			SASButton?.backgroundColor = buttonNormalBackgroundColor
 		}
-	}
-	
-	func updateCraft(interval:TimeInterval) {
-		// Update the craft position and rotation
-		
-		// Add angular acceleration to angular velocity
-		let initialAngularVelocity = angularVelocity
-		angularVelocity[0] += angularAcceleration[0] * interval
-		angularVelocity[1] += angularAcceleration[1] * interval
-		angularVelocity[2] += angularAcceleration[2] * interval
-
-		// Rotation
-		let x = CGFloat ( interval * (initialAngularVelocity[0] + angularVelocity[0]) * 0.5)
-		let y = CGFloat ( interval * (initialAngularVelocity[1] + angularVelocity[1]) * 0.5)
-		let z = CGFloat ( interval * (initialAngularVelocity[2] + angularVelocity[2]) * 0.5)
-
-		let action = SCNAction.rotateBy(x: x, y: y, z: z, duration: interval)
-		craft?.runAction(action)
 	}
 	
 	// MARK: - UI Update Loop
@@ -265,9 +266,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
 	func startUserInterfaceUpdateTimer() {
 		let interval = userInterfaceUpdateInterval
 		userInterfaceUpdateTimer = Timer.scheduledTimer(withTimeInterval: interval, repeats: true, block: { _ in
-			// Update physics and UI
-			self.universalTime += interval
-			self.updateCraft(interval: interval)
+			// Update UI only. Physics is updated in the renderer(_:updateAtTime)
 			self.updateReadouts()
 		})
 	}
@@ -307,38 +306,38 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
 	}
 	
 	@IBAction func toggleRCS(_ sender: Any?) {
-		enableRCS = !enableRCS
+		theSpacecraft.enableRCS = !theSpacecraft.enableRCS
 		updateButtonStates()
 	}
 	
 	@IBAction func toggleSAS(_ sender: Any?) {
-		enableSAS = !enableSAS
+		theSpacecraft.enableSAS = !theSpacecraft.enableSAS
 		updateButtonStates()
 		
-		if enableSAS {
-			angularVelocity = [0.0, 0.0, 0.0]
+		if theSpacecraft.enableSAS {
+			theSpacecraft.killRotation()
 		}
 	}
 	
 	@IBAction func pitchUpOn(_ sender: Any?) {
-		angularAcceleration[0] = -Double.pi / 16.0
+		theSpacecraft.angularAcceleration.x = -Double.pi / 16.0
 	}
 
 	@IBAction func pitchUpOff(_ sender: Any?) {
-		angularAcceleration[0] = 0.0
-		if enableSAS {
-			angularVelocity = [0.0, 0.0, 0.0]
+		theSpacecraft.angularAcceleration.x = 0.0
+		if theSpacecraft.enableSAS {
+			theSpacecraft.killRotation()
 		}
 	}
 
 	@IBAction func pitchDownOn(_ sender: Any?) {
-		angularAcceleration[0] = Double.pi / 32.0
+		theSpacecraft.angularAcceleration.x = Double.pi / 32.0
 	}
 	
 	@IBAction func pitchDownOff(_ sender: Any?) {
-		angularAcceleration[0] = 0.0
-		if enableSAS {
-			angularVelocity = [0.0, 0.0, 0.0]
+		theSpacecraft.angularAcceleration.x = 0.0
+		if theSpacecraft.enableSAS {
+			theSpacecraft.killRotation()
 		}
 	}
 	
