@@ -43,6 +43,13 @@ class Spacecraft {
 		return velocity.distance(to: DoubleVector3())
 	}
 	
+	func orientation() -> DoubleQuaternion {
+		if let a = sceneNode?.orientation {
+			return DoubleQuaternion(x:a.x, y:a.y, z:a.z, w:a.w)
+		}
+		return DoubleQuaternion()
+	}
+	
 	// MARK: -
 	
 	func updatePhysics(interval:TimeInterval) {
@@ -58,11 +65,28 @@ class Spacecraft {
 		let dx = interval * (initialAngularVelocity.x + angularVelocity.x) * 0.5
 		let dy = interval * (initialAngularVelocity.y + angularVelocity.y) * 0.5
 		let dz = interval * (initialAngularVelocity.z + angularVelocity.z) * 0.5
-		let eulerAngles = DoubleVector3(x:dx, y:dy, z:dz)
 		
 		// Apply rotation
-		let quat = DoubleQuaternion(fromEulerAngles: eulerAngles)
-		sceneNode?.localRotate(by: SCNQuaternion(quat.x, quat.y, quat.z, quat.w))
+		if let node = sceneNode {
+			var currentRotation = node.eulerAngles
+			currentRotation.x += Float(dx)
+			currentRotation.y +=  Float(dy)
+			currentRotation.z += Float(dz)
+			node.eulerAngles = currentRotation
+		}
+	}
+	
+	// MARK: -
+	
+	func toggleRCS() {
+		enableRCS = !enableRCS
+	}
+	
+	func toggleSAS() {
+		enableSAS = !enableSAS
+		if enableSAS {
+			killRotation()
+		}
 	}
 	
 	func killRotation() {
@@ -70,5 +94,29 @@ class Spacecraft {
 		angularAcceleration = DoubleVector3()
 	}
 	
+	func setPitchControl(_ x:Double) {
+		angularAcceleration.x = x * Double.pi / 9.0
+		
+		if x == 0.0 && enableSAS {
+			killRotation()
+		}
+	}
+
+	func setYawControl(_ yaw:Double) {
+		angularAcceleration.z = yaw * Double.pi / 9.0
+		
+		if yaw == 0.0 && enableSAS {
+			killRotation()
+		}
+	}
+
+	func setRollControl(_ roll:Double) {
+		angularAcceleration.y = roll * Double.pi / 9.0
+		
+		if roll == 0.0 && enableSAS {
+			killRotation()
+		}
+	}
+
 	
 }

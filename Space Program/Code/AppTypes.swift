@@ -23,6 +23,12 @@ struct DoubleVector3 {
 		self.z = z
 	}
 	
+	init(x: Float, y: Float, z: Float) {
+		self.x = Double(x)
+		self.y = Double(y)
+		self.z = Double(z)
+	}
+	
 	func distance(to: DoubleVector3) -> Double {
 		let dx = to.x - self.x
 		let dy = to.y - self.y
@@ -40,7 +46,7 @@ struct DoubleQuaternion {
 	var w: Double
 	
 	init() {
-		x = 0.0; y = 0.0; z = 0.0; w = 1.0
+		x = 0.0; y = 1.0; z = 0.0; w = 0.0
 	}
 	
 	init(x: Double, y: Double, z: Double, w: Double) {
@@ -48,6 +54,13 @@ struct DoubleQuaternion {
 		self.y = y
 		self.z = z
 		self.w = w
+	}
+	
+	init(x: Float, y: Float, z: Float, w: Float) {
+		self.x = Double(x)
+		self.y = Double(y)
+		self.z = Double(z)
+		self.w = Double(w)
 	}
 	
 	init(fromEulerAngles euler: DoubleVector3) {

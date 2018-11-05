@@ -122,6 +122,13 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JcD-2E-d1N" userLabel="Main Control Group">
                                 <rect key="frame" x="60" y="352" width="200" height="200"/>
                                 <subviews>
+                                    <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KNX-dQ-aD4" customClass="AttitudeIndicatorView" customModule="Space_Program" customModuleProvider="target">
+                                        <rect key="frame" x="10" y="10" width="180" height="180"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="KNX-dQ-aD4" secondAttribute="height" id="cQC-tW-QLa"/>
+                                        </constraints>
+                                    </view>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="edd-lV-XRv">
                                         <rect key="frame" x="70" y="168" width="60" height="32"/>
                                         <color key="backgroundColor" white="1" alpha="0.66000000000000003" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -134,10 +141,10 @@
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <connections>
-                                            <action selector="pitchDownOff:" destination="BV1-FR-VrT" eventType="touchCancel" id="PWg-Pp-sCc"/>
-                                            <action selector="pitchDownOff:" destination="BV1-FR-VrT" eventType="touchUpOutside" id="RTo-80-HyF"/>
-                                            <action selector="pitchDownOff:" destination="BV1-FR-VrT" eventType="touchUpInside" id="ee3-by-b4z"/>
                                             <action selector="pitchDownOn:" destination="BV1-FR-VrT" eventType="touchDown" id="JJF-gd-Lfu"/>
+                                            <action selector="rotationControlOff:" destination="BV1-FR-VrT" eventType="touchCancel" id="Jds-dq-vb2"/>
+                                            <action selector="rotationControlOff:" destination="BV1-FR-VrT" eventType="touchUpInside" id="bC3-Vl-MeM"/>
+                                            <action selector="rotationControlOff:" destination="BV1-FR-VrT" eventType="touchUpOutside" id="tAN-cs-yjZ"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="l23-rC-bBp">
@@ -152,7 +159,10 @@
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <connections>
-                                            <action selector="yawRight:" destination="BV1-FR-VrT" eventType="touchUpInside" id="IVo-wC-7iB"/>
+                                            <action selector="rotationControlOff:" destination="BV1-FR-VrT" eventType="touchUpOutside" id="KIj-pA-tjD"/>
+                                            <action selector="rotationControlOff:" destination="BV1-FR-VrT" eventType="touchCancel" id="Xtb-tj-ILp"/>
+                                            <action selector="rotationControlOff:" destination="BV1-FR-VrT" eventType="touchUpInside" id="beT-aZ-Oev"/>
+                                            <action selector="yawRightOn:" destination="BV1-FR-VrT" eventType="touchDown" id="UYe-nZ-eug"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5qq-D5-d37">
@@ -167,7 +177,10 @@
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <connections>
-                                            <action selector="yawLeft:" destination="BV1-FR-VrT" eventType="touchUpInside" id="CyP-pA-0Mb"/>
+                                            <action selector="rotationControlOff:" destination="BV1-FR-VrT" eventType="touchCancel" id="2gm-bx-Zdt"/>
+                                            <action selector="rotationControlOff:" destination="BV1-FR-VrT" eventType="touchUpInside" id="CmC-Rk-vYz"/>
+                                            <action selector="rotationControlOff:" destination="BV1-FR-VrT" eventType="touchUpOutside" id="JzT-dM-sJo"/>
+                                            <action selector="yawLeftOn:" destination="BV1-FR-VrT" eventType="touchDown" id="eP9-ae-Qkb"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EgW-5n-EHm">
@@ -182,7 +195,10 @@
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <connections>
-                                            <action selector="rollRight:" destination="BV1-FR-VrT" eventType="touchUpInside" id="IIh-dC-m0w"/>
+                                            <action selector="rollRight:" destination="BV1-FR-VrT" eventType="touchDown" id="Jhe-19-hz1"/>
+                                            <action selector="rotationControlOff:" destination="BV1-FR-VrT" eventType="touchUpOutside" id="9Mp-xR-hnD"/>
+                                            <action selector="rotationControlOff:" destination="BV1-FR-VrT" eventType="touchUpInside" id="FNN-fS-pef"/>
+                                            <action selector="rotationControlOff:" destination="BV1-FR-VrT" eventType="touchCancel" id="RCe-oF-W6e"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HdC-2A-Lt8">
@@ -197,7 +213,10 @@
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <connections>
-                                            <action selector="rollLeft:" destination="BV1-FR-VrT" eventType="touchUpInside" id="qAS-52-o3q"/>
+                                            <action selector="rollLeft:" destination="BV1-FR-VrT" eventType="touchDown" id="Hue-PV-OHt"/>
+                                            <action selector="rotationControlOff:" destination="BV1-FR-VrT" eventType="touchUpInside" id="T11-pe-xYr"/>
+                                            <action selector="rotationControlOff:" destination="BV1-FR-VrT" eventType="touchUpOutside" id="ilt-c7-g0s"/>
+                                            <action selector="rotationControlOff:" destination="BV1-FR-VrT" eventType="touchCancel" id="xJI-4I-O6L"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PA9-JC-0Qz">
@@ -227,10 +246,10 @@
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <connections>
-                                            <action selector="pitchUpOff:" destination="BV1-FR-VrT" eventType="touchCancel" id="5l6-IN-xjb"/>
-                                            <action selector="pitchUpOff:" destination="BV1-FR-VrT" eventType="touchUpInside" id="LMR-Sb-Hld"/>
-                                            <action selector="pitchUpOff:" destination="BV1-FR-VrT" eventType="touchUpOutside" id="Ne3-Mi-xSO"/>
                                             <action selector="pitchUpOn:" destination="BV1-FR-VrT" eventType="touchDown" id="PNn-Su-dRv"/>
+                                            <action selector="rotationControlOff:" destination="BV1-FR-VrT" eventType="touchUpInside" id="258-NY-F1f"/>
+                                            <action selector="rotationControlOff:" destination="BV1-FR-VrT" eventType="touchUpOutside" id="6kx-yU-pRt"/>
+                                            <action selector="rotationControlOff:" destination="BV1-FR-VrT" eventType="touchCancel" id="9Jo-pM-apu"/>
                                         </connections>
                                     </button>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="l05-XY-1oY" userLabel="Heading Group">
@@ -275,11 +294,13 @@
                                     <constraint firstItem="5qq-D5-d37" firstAttribute="centerY" secondItem="JcD-2E-d1N" secondAttribute="centerY" id="0Yd-TT-KGG"/>
                                     <constraint firstItem="dGZ-0l-Ekc" firstAttribute="top" secondItem="JcD-2E-d1N" secondAttribute="top" id="1Wi-0l-jFn"/>
                                     <constraint firstItem="PA9-JC-0Qz" firstAttribute="leading" secondItem="JcD-2E-d1N" secondAttribute="leading" constant="8" id="4bi-nn-2Kc"/>
+                                    <constraint firstItem="KNX-dQ-aD4" firstAttribute="centerY" secondItem="JcD-2E-d1N" secondAttribute="centerY" id="4fN-80-wfZ"/>
                                     <constraint firstAttribute="bottom" secondItem="HdC-2A-Lt8" secondAttribute="bottom" constant="8" id="63g-A3-wKz"/>
                                     <constraint firstAttribute="width" constant="200" id="88m-BQ-Mcc"/>
                                     <constraint firstItem="PA9-JC-0Qz" firstAttribute="top" secondItem="JcD-2E-d1N" secondAttribute="top" constant="8" id="FoR-oJ-MZy"/>
                                     <constraint firstAttribute="height" constant="200" id="Itx-NM-yWj"/>
                                     <constraint firstItem="aHS-ma-sBJ" firstAttribute="top" secondItem="JcD-2E-d1N" secondAttribute="top" constant="8" id="Mwg-TA-8Ld"/>
+                                    <constraint firstItem="KNX-dQ-aD4" firstAttribute="centerX" secondItem="JcD-2E-d1N" secondAttribute="centerX" id="Nmx-rf-gyP"/>
                                     <constraint firstAttribute="trailing" secondItem="l23-rC-bBp" secondAttribute="trailing" id="Wls-pD-IIs"/>
                                     <constraint firstItem="l05-XY-1oY" firstAttribute="top" secondItem="dGZ-0l-Ekc" secondAttribute="bottom" constant="4" id="XfI-lI-d7G"/>
                                     <constraint firstAttribute="bottom" secondItem="edd-lV-XRv" secondAttribute="bottom" id="ZVj-Ak-tQF"/>
@@ -290,6 +311,7 @@
                                     <constraint firstItem="l23-rC-bBp" firstAttribute="centerY" secondItem="JcD-2E-d1N" secondAttribute="centerY" id="kbX-ea-iZQ"/>
                                     <constraint firstItem="l05-XY-1oY" firstAttribute="centerX" secondItem="JcD-2E-d1N" secondAttribute="centerX" id="o74-i5-iuw"/>
                                     <constraint firstAttribute="bottom" secondItem="EgW-5n-EHm" secondAttribute="bottom" constant="8" id="pfI-Qt-7JF"/>
+                                    <constraint firstItem="KNX-dQ-aD4" firstAttribute="width" secondItem="JcD-2E-d1N" secondAttribute="width" multiplier="0.9" id="xJp-4j-bOd"/>
                                     <constraint firstItem="edd-lV-XRv" firstAttribute="centerX" secondItem="JcD-2E-d1N" secondAttribute="centerX" id="xOO-NI-mJe"/>
                                     <constraint firstItem="5qq-D5-d37" firstAttribute="leading" secondItem="JcD-2E-d1N" secondAttribute="leading" id="ye9-SV-31R"/>
                                 </constraints>

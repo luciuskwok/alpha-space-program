@@ -30,6 +30,8 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
 	@IBOutlet weak var fullThrottleButton: UIButton?
 	@IBOutlet weak var cutThrottleButton: UIButton?
 
+	@IBOutlet weak var attitudeIndicator: AttitudeIndicatorView?
+
 	@IBOutlet weak var RCSButton: UIButton?
 	@IBOutlet weak var SASButton: UIButton?
 
@@ -207,6 +209,13 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
 		numberFormatter.minimumFractionDigits = 1
 		velocityReadout?.text = numberFormatter.string(from: theSpacecraft.velocityScalar() as NSNumber)
 		
+		// Orientation
+		// Up is always the vector away from the center of the planet being orbited.
+		// For testing, show the values of x, y, z, and w.
+		let co = theSpacecraft.orientation()
+		attitudeIndicator?.orientation = co
+		headingReadout?.text = String(format:"x%1.3f y%1.3f z%1.3f w%1.3f", co.x, co.y, co.z, co.w)
+		
 		// MET: Mission Elapsed Time
 		let met = universalTime - theSpacecraft.missionStartTime
 		let (metN, metY, metD, metH, metM, metS) = componentsFromTimeInterval(met)
@@ -268,6 +277,10 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
 		}
 	}
 	
+	func degrees(fromRadians: Double) -> Double {
+		return (fromRadians / (2 * .pi) + 1.0).truncatingRemainder(dividingBy: 1.0) * 360.0
+	}
+	
 	// MARK: - UI Update Loop
 	
 	func startUserInterfaceUpdateTimer() {
@@ -314,51 +327,43 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
 	}
 	
 	@IBAction func toggleRCS(_ sender: Any?) {
-		theSpacecraft.enableRCS = !theSpacecraft.enableRCS
+		theSpacecraft.toggleRCS()
 		updateButtonStates()
 	}
 	
 	@IBAction func toggleSAS(_ sender: Any?) {
-		theSpacecraft.enableSAS = !theSpacecraft.enableSAS
+		theSpacecraft.toggleSAS()
 		updateButtonStates()
-		
-		if theSpacecraft.enableSAS {
-			theSpacecraft.killRotation()
-		}
 	}
 	
 	@IBAction func pitchUpOn(_ sender: Any?) {
-		theSpacecraft.angularAcceleration.x = -Double.pi / 16.0
-	}
-
-	@IBAction func pitchUpOff(_ sender: Any?) {
-		theSpacecraft.angularAcceleration.x = 0.0
-		if theSpacecraft.enableSAS {
-			theSpacecraft.killRotation()
-		}
+		theSpacecraft.setPitchControl(-1.0)
 	}
 
 	@IBAction func pitchDownOn(_ sender: Any?) {
-		theSpacecraft.angularAcceleration.x = Double.pi / 32.0
+		theSpacecraft.setPitchControl(1.0)
 	}
 	
-	@IBAction func pitchDownOff(_ sender: Any?) {
-		theSpacecraft.angularAcceleration.x = 0.0
-		if theSpacecraft.enableSAS {
-			theSpacecraft.killRotation()
-		}
+	@IBAction func yawLeftOn(_ sender: Any?) {
+		theSpacecraft.setYawControl(1.0)
 	}
 	
-	@IBAction func yawLeft(_ sender: Any?) {
-	}
-	
-	@IBAction func yawRight(_ sender: Any?) {
+	@IBAction func yawRightOn(_ sender: Any?) {
+		theSpacecraft.setYawControl(-1.0)
 	}
 	
 	@IBAction func rollLeft(_ sender: Any?) {
+		theSpacecraft.setRollControl(-1.0)
 	}
 	
 	@IBAction func rollRight(_ sender: Any?) {
+		theSpacecraft.setRollControl(1.0)
+	}
+	
+	@IBAction func rotationControlOff(_ sender: Any?) {
+		theSpacecraft.setPitchControl(0.0)
+		theSpacecraft.setYawControl(0.0)
+		theSpacecraft.setRollControl(0.0)
 	}
 	
 
