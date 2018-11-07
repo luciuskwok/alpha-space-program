@@ -39,7 +39,7 @@ struct DoubleVector3 {
 	
 }
 
-struct DoubleQuaternion {
+struct DoubleVector4 {
 	var x: Double
 	var y: Double
 	var z: Double

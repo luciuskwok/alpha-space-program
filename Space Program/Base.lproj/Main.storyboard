@@ -432,6 +432,7 @@
                         <outlet property="UTCTimeReadout" destination="Hg6-f3-M7x" id="9ha-CN-sHA"/>
                         <outlet property="altitudeReadout" destination="6DA-ed-kZb" id="sDH-YV-ZZz"/>
                         <outlet property="altitudeUnitsLabel" destination="FKR-wV-x8z" id="Vdc-6Y-KTO"/>
+                        <outlet property="attitudeIndicator" destination="KNX-dQ-aD4" id="HVx-hc-ho5"/>
                         <outlet property="cutThrottleButton" destination="CAE-Nk-cHH" id="N8k-5z-BEL"/>
                         <outlet property="escapeButton" destination="3M8-86-q2w" id="rmE-Xx-ljn"/>
                         <outlet property="fullThrottleButton" destination="TNL-mq-FcZ" id="LcB-pY-olC"/>

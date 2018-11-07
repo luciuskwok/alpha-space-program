@@ -7,21 +7,41 @@
 //
 
 import UIKit
+import SceneKit
 
 class AttitudeIndicatorView: UIView {
-	let tau = 2.0 * Double.pi
-	
-	var orientation = DoubleQuaternion() {
+	let tau = 2.0 * Float.pi
+	let groundColor = UIColor(hue: 30.0/360.0, saturation: 1.0, brightness: 0.667, alpha: 1.0)
+	let skyColor = UIColor(hue: 210.0/360.0, saturation: 1.0, brightness: 1.0, alpha: 1.0)
+
+	var pitchAngle = CGFloat(0.0) {
 		didSet {
-			setNeedsDisplay()
+			if pitchAngle != oldValue {
+				setNeedsDisplay()
+			}
+		}
+	}
+	
+	var rollAngle = CGFloat(0.0) {
+		didSet {
+			if rollAngle != oldValue {
+				setNeedsDisplay()
+			}
+		}
+	}
+	
+	var heading = CGFloat(0.0)  {
+		didSet {
+			if heading != oldValue {
+				setNeedsDisplay()
+			}
 		}
 	}
 
 	override func draw(_ rect: CGRect) {
-		
 		let margin = CGFloat(2.0)
 		let width = bounds.size.width - 2.0 * margin
-		let radius = bounds.size.width * 0.5 - margin
+		let radius = width * 0.5
 		let center = CGPoint(x: radius + margin, y: radius + margin)
 		let contextClipRect = CGRect(x: margin, y: margin, width: width, height: width)
 		
@@ -31,29 +51,36 @@ class AttitudeIndicatorView: UIView {
 			context.addEllipse(in: contextClipRect)
 			context.closePath()
 			context.clip()
+
+			// Use an affine transform to rotate for roll, and then translate for pitch
+			context.saveGState()
+			context.translateBy(x: center.x, y: center.y)
+			context.rotate(by: rollAngle)
+			context.translateBy(x: 0.0, y: radius * pitchAngle * 2.0 / .pi)
+
+			// Ground fill
+			let groundPath = UIBezierPath(rect: CGRect(x:-radius, y:0.0, width:width, height:width))
+			groundColor.set()
+			groundPath.fill()
 			
-			// Pitch
-			let pitch = CGFloat(orientation.x/tau + 1.25).truncatingRemainder(dividingBy: 1.0) // range of 0.0 to 1.0
-			let pitchY = radius * ((2.0 - pitch * 2.0).truncatingRemainder(dividingBy: 1.0) - 0.5)
-			let upsideDown = (pitch > 0.5)
-			
-			// Roll
-			let roll = CGFloat(orientation.z)
-			
-			// Horizon line
-			let pt1 = CGPoint(x: center.x + cos(roll) * radius * 2, y: center.y + sin(roll) * radius * 2 + pitchY)
-			let pt2 = CGPoint(x: center.x - cos(roll) * radius * 2, y: center.y - sin(roll) * radius * 2 + pitchY)
-			let horizonLine = UIBezierPath()
-			horizonLine.move(to:pt1)
-			horizonLine.addLine(to: pt2)
-			horizonLine.lineWidth = 0.75
+			// Sky fill
+			let skyPath = UIBezierPath(rect: CGRect(x:-radius, y:-width, width:width, height:width))
+			skyColor.set()
+			skyPath.fill()
+
+			// Horizon path
+			let horizonPath = UIBezierPath()
+			horizonPath.move(to:CGPoint(x:-radius, y:0.0))
+			horizonPath.addLine(to:CGPoint(x:radius, y:0.0))
+			horizonPath.lineWidth = 2.5
 			UIColor.white.set()
-			horizonLine.stroke()
+			horizonPath.stroke()
 			
-			if pitch <= 0.5 {
-				// Right-side up
-			}
+			// Print debug info
+			print(String(format:"Pitch=%1.0f, Roll=%1.0f", pitchAngle / .pi * 180.0, rollAngle / .pi * 180.0))
 			
+			// Reset context to remove transform
+			context.restoreGState()
 			
 			// Draw the center markings
 			let markPath = UIBezierPath()

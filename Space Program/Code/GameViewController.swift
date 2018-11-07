@@ -192,9 +192,9 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
 		let roundedAltitude = round(theSpacecraft.altitude())
 		if roundedAltitude > 999999 {
 			let altKm = roundedAltitude / 1000.0
-			let dec = (altKm >= 10000.0) ? 0 : 1
-			numberFormatter.maximumFractionDigits = dec
-			numberFormatter.minimumFractionDigits = dec
+			let decimals = (altKm >= 10000.0) ? 0 : 1
+			numberFormatter.maximumFractionDigits = decimals
+			numberFormatter.minimumFractionDigits = decimals
 			altitudeReadout?.text = numberFormatter.string(from: roundedAltitude/1000.0 as NSNumber)
 			altitudeUnitsLabel?.text = "km"
 		} else {
@@ -210,11 +210,15 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
 		velocityReadout?.text = numberFormatter.string(from: theSpacecraft.velocityScalar() as NSNumber)
 		
 		// Orientation
-		// Up is always the vector away from the center of the planet being orbited.
-		// For testing, show the values of x, y, z, and w.
-		let co = theSpacecraft.orientation()
-		attitudeIndicator?.orientation = co
-		headingReadout?.text = String(format:"x%1.3f y%1.3f z%1.3f w%1.3f", co.x, co.y, co.z, co.w)
+		// Up should always be the vector away from the center of the planet being orbited.
+		let angles = theSpacecraft.pitchRollHeadingAngles()
+		let heading = angles.z
+		if let ai = attitudeIndicator {
+			ai.pitchAngle = CGFloat(angles.x)
+			ai.rollAngle = CGFloat(angles.y)
+			ai.heading = CGFloat(heading)
+		}
+		headingReadout?.text = String(format:"%1.0f°", round(degrees(fromRadians:Double(heading))))
 		
 		// MET: Mission Elapsed Time
 		let met = universalTime - theSpacecraft.missionStartTime
@@ -345,19 +349,19 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
 	}
 	
 	@IBAction func yawLeftOn(_ sender: Any?) {
-		theSpacecraft.setYawControl(1.0)
-	}
-	
-	@IBAction func yawRightOn(_ sender: Any?) {
 		theSpacecraft.setYawControl(-1.0)
 	}
 	
+	@IBAction func yawRightOn(_ sender: Any?) {
+		theSpacecraft.setYawControl(1.0)
+	}
+	
 	@IBAction func rollLeft(_ sender: Any?) {
-		theSpacecraft.setRollControl(-1.0)
+		theSpacecraft.setRollControl(1.0)
 	}
 	
 	@IBAction func rollRight(_ sender: Any?) {
-		theSpacecraft.setRollControl(1.0)
+		theSpacecraft.setRollControl(-1.0)
 	}
 	
 	@IBAction func rotationControlOff(_ sender: Any?) {
