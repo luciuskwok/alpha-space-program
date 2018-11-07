@@ -65,12 +65,25 @@ class Spacecraft {
 	func pitchRollHeadingAngles() -> float3 {
 		// Use the vector pointing forward from the craft to determine pitch, heading, and up/down orientation.
 		let fwd = orientation().act(float3(x:0.0, y:1.0, z:0.0))
+		
 		// Use the right-wing vector to determine roll.
 		let right = orientation().act(float3(x:1.0, y:0.0, z:0.0))
+		
+		// Use the up vector to determine inverted state.
+		let up = orientation().act(float3(x:0.0, y:0.0, z:1.0))
+		
 		// Measure the pitch as the angle between the rotated vector and the x-y (horizontal) plane.
 		let pitch = 0.5 * .pi - atan2f(hypotf(fwd.x, fwd.y), fwd.z)
+		
 		// Measure the roll as the angle between the rotated vector and the x-y (horizontal) plane.
-		let roll = 0.5 * .pi - atan2f(hypotf(right.x, right.y), right.z)
+		// Handle inverted orientation by inverting roll.
+		var roll:Float
+		if up.z > 0.0 {
+			roll = 0.5 * .pi - atan2f(hypotf(right.x, right.y), right.z)
+		} else {
+			roll = 0.5 * .pi + atan2f(hypotf(right.x, right.y), right.z)
+		}
+		
 		// Measure the heading as the angle in the x-y plane.
 		let heading = atan2f(fwd.x, fwd.y)
 		return float3(x:pitch, y:roll, z:heading)
