@@ -80,6 +80,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
 			if let craftNode = craftScene.rootNode.childNode(withName: "Craft", recursively: true) {
 				scene.rootNode.addChildNode(craftNode)
 				theSpacecraft.sceneNode = craftNode
+				theSpacecraft.updatePhysicsBody()
 			}
 		}
 		
@@ -124,7 +125,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
 		}
 		
 		// Set up spacecraft
-		theSpacecraft.position = DoubleVector3(x: 0.0, y: 0.0, z: -670002.0)
+		theSpacecraft.position = simd_double3(x: 0.0, y: 0.0, z: -670002.0)
 		
 		// Number formatter
 		numberFormatter.numberStyle = .decimal
@@ -172,9 +173,6 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
 	func updateCraft(interval:TimeInterval) {
 		// Update the craft position and rotation
 		theSpacecraft.updatePhysics(interval: interval)
-		
-		//		let action = SCNAction.rotateBy(x: x, y: y, z: z, duration: interval)
-		//		craft?.runAction(action)
 	}
 	
 	func updatePlanets(time:TimeInterval) {
@@ -211,14 +209,9 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
 		
 		// Orientation
 		// Up should always be the vector away from the center of the planet being orbited.
-		let angles = theSpacecraft.pitchRollHeadingAngles()
-		let heading = angles.z
-		if let ai = attitudeIndicator {
-			ai.pitchAngle = CGFloat(angles.x)
-			ai.rollAngle = CGFloat(angles.y)
-			ai.heading = CGFloat(heading)
-		}
-		headingReadout?.text = String(format:"%1.0f°", round(degrees(fromRadians:Double(heading))))
+		attitudeIndicator?.orientation = theSpacecraft.orientation()
+		let degreeHeading = degrees(fromRadians: theSpacecraft.heading())
+		headingReadout?.text = String(format:"%1.0f°", round(degreeHeading))
 		
 		// MET: Mission Elapsed Time
 		let met = universalTime - theSpacecraft.missionStartTime
@@ -341,33 +334,34 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
 	}
 	
 	@IBAction func pitchUpOn(_ sender: Any?) {
-		theSpacecraft.setPitchControl(-1.0)
+		theSpacecraft.pilotControls.x = -1.0
 	}
 
 	@IBAction func pitchDownOn(_ sender: Any?) {
-		theSpacecraft.setPitchControl(1.0)
+		theSpacecraft.pilotControls.x = 1.0
 	}
 	
 	@IBAction func yawLeftOn(_ sender: Any?) {
-		theSpacecraft.setYawControl(-1.0)
+		theSpacecraft.pilotControls.z = -1.0
 	}
 	
 	@IBAction func yawRightOn(_ sender: Any?) {
-		theSpacecraft.setYawControl(1.0)
+		theSpacecraft.pilotControls.z = 1.0
 	}
 	
 	@IBAction func rollLeft(_ sender: Any?) {
-		theSpacecraft.setRollControl(1.0)
+		theSpacecraft.pilotControls.y = -1.0
 	}
 	
 	@IBAction func rollRight(_ sender: Any?) {
-		theSpacecraft.setRollControl(-1.0)
+		theSpacecraft.pilotControls.y = 1.0
 	}
 	
 	@IBAction func rotationControlOff(_ sender: Any?) {
-		theSpacecraft.setPitchControl(0.0)
-		theSpacecraft.setYawControl(0.0)
-		theSpacecraft.setRollControl(0.0)
+		theSpacecraft.pilotControls = float3()
+		if theSpacecraft.enableSAS {
+			theSpacecraft.clearAllForces()
+		}
 	}
 	
 

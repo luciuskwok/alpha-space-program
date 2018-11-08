@@ -16,84 +16,112 @@ class Spacecraft {
 	var sceneNode:SCNNode?
 	
 	// Physics state
-	var position = DoubleVector3()
-	var velocity = DoubleVector3(x:2287.0, y:0.0, z:0.0)
+	var position = simd_double3()
+	var velocity = simd_double3(x:2287.0, y:0.0, z:0.0)
 	var missionStartTime:TimeInterval = 0.0
 	var missionHasStarted = false
+	var controlTorque = Float(1000.0) // newton-meters
 	
 	// Sphere of influence
 	var planetRadius = Double(600000)
-	var planetPosition = DoubleVector3()
+	var planetPosition = simd_double3()
 	
 	// Other state
 	var enableRCS = false
 	var enableSAS = true
-	var throttle:Double = 1.0
+	var throttle = Float(1.0)
+	var pilotControls = float3()
 	
 	// Constants
-	let tau = 2.0 * Double.pi
+	let tau = 2.0 * Float.pi
+	// Vectors
+	let forward = float3(x:0.0, y:1.0, z:0.0)
+	let right = float3(x:1.0, y:0.0, z:0.0)
+	let up = float3(x:0.0, y:0.0, z:-1.0)
+	
 
 	// MARK: -
 	
+	func distance(from:simd_double3, to:simd_double3) -> Double {
+		let dx = to.x - from.x
+		let dy = to.y - from.y
+		let dz = to.z - from.z
+		let a = hypot(dx, dy)
+		return hypot(a, dz)
+	}
+	
 	func altitude() -> Double {
-		let distance = position.distance(to: planetPosition)
-		return distance - planetRadius
+		let d = distance(from:position, to: planetPosition)
+		return d - planetRadius
 	}
 	
 	func velocityScalar() -> Double {
-		return velocity.distance(to: DoubleVector3())
+		return distance(from:velocity, to: simd_double3())
 	}
 	
 	func orientation() -> simd_quatf {
-		if let node = sceneNode {
+		// Use the presentation node because it is changed by the physics simulation while the sceneNode isn't.
+		if let node = sceneNode?.presentation {
 			return node.simdOrientation
 		}
 		return simd_quatf()
 	}
 	
-	func rotation() -> SCNVector4 {
-		// Returns axis in first 3 values, and angle of rotation in 4th value.
-		if let node = sceneNode {
-			return node.rotation
-		}
-		return SCNVector4()
+	// MARK: - Physics
+	// Using SceneKit physics
+	
+	func updatePhysicsBody() {
+		let body = SCNPhysicsBody.dynamic()
+		body.mass = 2500 // kg
+		let cylinder = SCNCylinder(radius: 0.625, height: 3.1)
+		body.physicsShape = SCNPhysicsShape(geometry: cylinder, options: [:])
+		body.usesDefaultMomentOfInertia = true
+		
+		// There is no drag in space
+		body.angularDamping = 0.0
+		body.damping = 0.0
+		
+		sceneNode?.physicsBody = body
 	}
 	
+	func clearAllForces() {
+		sceneNode?.physicsBody?.clearAllForces()
+	}
+	
+	func updatePhysics(interval:TimeInterval) {
+		// Update applied torque on each axis separately
+		
+		// Pitch
+		if pilotControls.x != 0.0 {
+			applyTorque(axis: right, angle: pilotControls.x * controlTorque, asImpulse:false)
+		}
+
+		// Roll
+		if pilotControls.y != 0.0 {
+			applyTorque(axis: forward, angle: pilotControls.y * controlTorque, asImpulse:false)
+		}
+
+		// Yaw
+		if pilotControls.z != 0.0 {
+			applyTorque(axis: up, angle: pilotControls.z * controlTorque, asImpulse:false)
+		}
+	}
+
+	func applyTorque(axis:float3, angle:Float, asImpulse:Bool) {
+		// SceneKit applies torque in the world's frame of reference, so rotate the axis to match the craft's orientation.
+		let localAxis = orientation().act(axis)
+		let torque = SCNVector4(x:localAxis.x, y:localAxis.y, z:localAxis.z, w:angle)
+		sceneNode?.physicsBody?.applyTorque(torque, asImpulse: asImpulse)
+	}
+	
+
 	// MARK: - Attitude Indicators
 	// The convention used here is that the craft's Y-axis represents its forward motion.
 	
-	func pitchRollHeadingAngles() -> float3 {
-		// Use the vector pointing forward from the craft to determine pitch, heading, and up/down orientation.
-		let fwd = orientation().act(float3(x:0.0, y:1.0, z:0.0))
-		
-		// Use the right-wing vector to determine roll.
-		let right = orientation().act(float3(x:1.0, y:0.0, z:0.0))
-		
-		// Use the up vector to determine inverted state.
-		let up = orientation().act(float3(x:0.0, y:0.0, z:1.0))
-		
-		// Measure the pitch as the angle between the rotated vector and the x-y (horizontal) plane.
-		let pitch = 0.5 * .pi - atan2f(hypotf(fwd.x, fwd.y), fwd.z)
-		
-		// Measure the roll as the angle between the rotated vector and the x-y (horizontal) plane.
-		// Handle inverted orientation by inverting roll.
-		var roll:Float
-		if up.z > 0.0 {
-			roll = 0.5 * .pi - atan2f(hypotf(right.x, right.y), right.z)
-		} else {
-			roll = 0.5 * .pi + atan2f(hypotf(right.x, right.y), right.z)
-		}
-		
+	func heading() -> Double {
 		// Measure the heading as the angle in the x-y plane.
-		let heading = atan2f(fwd.x, fwd.y)
-		return float3(x:pitch, y:roll, z:heading)
-	}
-	
-	
-	// MARK: -
-	
-	func updatePhysics(interval:TimeInterval) {
-		// Update the craft position and rotation
+		let forwardOrientation = orientation().act(forward)
+		return Double(atan2(forwardOrientation.x, forwardOrientation.y))
 	}
 	
 	// MARK: -
@@ -105,27 +133,32 @@ class Spacecraft {
 	func toggleSAS() {
 		enableSAS = !enableSAS
 		if enableSAS {
-			killRotation()
+			clearAllForces()
 		}
 	}
 	
-	func killRotation() {
-		// Stub.
-		// Need to figure out 3-d rotation to write this code.
-	}
-	
-	func instantRotateDegrees(by deltaAngles:DoubleVector3) {
+	func instantRotateDegrees(by deltaAngles:float3) {
 		if let node = sceneNode {
-			var angles = node.eulerAngles
-			angles.x += Float(deltaAngles.x / 360.0 * tau)
-			angles.y += Float(deltaAngles.y / 360.0 * tau)
-			angles.z += Float(deltaAngles.z / 360.0 * tau)
-			node.eulerAngles = angles
+			let fwd = float3(x:0.0, y:1.0, z:0.0)
+			let up = float3(x:0.0, y:0.0, z:-1.0)
+			let right = float3(x:1.0, y:0.0, z:0.0)
 			
-			//printDebugInfo()
+			// Pitch
+			let pitchAngle = deltaAngles.x / 360.0 * tau
+			node.simdLocalRotate(by: simd_quatf(angle:pitchAngle, axis:right))
 
+			// Roll
+			let rollAngle = deltaAngles.y / 360.0 * tau
+			node.simdLocalRotate(by: simd_quatf(angle:rollAngle, axis:fwd))
+
+			// Yaw
+			let yawAngle = deltaAngles.z / 360.0 * tau
+			node.simdLocalRotate(by: simd_quatf(angle:yawAngle, axis:up))
 		}
 	}
+
+	
+	// MARK: - Debug
 	
 	func printDebugInfo() {
 		if let node = sceneNode {
@@ -141,54 +174,9 @@ class Spacecraft {
 			print (string)
 			string = String(format: "%1.3f %1.3f %1.3f %1.3f", t.m41, t.m42, t.m43, t.m44)
 			print (string)
-
+			
 		}
 	}
 	
-	func setPitchControl(_ pitch:Double) {
-		// Testing: rotate by 15° increments
-		if pitch > 0.0 {
-			// Rotate +15° pitch
-			instantRotateDegrees(by: DoubleVector3(x:15.0, y:0.0, z:0.0))
-		} else if pitch < 0.0 {
-			// Rotate -15° pitch
-			instantRotateDegrees(by: DoubleVector3(x:-15.0, y:0.0, z:0.0))
-		}
-	
-		if pitch == 0.0 && enableSAS {
-			killRotation()
-		}
-	}
 
-	func setYawControl(_ yaw:Double) {
-		// Testing: yaw by 15° increments.
-		if yaw > 0.0 {
-			// Rotate +15° yaw
-			instantRotateDegrees(by: DoubleVector3(x:0.0, y:15.0, z:0.0))
-		} else if yaw < 0.0 {
-			// Rotate -15° yaw
-			instantRotateDegrees(by: DoubleVector3(x:0.0, y:-15.0, z:0.0))
-		}
-
-		if yaw == 0.0 && enableSAS {
-			killRotation()
-		}
-	}
-
-	func setRollControl(_ roll:Double) {
-		// Testing: roll by 15° increments.
-		if roll > 0.0 {
-			// Rotate +15° roll
-			instantRotateDegrees(by: DoubleVector3(x:0.0, y:0.0, z:15.0))
-		} else if roll < 0.0 {
-			// Rotate -15° roll
-			instantRotateDegrees(by: DoubleVector3(x:0.0, y:0.0, z:-15.0))
-		}
-
-		if roll == 0.0 && enableSAS {
-			killRotation()
-		}
-	}
-
-	
 }
