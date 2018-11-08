@@ -43,10 +43,10 @@ class AttitudeIndicatorView: UIView {
 			UIColor.white.set()
 
 			// Lines of latitude
-			for latitude in stride(from:-60, to:61, by:30) {
+			for latitude in stride(from:-60, through:60, by:30) {
 				var points3d:[float3] = []
 				let latRad = radians(degrees:Float(latitude))
-				for longitude in stride(from:0, to:361, by:10) {
+				for longitude in stride(from:0, through:360, by:10) {
 					let longRad = radians(degrees:Float(longitude))
 					let pt = point(latitude: latRad, longitude: longRad, radius: ballRadius)
 					points3d.append(pt)
@@ -61,10 +61,10 @@ class AttitudeIndicatorView: UIView {
 			}
 			
 			// Heading lines
-			for longitude in stride(from:0, to:361, by:30) {
+			for longitude in stride(from:0, through:360, by:30) {
 				var points3d:[float3] = []
 				let longRad = radians(degrees:Float(longitude))
-				for latitude in stride(from:-60, to:61, by:10) {
+				for latitude in stride(from:-60, through:60, by:10) {
 					let latRad = radians(degrees:Float(latitude))
 					let pt = point(latitude: latRad, longitude: longRad, radius: ballRadius)
 					points3d.append(pt)
