@@ -1,5 +1,5 @@
 //
-//  CraftCamera.swift
+//  CameraController.swift
 //  Space Program
 //
 //  Created by Lucius Kwok on 11/3/18.
@@ -10,9 +10,7 @@ import Foundation
 import SceneKit
 
 
-class CraftCamera {
-	let tau = 2.0 * Float.pi
-
+class CameraController {
 	var camera:SCNNode
 	var vabMode = true
 	var target = SCNVector3()
@@ -64,7 +62,7 @@ class CraftCamera {
 			let deltaX = Float(currentLocation.x - panPreviousLocation.x)
 			if deltaX != 0.0 {
 				// Pan around point horizontally
-				panAngle = (panAngle - deltaX * tau / 720.0 + tau).truncatingRemainder(dividingBy: tau)
+				panAngle = (panAngle - deltaX * (2.0 * .pi) / 720.0 +  (2.0 * .pi)).truncatingRemainder(dividingBy:  (2.0 * .pi))
 			}
 			
 			// Vertical axis
@@ -77,7 +75,7 @@ class CraftCamera {
 					target.y = min(19.75, target.y) // replace with actual max height limit
 				} else {
 					// In game mode, vertical gestures adjust the tilt
-					tiltAngle = min(tiltMax, max(tiltMin, tiltAngle + deltaY * tau / 720.0))
+					tiltAngle = min(tiltMax, max(tiltMin, tiltAngle + deltaY * (2.0 * .pi) / 720.0))
 				}
 			}
 			
@@ -97,7 +95,7 @@ class CraftCamera {
 			// Tilt camera from -85° to +85°
 			let deltaY = Float(currentLocation.y - panPreviousLocation.y)
 			if deltaY != 0.0 {
-				tiltAngle = min(tiltMax, max(tiltMin, tiltAngle + deltaY * tau / 720.0))
+				tiltAngle = min(tiltMax, max(tiltMin, tiltAngle + deltaY * (2.0 * .pi) / 720.0))
 				updateCameraPosition()
 			}
 		}

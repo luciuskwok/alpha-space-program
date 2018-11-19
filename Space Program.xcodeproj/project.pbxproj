@@ -12,6 +12,8 @@
 		E0343E9A218A3822006C8C1B /* PartNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0343E99218A3822006C8C1B /* PartNode.swift */; };
 		E0343E9C218A6DA9006C8C1B /* Scene.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = E0343E9B218A6DA9006C8C1B /* Scene.scnassets */; };
 		E0449B56218EB71B004A23DE /* AttitudeIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0449B55218EB71B004A23DE /* AttitudeIndicatorView.swift */; };
+		E05F542E21A27EDA005CF95A /* TrackingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E05F542D21A27EDA005CF95A /* TrackingViewController.swift */; };
+		E05F543021A284A1005CF95A /* GameState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E05F542F21A284A1005CF95A /* GameState.swift */; };
 		E072500F2188243E004E4B07 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E072500D2188243E004E4B07 /* Main.storyboard */; };
 		E072501121882440004E4B07 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E072501021882440004E4B07 /* Assets.xcassets */; };
 		E072501421882440004E4B07 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E072501221882440004E4B07 /* LaunchScreen.storyboard */; };
@@ -20,7 +22,7 @@
 		E0ACC4D02189434B008915B2 /* SpaceCenterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ACC4CC2189434B008915B2 /* SpaceCenterViewController.swift */; };
 		E0ACC4D12189434B008915B2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ACC4CD2189434B008915B2 /* AppDelegate.swift */; };
 		E0ACC4D421895224008915B2 /* Parts.json in Resources */ = {isa = PBXBuildFile; fileRef = E0ACC4D221895224008915B2 /* Parts.json */; };
-		E0C36B0E218D5F52006FCD30 /* CraftCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C36B0D218D5F52006FCD30 /* CraftCamera.swift */; };
+		E0C36B0E218D5F52006FCD30 /* CameraController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C36B0D218D5F52006FCD30 /* CameraController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,6 +31,8 @@
 		E0343E99218A3822006C8C1B /* PartNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartNode.swift; sourceTree = "<group>"; };
 		E0343E9B218A6DA9006C8C1B /* Scene.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = Scene.scnassets; sourceTree = "<group>"; };
 		E0449B55218EB71B004A23DE /* AttitudeIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttitudeIndicatorView.swift; sourceTree = "<group>"; };
+		E05F542D21A27EDA005CF95A /* TrackingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingViewController.swift; sourceTree = "<group>"; };
+		E05F542F21A284A1005CF95A /* GameState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameState.swift; sourceTree = "<group>"; };
 		E07250042188243E004E4B07 /* Space Program.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Space Program.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E072500E2188243E004E4B07 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		E072501021882440004E4B07 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -39,7 +43,7 @@
 		E0ACC4CC2189434B008915B2 /* SpaceCenterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpaceCenterViewController.swift; sourceTree = "<group>"; };
 		E0ACC4CD2189434B008915B2 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E0ACC4D321895224008915B2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = Base; path = Base.lproj/Parts.json; sourceTree = "<group>"; };
-		E0C36B0D218D5F52006FCD30 /* CraftCamera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CraftCamera.swift; sourceTree = "<group>"; };
+		E0C36B0D218D5F52006FCD30 /* CameraController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,13 +92,15 @@
 			children = (
 				E0ACC4CD2189434B008915B2 /* AppDelegate.swift */,
 				E0ACC4CC2189434B008915B2 /* SpaceCenterViewController.swift */,
-				E0ACC4CB2189434B008915B2 /* VehicleAssemblyBuildingViewController.swift */,
 				E0ACC4CA2189434B008915B2 /* GameViewController.swift */,
+				E05F542D21A27EDA005CF95A /* TrackingViewController.swift */,
+				E0ACC4CB2189434B008915B2 /* VehicleAssemblyBuildingViewController.swift */,
 				E0449B55218EB71B004A23DE /* AttitudeIndicatorView.swift */,
-				E0C36B0D218D5F52006FCD30 /* CraftCamera.swift */,
+				E0C36B0D218D5F52006FCD30 /* CameraController.swift */,
 				E0343E95218A04B3006C8C1B /* Spacecraft.swift */,
 				E0343E99218A3822006C8C1B /* PartNode.swift */,
 				E0343E97218A0611006C8C1B /* CraftPart.swift */,
+				E05F542F21A284A1005CF95A /* GameState.swift */,
 			);
 			path = Code;
 			sourceTree = "<group>";
@@ -177,10 +183,12 @@
 				E0343E9A218A3822006C8C1B /* PartNode.swift in Sources */,
 				E0343E96218A04B3006C8C1B /* Spacecraft.swift in Sources */,
 				E0343E98218A0611006C8C1B /* CraftPart.swift in Sources */,
-				E0C36B0E218D5F52006FCD30 /* CraftCamera.swift in Sources */,
+				E05F542E21A27EDA005CF95A /* TrackingViewController.swift in Sources */,
+				E0C36B0E218D5F52006FCD30 /* CameraController.swift in Sources */,
 				E0ACC4D02189434B008915B2 /* SpaceCenterViewController.swift in Sources */,
 				E0ACC4CF2189434B008915B2 /* VehicleAssemblyBuildingViewController.swift in Sources */,
 				E0449B56218EB71B004A23DE /* AttitudeIndicatorView.swift in Sources */,
+				E05F543021A284A1005CF95A /* GameState.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

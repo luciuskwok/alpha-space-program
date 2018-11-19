@@ -9,6 +9,8 @@
 import UIKit
 
 class SpaceCenterViewController: UIViewController {
+	
+	var gameState = GameState()
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -17,6 +19,18 @@ class SpaceCenterViewController: UIViewController {
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
 		navigationController?.isNavigationBarHidden = false
+	}
+	
+	override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+		if segue.identifier == "ShowLaunchPad" {
+			if let dest = segue.destination as? GameViewController {
+				dest.gameState = self.gameState
+			}
+		} else if segue.identifier == "ShowTracking" {
+			if let dest = segue.destination as? TrackingViewController {
+				dest.gameState = self.gameState
+			}
+		}
 	}
 	
 	// MARK: -

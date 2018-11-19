@@ -42,10 +42,9 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
 	@IBOutlet weak var rollLeftButton: UIButton?
 	@IBOutlet weak var rollRightButton: UIButton?
 	
+	var gameState:GameState?
 	var theSpacecraft = Spacecraft()
-	var universalTime = 0.0
-	
-	var camera: CraftCamera?
+	var cameraController: CameraController?
 	var craft: SCNNode?
 	var earth: SCNNode?
 
@@ -105,16 +104,16 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
 			
 			// Set up camera
 			if let cameraNode = scene.rootNode.childNode(withName: "Camera", recursively: true) {
-				let craftCamera = CraftCamera(camera: cameraNode)
-				craftCamera.camera = cameraNode
-				craftCamera.vabMode = false
-				craftCamera.target = SCNVector3(x:0.0, y:0.0, z:0.0)
-				craftCamera.distance = 10.0
-				craftCamera.distanceMax = 600.0
-				craftCamera.distanceMin = 2.5
-				craftCamera.addGestureRecognizers(to: sceneView)
-				craftCamera.updateCameraPosition()
-				camera = craftCamera
+				let cameraCtrl = CameraController(camera: cameraNode)
+				cameraCtrl.camera = cameraNode
+				cameraCtrl.vabMode = false
+				cameraCtrl.target = SCNVector3(x:0.0, y:0.0, z:0.0)
+				cameraCtrl.distance = 10.0
+				cameraCtrl.distanceMax = 600.0
+				cameraCtrl.distanceMin = 2.5
+				cameraCtrl.addGestureRecognizers(to: sceneView)
+				cameraCtrl.updateCameraPosition()
+				cameraController = cameraCtrl
 			} else {
 				print("[LK] Camera not found.")
 			}
@@ -161,11 +160,13 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
 	
 	func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
 		// Skip physics updates in initial frame, in order to get an accurate system time.
-		if scenePreviousRenderTime != -1.0 {
-			let interval = time - scenePreviousRenderTime
-			universalTime += interval
-			updateCraft(interval: interval)
-			updatePlanets(time: universalTime)
+		if let gameState = gameState {
+			if scenePreviousRenderTime != -1.0 {
+				let interval = time - scenePreviousRenderTime
+				gameState.universalTime += interval
+				updateCraft(interval: interval)
+				updatePlanets(time: gameState.universalTime)
+			}
 		}
 		scenePreviousRenderTime = time
 	}
@@ -213,53 +214,15 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
 		let degreeHeading = degrees(fromRadians: theSpacecraft.heading())
 		headingReadout?.text = String(format:"%1.0f°", round(degreeHeading))
 		
-		// MET: Mission Elapsed Time
-		let met = universalTime - theSpacecraft.missionStartTime
-		let (metN, metY, metD, metH, metM, metS) = componentsFromTimeInterval(met)
-		var metString = ""
-		if metY > 0 {
-			metString = String(format:"%dY", metY)
+		// Mission Elapsed Time and Universal Time
+		if let gameState = gameState {
+			METReadout?.text = gameState.elapsedTimeString(since: theSpacecraft.missionStartTime)
+			let (utDate, utTime) = gameState.universalTimeString()
+			UTCDayReadout?.text = utDate
+			UTCTimeReadout?.text = utTime
 		}
-		if metD > 0 || metString.count > 0 {
-			metString = String(format:"%@ %dd", metString, metD)
-		}
-		if metH > 0 || metString.count > 0 {
-			metString = String(format:"%@ %dh", metString, metH)
-		}
-		if metM > 0 || metString.count > 0 {
-			metString = String(format:"%@ %dm", metString, metM)
-		}
-		metString = String(format:"%@ %1.0fs", metString, floor(metS))
-		if metN < 0 {
-			metString = "-" + metString
-		}
-		METReadout?.text = metString
-		
-		// UT: Universal Time
-		let (_, utY, utD, utH, utM, utS) = componentsFromTimeInterval(universalTime)
-		UTCDayReadout?.text = String(format:"Y%d, d%d", utY+1, utD+1)
-		UTCTimeReadout?.text = String(format:"%02d:%02d:%02.0f", utH, utM, floor(utS))
-
 	}
 	
-	func componentsFromTimeInterval(_ interval:Double) -> (sign: Int, year: Int, day: Int, hour: Int, minute: Int, second: Double) {
-		var sec = interval
-		var sign = 1
-		
-		if sec < 0.0 {
-			sec = -sec
-			sign = -1
-		}
-		
-		let min = Int(floor(sec / 60.0))
-		let hr = min / 60
-		let day = hr / 6
-		let year = day / 426
-		let secRemainder = sec.truncatingRemainder(dividingBy:60.0)
-		
-		return (sign, year, day % 426, hr % 6, min % 60, secRemainder)
-	}
-
 	func updateButtonStates() {
 		if theSpacecraft.enableRCS {
 			RCSButton?.backgroundColor = buttonGreenlightBackgroundColor

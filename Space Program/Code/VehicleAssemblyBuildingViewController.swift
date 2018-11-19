@@ -13,15 +13,12 @@ import SceneKit
 class VehicleAssemblyBuildingViewController:
 	UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout
 {
-	let tau = 2.0 * Float.pi
-	
 	@IBOutlet weak var sceneView: SCNView?
 	@IBOutlet weak var partsCollectionView: UICollectionView?
 	
 	var parts:[[String:Any]]?
 	var currentCellSize = CGSize(width: 80, height: 80)
-	
-	var camera: CraftCamera?
+	var cameraController: CameraController?
 
 	// MARK: -
 
@@ -54,15 +51,15 @@ class VehicleAssemblyBuildingViewController:
 			
 			// Set up camera
 			if let cameraNode = vabScene.rootNode.childNode(withName: "Camera", recursively: true) {
-				let craftCamera = CraftCamera(camera: cameraNode)
-				craftCamera.camera = cameraNode
-				craftCamera.vabMode = true
-				craftCamera.target = SCNVector3(x:0.0, y:5.0, z:0.0)
-				craftCamera.distanceMax = 20.0
-				craftCamera.distanceMin = 1.25
-				craftCamera.addGestureRecognizers(to: sceneView)
-				craftCamera.updateCameraPosition()
-				camera = craftCamera
+				let cameraCtrl = CameraController(camera: cameraNode)
+				cameraCtrl.camera = cameraNode
+				cameraCtrl.vabMode = true
+				cameraCtrl.target = SCNVector3(x:0.0, y:5.0, z:0.0)
+				cameraCtrl.distanceMax = 20.0
+				cameraCtrl.distanceMin = 1.25
+				cameraCtrl.addGestureRecognizers(to: sceneView)
+				cameraCtrl.updateCameraPosition()
+				cameraController = cameraCtrl
 			} else {
 				print("[LK] Camera not found.")
 			}

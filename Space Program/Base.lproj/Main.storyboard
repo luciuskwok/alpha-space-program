@@ -698,28 +698,34 @@
         <!--Tracking-->
         <scene sceneID="QbN-4C-GSz">
             <objects>
-                <viewController title="Tracking" id="5yH-fo-7ja" sceneMemberID="viewController">
+                <viewController title="Tracking" id="5yH-fo-7ja" customClass="TrackingViewController" customModule="Space_Program" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Yaa-lD-X6x">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Tracking Placeholder" translatesAutoresizingMaskIntoConstraints="NO" id="iIA-AI-AYa">
+                            <sceneKitView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="evd-8i-nj1">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                            </imageView>
+                                <connections>
+                                    <outlet property="delegate" destination="5yH-fo-7ja" id="BJc-qK-n3c"/>
+                                </connections>
+                            </sceneKitView>
                         </subviews>
                         <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="iIA-AI-AYa" firstAttribute="leading" secondItem="Yaa-lD-X6x" secondAttribute="leading" id="L6N-mL-PBI"/>
-                            <constraint firstAttribute="bottom" secondItem="iIA-AI-AYa" secondAttribute="bottom" id="Q9q-Ac-Jbt"/>
-                            <constraint firstItem="iIA-AI-AYa" firstAttribute="trailing" secondItem="Yaa-lD-X6x" secondAttribute="trailing" id="W3q-xh-yB9"/>
-                            <constraint firstItem="iIA-AI-AYa" firstAttribute="top" secondItem="Yaa-lD-X6x" secondAttribute="top" id="Y5N-fJ-KRb"/>
+                            <constraint firstItem="evd-8i-nj1" firstAttribute="top" secondItem="Yaa-lD-X6x" secondAttribute="top" id="7F7-Gw-Tbh"/>
+                            <constraint firstItem="evd-8i-nj1" firstAttribute="leading" secondItem="1yJ-LI-hT3" secondAttribute="leading" id="7Wj-n3-3fC"/>
+                            <constraint firstItem="evd-8i-nj1" firstAttribute="trailing" secondItem="1yJ-LI-hT3" secondAttribute="trailing" id="lhc-yC-moI"/>
+                            <constraint firstItem="evd-8i-nj1" firstAttribute="bottom" secondItem="1yJ-LI-hT3" secondAttribute="bottom" id="qlb-G3-j6H"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="1yJ-LI-hT3"/>
                     </view>
+                    <connections>
+                        <outlet property="sceneView" destination="evd-8i-nj1" id="9NW-tp-hfm"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Mft-Wm-ghc" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1670" y="737"/>
+            <point key="canvasLocation" x="1668.75" y="736.26760563380287"/>
         </scene>
         <!--Research-->
         <scene sceneID="hWe-8p-ZLV">
@@ -962,7 +968,6 @@
         <image name="Command Pod" width="32" height="40"/>
         <image name="LaunchPad" width="64" height="64"/>
         <image name="SPH" width="64" height="64"/>
-        <image name="Tracking Placeholder" width="600" height="424"/>
         <image name="TrackingStation" width="64" height="64"/>
         <image name="VAB" width="64" height="64"/>
     </resources>
