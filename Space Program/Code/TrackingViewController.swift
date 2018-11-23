@@ -28,6 +28,9 @@ class TrackingViewController: UIViewController, SCNSceneRendererDelegate {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		
+		// == TEST ===
+		OrbitalElements.runTest()
+		
 		// Load "Universe.scn" scene
 		let universeScene = SCNScene(named: "Scene.scnassets/Universe.scn")!
 
@@ -87,7 +90,7 @@ class TrackingViewController: UIViewController, SCNSceneRendererDelegate {
 				cameraCtrl.camera = cameraNode
 				cameraCtrl.vabMode = false
 				cameraCtrl.target = SCNVector3(x:0.0, y:0.0, z:0.0)
-				cameraCtrl.distance = Float(sunRadius * 8.0)
+				cameraCtrl.distance = Float(sunRadius * 24.0)
 				cameraCtrl.distanceMax = Float(sunRadius * 1000.0)
 				cameraCtrl.distanceMin = Float(sunRadius * 4.0)
 				cameraCtrl.addGestureRecognizers(to: sceneView)
@@ -115,5 +118,5 @@ class TrackingViewController: UIViewController, SCNSceneRendererDelegate {
 		scenePreviousRenderTime = time
 	} // end func renderer
 
-
+	
 }

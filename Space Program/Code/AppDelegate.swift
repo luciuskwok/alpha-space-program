@@ -15,7 +15,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-		// Override point for customization after application launch.
+		
+		// Switch to Tracking automatically on launch
+		if let nc = application.windows.first?.rootViewController as? UINavigationController {
+			if let vc = nc.viewControllers.first as? SpaceCenterViewController {
+				vc.showTracking(nil)
+			}
+		}
+		
 		return true
 	}
 

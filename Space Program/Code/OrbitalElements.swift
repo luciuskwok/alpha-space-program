@@ -63,20 +63,16 @@ struct OrbitalElements {
 		// cos(θ) = (cos (E) - ε) / (1 - ε * cos(E))
 		// if ε is not close to 1.0, use: θ = 2 * atan2( sqrt(1-ε) * cos(E/2), sqrt(1-ε) * sin(E/2) )
 		let sign = (ea < 1.0) ? -1.0 : 1.0
-		return sign * 2.0 * atan2( sqrt(1.0 - eccentricity) * cos(ea / 2.0), sqrt(1.0 + eccentricity) * sin(ea / 2.0) )
+		return sign * 2.0 * atan2( sqrt(1.0 + eccentricity) * sin(ea / 2.0), sqrt(1.0 - eccentricity) * cos(ea / 2.0) )
 	}
 	
 	func eccentricAnomaly(fromMeanAnomaly ma:Double) -> Double {
 		var ea: Double = (eccentricity > 0.5) ? .pi : ma
-		var correction: Double
-		
-		repeat {
-			correction = (ea - ma + eccentricity * sin (ea)) / (1 - eccentricity * cos (ea))
-			if correction < 0.001 {
-				break
-			}
+		var correction = Double(1.0)
+		while fabs(correction) > 1e-6 {
+			correction = (ea - ma - eccentricity * sin (ea)) / (1 - eccentricity * cos (ea))
 			ea = ea - correction
-		} while true
+		}
 		return ea
 	}
 	
@@ -103,6 +99,47 @@ struct OrbitalElements {
 		let ta = trueAnomaly(fromEccentricAnomaly: ea)
 		let r = radius(atEccentricAnomaly: ea)
 		return (r:r, angle:ta)
+	}
+	
+	func velocity(distance r:Double, GM:Double) -> Double {
+		return sqrt (GM * (2 / r - 1 / semiMajorAxis) )
+	}
+
+	// MARK: - Testing
+	
+	static func runTest() {
+		let GM = 3.5316e12
+		let testOrbit = OrbitalElements(semiMajorAxis: 9110920, eccentricity: 0.746733)
+		let apoapsis = testOrbit.apoapsisFromCenter()
+		let periapsis = testOrbit.periapsisFromCenter()
+		let period = testOrbit.orbitalPeriod(GM: GM)
+		
+		print("== Orbit Calculation Test ==")
+		print("Semi-major axis:", testOrbit.semiMajorAxis, "Eccentricity:", testOrbit.eccentricity)
+		print("Ap:", apoapsis, "Pe:", periapsis)
+		print("Period:", period)
+		
+		// Test anomaly calcuations
+		let ta = 155.0 / 180.0 * .pi
+		let ea = testOrbit.eccentricAnomaly(fromTrueAnomaly: ta)
+		let ta1 = testOrbit.trueAnomaly(fromEccentricAnomaly: ea)
+		let ma = testOrbit.meanAnomaly(fromEccentricAnomaly: ea)
+		let ea2 = testOrbit.eccentricAnomaly(fromMeanAnomaly: ma)
+		let ta2 = testOrbit.trueAnomaly(fromEccentricAnomaly: ea2)
+		
+		print("θ:", ta, "ta1:", ta1, "ta2:", ta2)
+		print("E:", ea, "ea2:", ea2)
+		print("M:", ma)
+		
+		// Test positionn calculations
+		let timeSincePe = 21039.5
+		let (rp, angle) = testOrbit.polarCoordinates(atTime: timeSincePe, GM: GM)
+		print("t:", timeSincePe, "distance:", rp, "θ:", angle)
+		
+		let velocity = testOrbit.velocity(distance: rp, GM: GM)
+		print("velocity:", velocity)
+
+		
 	}
 
 }
