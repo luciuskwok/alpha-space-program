@@ -57,21 +57,35 @@ struct OrbitalElements {
 	func eccentricAnomaly(fromTrueAnomaly ta:Double) -> Double {
 		// E: eccentric anomaly
 		// E = arctan( sqrt( (1 - ε) / (1 + ε) * tan(θ / 2)² ) ) * 2
-		return atan (sqrt ( (1-eccentricity)/(1+eccentricity) * pow (tan (ta/2), 2) ) ) * 2.0
+		// E = arctan( sqrt( (1 - ε) / (1 + ε) ) * tan(θ / 2) ) * 2
+		// E = arctan( sqrt(1 - ε) / sqrt(1 + ε) * tan(θ / 2) ) * 2
+		// E = arctan( sqrt(1 - ε) / sqrt(1 + ε) * cos(θ / 2) / sin(θ / 2) ) * 2
+		// E = arctan( sqrt(1 - ε) * cos(θ / 2) / sqrt(1+ ε) * sin(θ / 2) ) * 2
+		// E = atan2( sqrt(1- ε) * cos(θ / 2), sqrt(1+ ε) * sin(θ / 2) ) * 2
+		// atan2(y, x) = atan(y/x)
+
+		let e = eccentricity
+		return 2.0 * atan( sqrt((1-e) / (1+e)) * tan(ta/2) )
 	}
 	
 	func trueAnomaly(fromEccentricAnomaly ea:Double) -> Double {
 		// cos(θ) = (cos (E) - ε) / (1 - ε * cos(E))
 		// if ε is not close to 1.0, use: θ = 2 * atan2( sqrt(1-ε) * cos(E/2), sqrt(1-ε) * sin(E/2) )
-		let sign = (ea < 1.0) ? -1.0 : 1.0
-		return sign * 2.0 * atan2( sqrt(1.0 + eccentricity) * sin(ea / 2.0), sqrt(1.0 - eccentricity) * cos(ea / 2.0) )
+		//let sign = (ea < 0.0) ? -1.0 : 1.0
+		let e = eccentricity
+		return 2.0 * atan2( sqrt(1+e) * sin(ea/2), sqrt(1-e) * cos(ea/2) )
 	}
 	
 	func eccentricAnomaly(fromMeanAnomaly ma:Double) -> Double {
-		var ea: Double = (eccentricity > 0.5) ? .pi : ma
+		var ea: Double = ma
 		var correction = Double(1.0)
-		while fabs(correction) > 1e-6 {
+		while fabs(correction) > 1e-6 && fabs(correction) <= 2 * .pi {
 			correction = (ea - ma - eccentricity * sin (ea)) / (1 - eccentricity * cos (ea))
+			// == DEBUG ==
+			if fabs(correction) > .pi {
+				print("correction=\(correction), ea=\(ea)")
+			}
+			// == END DEBUG ==
 			ea = ea - correction
 		}
 		return ea
@@ -109,7 +123,7 @@ struct OrbitalElements {
 	func orbitPathCoordinates(divisions:Int) -> [simd_double2] {
 		var coords:[simd_double2] = []
 		for index in 0...divisions {
-			let ea = (Double(index) / Double(divisions) - 0.5) * 2 * .pi
+			let ea = (Double(index) / Double(divisions)) * 2 * .pi
 			let r = radius(atEccentricAnomaly: ea)
 			let ta = trueAnomaly(fromEccentricAnomaly: ea)
 			let x = r * cos(ta)
@@ -122,6 +136,15 @@ struct OrbitalElements {
 	// MARK: - Testing
 	static func runTest() {
 		testOneOrbit(GM: 3.5316e12, sma: 9110920, ecc: 0.746733)
+		//testOneOrbit(GM: 3.5316e12, sma: 9110920, ecc: 0.0)
+		
+	}
+	
+	static func printRemainders() {
+		for index in -10...10 {
+			let x = Double(index)
+			print(String(format:"x=%3.0f, remainder=%2.0f, truncatingRemainder=%2.0f", x, x.remainder(dividingBy: 5.0), x.truncatingRemainder(dividingBy: 5.0)))
+		}
 	}
 	
 	static func testOneOrbit(GM:Double, sma:Double, ecc:Double) {
@@ -138,13 +161,13 @@ struct OrbitalElements {
 		// Test anomaly calcuations in 2 full circles
 		for deg in stride(from: -360, through: 360, by: 15) {
 			let ta = Double(deg) / 180.0 * .pi
-			let ea = testOrbit.eccentricAnomaly(fromTrueAnomaly: ta)
-			let ta1 = testOrbit.trueAnomaly(fromEccentricAnomaly: ea)
-			let ma = testOrbit.meanAnomaly(fromEccentricAnomaly: ea)
-			let ea2 = testOrbit.eccentricAnomaly(fromMeanAnomaly: ma)
+			let ea1 = testOrbit.eccentricAnomaly(fromTrueAnomaly: ta)
+			let ta1 = testOrbit.trueAnomaly(fromEccentricAnomaly: ea1)
+			let ma2 = testOrbit.meanAnomaly(fromEccentricAnomaly: ea1)
+			let ea2 = testOrbit.eccentricAnomaly(fromMeanAnomaly: ma2)
 			let ta2 = testOrbit.trueAnomaly(fromEccentricAnomaly: ea2)
 			
-			print(String(format:"θ=%1.6f, ta1=%1.6f, ta2=%1.6f, ea=%1.6f, ea2=%1.6f, M=%1.6f", ta, ta1, ta2, ea, ea2, ma))
+			print(String(format:"θ=%6.3f, ea1=%6.3f, ta1=%6.3f, ma2=%6.3f, ea2=%6.3f, ta2=%6.3f", ta, ea1, ta1, ma2, ea2, ta2))
 		}
 		
 		// Test position calculations

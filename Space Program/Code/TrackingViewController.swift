@@ -75,7 +75,7 @@ class TrackingViewController: UIViewController, SCNSceneRendererDelegate {
 		let eveScene = SCNScene(named: "Scene.scnassets/Eve.dae")!
 		let eveNode = eveScene.rootNode.childNode(withName: "Eve", recursively: true)!
 		universeScene.rootNode.addChildNode(eveNode)
-		eve = CelestialBody(orbit: OrbitalElements(semiMajorAxis: 100.0, eccentricity: 0.0625), gravitationalConstant: 8.172e12, radius: 2.0, sceneNode: eveNode)
+		eve = CelestialBody(orbit: OrbitalElements(semiMajorAxis: 100.0, eccentricity: 0.75), gravitationalConstant: 8.172e12, radius: 2.0, sceneNode: eveNode)
 		eveNode.position = SCNVector3(x:100.0, y:0.0, z:0.0)
 		
 		// Eve orbit line
