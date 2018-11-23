@@ -43,6 +43,7 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
 	@IBOutlet weak var rollRightButton: UIButton?
 	
 	var gameState:GameState?
+	var scenePreviousRenderTime = -1.0
 	var theSpacecraft = Spacecraft()
 	var cameraController: CameraController?
 	var craft: SCNNode?
@@ -56,7 +57,6 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
 	let userInterfaceUpdateInterval = 1.0/15.0
 	var userInterfaceUpdateTimer:Timer?
 	
-	var scenePreviousRenderTime = -1.0
 	
 	// MARK: -
 

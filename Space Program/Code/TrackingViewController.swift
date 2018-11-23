@@ -15,6 +15,7 @@ class TrackingViewController: UIViewController, SCNSceneRendererDelegate {
 	@IBOutlet weak var sceneView: SCNView?
 
 	var gameState:GameState?
+	var scenePreviousRenderTime = -1.0
 	var cameraController: CameraController?
 	var sunNode:SCNNode?
 	var eveNode:SCNNode?
@@ -23,12 +24,15 @@ class TrackingViewController: UIViewController, SCNSceneRendererDelegate {
 
 	// Constants
 	let sunRadius = Double(10.0) // Double(261.6e6) // 261,600 km
+	
+	
 	let kerbinRadius = Double(4.0) // Double(600e3) // 600 km
 	let kerbinSemiMajorAxis = Double(40.0) // Double(13599840256) // 13,599,840,256 m
 	let munRadius = Double(1.08) // Double(200e3) // 200 km
-	let munSemiMajorAxis = Double(4.0) // Double(12e6) // 12,000 km
+	let munSemiMajorAxis = Double(8.0) // Double(12e6) // 12,000 km
 	let eveRadius = Double(2.0) // Double(700e3) // 700 km
 	let eveSemiMajorAxis = Double(20.0) // Double(9832684) // 9,832,684 m
+	let eveEccentricity = Double(0.25)
 
 	// MARK: -
 	
@@ -104,12 +108,24 @@ class TrackingViewController: UIViewController, SCNSceneRendererDelegate {
 			} else {
 				print("[LK] Camera not found.")
 			}
+			
+		} // end if
+	} // end func viewDidLoad()
 
-
-			// end func viewDidLoad()
+	// MARK: - SceneKit
+	
+	func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
+		// Skip physics updates in initial frame, in order to get an accurate system time.
+		if let gameState = gameState {
+			if scenePreviousRenderTime != -1.0 {
+				let interval = time - scenePreviousRenderTime
+				gameState.universalTime += interval
+				//updateCraft(interval: interval)
+				//updatePlanets(time: gameState.universalTime)
+			}
 		}
-		
-		
-	}
+		scenePreviousRenderTime = time
+	} // end func renderer
+
 
 }
