@@ -17,22 +17,11 @@ class TrackingViewController: UIViewController, SCNSceneRendererDelegate {
 	var gameState:GameState?
 	var scenePreviousRenderTime = -1.0
 	var cameraController: CameraController?
-	var sunNode:SCNNode?
-	var eveNode:SCNNode?
-	var kerbinNode:SCNNode?
-	var munNode:SCNNode?
-
-	// Constants
-	let sunRadius = Double(10.0) // Double(261.6e6) // 261,600 km
 	
-	
-	let kerbinRadius = Double(4.0) // Double(600e3) // 600 km
-	let kerbinSemiMajorAxis = Double(40.0) // Double(13599840256) // 13,599,840,256 m
-	let munRadius = Double(1.08) // Double(200e3) // 200 km
-	let munSemiMajorAxis = Double(8.0) // Double(12e6) // 12,000 km
-	let eveRadius = Double(2.0) // Double(700e3) // 700 km
-	let eveSemiMajorAxis = Double(20.0) // Double(9832684) // 9,832,684 m
-	let eveEccentricity = Double(0.25)
+	var sun: CelestialBody?
+	var kerbin: CelestialBody?
+	var mun: CelestialBody?
+	var eve: CelestialBody?
 
 	// MARK: -
 	
@@ -52,37 +41,35 @@ class TrackingViewController: UIViewController, SCNSceneRendererDelegate {
 			UIImage(named:"space_skybox_back")
 		]
 		
+		// Set up solar system
+		
 		// Get Sun node
 		let sunScene = SCNScene(named: "Scene.scnassets/Sun.dae")!
-		let aSunNode = sunScene.rootNode.childNode(withName: "Sun", recursively: true)!
-		universeScene.rootNode.addChildNode(aSunNode)
-		aSunNode.scale = SCNVector3(sunRadius, sunRadius, sunRadius)
-		aSunNode.position = SCNVector3(x:0.0, y:0.0, z:0.0)
-		sunNode = aSunNode
+		let sunNode = sunScene.rootNode.childNode(withName: "Sun", recursively: true)!
+		universeScene.rootNode.addChildNode(sunNode)
+		sun = CelestialBody(orbit: OrbitalElements(semiMajorAxis: 0.0, eccentricity: 0.0), gravitationalConstant: 1.172e18, radius: 10.0, sceneNode: sunNode)
+		sunNode.position = SCNVector3(x:0.0, y:0.0, z:0.0)
 		
 		// Get Kerbin/Earth node
 		let earthScene = SCNScene(named: "Scene.scnassets/Earth.scn")!
-		let anEarthNode = earthScene.rootNode.childNode(withName: "Earth", recursively: true)!
-		universeScene.rootNode.addChildNode(anEarthNode)
-		anEarthNode.scale = SCNVector3(kerbinRadius, kerbinRadius, kerbinRadius)
-		anEarthNode.position = SCNVector3(x:Float(kerbinSemiMajorAxis), y:0.0, z:0.0)
-		kerbinNode = anEarthNode
+		let earthNode = earthScene.rootNode.childNode(withName: "Earth", recursively: true)!
+		universeScene.rootNode.addChildNode(earthNode)
+		kerbin = CelestialBody(orbit: OrbitalElements(semiMajorAxis: 150.0, eccentricity: 0.0), gravitationalConstant: 3.5316e12, radius: 4.0, sceneNode: earthNode)
+		earthNode.position = SCNVector3(x:150.0, y:0.0, z:0.0)
 		
 		// Get Mun node
 		let munScene = SCNScene(named: "Scene.scnassets/Mun.dae")!
-		let aMunNode = munScene.rootNode.childNode(withName: "Mun", recursively: true)!
-		universeScene.rootNode.addChildNode(aMunNode)
-		aMunNode.scale = SCNVector3(munRadius, munRadius, munRadius)
-		aMunNode.position = SCNVector3(x:Float(kerbinSemiMajorAxis - munSemiMajorAxis), y:0.0, z:0.0)
-		munNode = aMunNode
+		let munNode = munScene.rootNode.childNode(withName: "Mun", recursively: true)!
+		universeScene.rootNode.addChildNode(munNode)
+		mun = CelestialBody(orbit: OrbitalElements(semiMajorAxis: 8.0, eccentricity: 0.0), gravitationalConstant: 6.5138398e10, radius: 1.08, sceneNode: munNode)
+		munNode.position = SCNVector3(x:142.0, y:0.0, z:0.0)
 
 		// Get Eve node
 		let eveScene = SCNScene(named: "Scene.scnassets/Eve.dae")!
-		let anEveNode = eveScene.rootNode.childNode(withName: "Eve", recursively: true)!
-		universeScene.rootNode.addChildNode(anEveNode)
-		anEveNode.scale = SCNVector3(eveRadius, eveRadius, eveRadius)
-		anEveNode.position = SCNVector3(x:Float(eveSemiMajorAxis), y:0.0, z:0.0)
-		eveNode = anEveNode
+		let eveNode = eveScene.rootNode.childNode(withName: "Eve", recursively: true)!
+		universeScene.rootNode.addChildNode(eveNode)
+		eve = CelestialBody(orbit: OrbitalElements(semiMajorAxis: 100.0, eccentricity: 0.0), gravitationalConstant: 8.172e12, radius: 2.0, sceneNode: eveNode)
+		eveNode.position = SCNVector3(x:100.0, y:0.0, z:0.0)
 		
 		if let sceneView = sceneView {
 			// Configure scene view
@@ -95,6 +82,7 @@ class TrackingViewController: UIViewController, SCNSceneRendererDelegate {
 
 			// Set up camera
 			if let cameraNode = universeScene.rootNode.childNode(withName: "Camera", recursively: true) {
+				let sunRadius = sun!.radius
 				let cameraCtrl = CameraController(camera: cameraNode)
 				cameraCtrl.camera = cameraNode
 				cameraCtrl.vabMode = false
