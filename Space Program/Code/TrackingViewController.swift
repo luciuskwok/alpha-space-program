@@ -28,7 +28,7 @@ class TrackingViewController: UIViewController, SCNSceneRendererDelegate {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		
-		// == TEST ===
+		// TEST
 		OrbitalElements.runTest()
 		
 		// Load "Universe.scn" scene
@@ -60,6 +60,10 @@ class TrackingViewController: UIViewController, SCNSceneRendererDelegate {
 		kerbin = CelestialBody(orbit: OrbitalElements(semiMajorAxis: 150.0, eccentricity: 0.0), gravitationalConstant: 3.5316e12, radius: 4.0, sceneNode: earthNode)
 		earthNode.position = SCNVector3(x:150.0, y:0.0, z:0.0)
 		
+		// Kerbin orbit line
+		let kerbinOrbitNode = orbitLineNode(orbit: kerbin!.orbit)
+		universeScene.rootNode.addChildNode(kerbinOrbitNode)
+		
 		// Get Mun node
 		let munScene = SCNScene(named: "Scene.scnassets/Mun.dae")!
 		let munNode = munScene.rootNode.childNode(withName: "Mun", recursively: true)!
@@ -71,8 +75,12 @@ class TrackingViewController: UIViewController, SCNSceneRendererDelegate {
 		let eveScene = SCNScene(named: "Scene.scnassets/Eve.dae")!
 		let eveNode = eveScene.rootNode.childNode(withName: "Eve", recursively: true)!
 		universeScene.rootNode.addChildNode(eveNode)
-		eve = CelestialBody(orbit: OrbitalElements(semiMajorAxis: 100.0, eccentricity: 0.0), gravitationalConstant: 8.172e12, radius: 2.0, sceneNode: eveNode)
+		eve = CelestialBody(orbit: OrbitalElements(semiMajorAxis: 100.0, eccentricity: 0.0625), gravitationalConstant: 8.172e12, radius: 2.0, sceneNode: eveNode)
 		eveNode.position = SCNVector3(x:100.0, y:0.0, z:0.0)
+		
+		// Eve orbit line
+		let eveOrbitNode = orbitLineNode(orbit: eve!.orbit)
+		universeScene.rootNode.addChildNode(eveOrbitNode)
 		
 		if let sceneView = sceneView {
 			// Configure scene view
@@ -104,6 +112,29 @@ class TrackingViewController: UIViewController, SCNSceneRendererDelegate {
 	} // end func viewDidLoad()
 
 	// MARK: - SceneKit
+	
+	func orbitLineNode(orbit:OrbitalElements) -> SCNNode {
+		let flatCoords = orbit.orbitPathCoordinates(divisions: 180)
+		var geoCoords = [SCNVector3]()
+		var geoElements = [SCNGeometryElement]()
+		var index = Int16(0)
+		for coord in flatCoords {
+			geoCoords.append (SCNVector3 (x:Float(coord.x), y:0.0, z:Float(coord.y) ) )
+			if index > 0 {
+				geoElements.append (SCNGeometryElement(indices: [index-1, index], primitiveType: .line) )
+			}
+			index += 1
+		}
+		let vertexSource = SCNGeometrySource(vertices: geoCoords)
+		let orbitGeometry = SCNGeometry(sources: [vertexSource], elements: geoElements)
+		
+		let orbitMaterial = orbitGeometry.firstMaterial!
+		orbitMaterial.fillMode = .lines
+		orbitMaterial.isDoubleSided = true
+		orbitMaterial.lightingModel = .constant
+		
+		return SCNNode(geometry: orbitGeometry)
+	}
 	
 	func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
 		// Skip physics updates in initial frame, in order to get an accurate system time.
