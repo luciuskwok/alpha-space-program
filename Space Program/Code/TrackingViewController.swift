@@ -47,40 +47,48 @@ class TrackingViewController: UIViewController, SCNSceneRendererDelegate {
 		// Set up solar system
 		
 		// Get Sun node
-		let sunScene = SCNScene(named: "Scene.scnassets/Sun.dae")!
-		let sunNode = sunScene.rootNode.childNode(withName: "Sun", recursively: true)!
+		sun = CelestialBody(orbit: OrbitalElements(semiMajorAxis: 0.0, eccentricity: 0.0), gravitationalConstant: 1e4, radius: 10.0, parent:nil)
+		// Sun's actual GM in KSP should be 1.172e18.
+		let sunNode = sun!.loadSceneNode(fileName: "Sun.dae", nodeName: "Sun")
 		universeScene.rootNode.addChildNode(sunNode)
-		sun = CelestialBody(orbit: OrbitalElements(semiMajorAxis: 0.0, eccentricity: 0.0), gravitationalConstant: 1.172e18, radius: 10.0, sceneNode: sunNode)
-		sunNode.position = SCNVector3(x:0.0, y:0.0, z:0.0)
 		
 		// Get Kerbin/Earth node
-		let earthScene = SCNScene(named: "Scene.scnassets/Earth.scn")!
-		let earthNode = earthScene.rootNode.childNode(withName: "Earth", recursively: true)!
-		universeScene.rootNode.addChildNode(earthNode)
-		kerbin = CelestialBody(orbit: OrbitalElements(semiMajorAxis: 150.0, eccentricity: 0.0), gravitationalConstant: 3.5316e12, radius: 4.0, sceneNode: earthNode)
-		earthNode.position = SCNVector3(x:150.0, y:0.0, z:0.0)
+		kerbin = CelestialBody(orbit: OrbitalElements(semiMajorAxis: 150.0, eccentricity: 0.0), gravitationalConstant: 2e3, radius: 4.0, parent:sun)
+		// Kerbin's GM should be 3.5316e12
+		let kerNode = kerbin!.loadSceneNode(fileName: "Earth.scn", nodeName: "Earth")
+		universeScene.rootNode.addChildNode(kerNode)
 		
 		// Kerbin orbit line
-		let kerbinOrbitNode = orbitLineNode(orbit: kerbin!.orbit)
-		universeScene.rootNode.addChildNode(kerbinOrbitNode)
+		let kerOrbitNode = kerbin!.orbitLineNode()
+		universeScene.rootNode.addChildNode(kerOrbitNode)
 		
 		// Get Mun node
-		let munScene = SCNScene(named: "Scene.scnassets/Mun.dae")!
-		let munNode = munScene.rootNode.childNode(withName: "Mun", recursively: true)!
-		universeScene.rootNode.addChildNode(munNode)
-		mun = CelestialBody(orbit: OrbitalElements(semiMajorAxis: 8.0, eccentricity: 0.0), gravitationalConstant: 6.5138398e10, radius: 1.08, sceneNode: munNode)
-		munNode.position = SCNVector3(x:142.0, y:0.0, z:0.0)
+		mun = CelestialBody(orbit: OrbitalElements(semiMajorAxis: 8.0, eccentricity: 0.0), gravitationalConstant: 6.5138398e10, radius: 1.08, parent:kerbin)
+		let munNode = mun!.loadSceneNode(fileName: "Mun.dae", nodeName: "Mun")
+		kerNode.addChildNode(munNode)
 
-		// Get Eve node
-		let eveScene = SCNScene(named: "Scene.scnassets/Eve.dae")!
-		let eveNode = eveScene.rootNode.childNode(withName: "Eve", recursively: true)!
+		// Mun orbit line
+		let munOrbitNode = mun!.orbitLineNode()
+		kerNode.addChildNode(munOrbitNode)
+
+		// Get Eve nodeb
+		eve = CelestialBody(orbit: OrbitalElements(semiMajorAxis: 100.0, eccentricity: 0.75), gravitationalConstant: 8.172e12, radius: 2.0, parent:sun)
+		let eveNode = eve!.loadSceneNode(fileName: "Eve.dae", nodeName: "Eve")
 		universeScene.rootNode.addChildNode(eveNode)
-		eve = CelestialBody(orbit: OrbitalElements(semiMajorAxis: 100.0, eccentricity: 0.75), gravitationalConstant: 8.172e12, radius: 2.0, sceneNode: eveNode)
-		eveNode.position = SCNVector3(x:100.0, y:0.0, z:0.0)
 		
 		// Eve orbit line
-		let eveOrbitNode = orbitLineNode(orbit: eve!.orbit)
+		let eveOrbitNode = eve!.orbitLineNode()
 		universeScene.rootNode.addChildNode(eveOrbitNode)
+		
+		// Set initial positions
+		updateBodies(time: gameState!.universalTime)
+		
+		// == DEBUG ==
+		// Print orbital periods
+		let pEve = eve!.orbit.orbitalPeriod(GM: sun!.gravitationalConstant)
+		let pKerbin = kerbin!.orbit.orbitalPeriod(GM: sun!.gravitationalConstant)
+		let pMun = mun!.orbit.orbitalPeriod(GM: kerbin!.gravitationalConstant)
+		print(String(format:"Orbits: Eve=%1.1fs K=%1.1fs Mun=%1.1fs", pEve, pKerbin, pMun))
 		
 		if let sceneView = sceneView {
 			// Configure scene view
@@ -113,29 +121,6 @@ class TrackingViewController: UIViewController, SCNSceneRendererDelegate {
 
 	// MARK: - SceneKit
 	
-	func orbitLineNode(orbit:OrbitalElements) -> SCNNode {
-		let flatCoords = orbit.orbitPathCoordinates(divisions: 180)
-		var geoCoords = [SCNVector3]()
-		var geoElements = [SCNGeometryElement]()
-		var index = Int16(0)
-		for coord in flatCoords {
-			geoCoords.append (SCNVector3 (x:Float(coord.x), y:0.0, z:Float(coord.y) ) )
-			if index > 0 {
-				geoElements.append (SCNGeometryElement(indices: [index-1, index], primitiveType: .line) )
-			}
-			index += 1
-		}
-		let vertexSource = SCNGeometrySource(vertices: geoCoords)
-		let orbitGeometry = SCNGeometry(sources: [vertexSource], elements: geoElements)
-		
-		let orbitMaterial = orbitGeometry.firstMaterial!
-		orbitMaterial.fillMode = .lines
-		orbitMaterial.isDoubleSided = true
-		orbitMaterial.lightingModel = .constant
-		
-		return SCNNode(geometry: orbitGeometry)
-	}
-	
 	func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
 		// Skip physics updates in initial frame, in order to get an accurate system time.
 		if let gameState = gameState {
@@ -143,11 +128,17 @@ class TrackingViewController: UIViewController, SCNSceneRendererDelegate {
 				let interval = time - scenePreviousRenderTime
 				gameState.universalTime += interval
 				//updateCraft(interval: interval)
-				//updatePlanets(time: gameState.universalTime)
+				updateBodies(time: gameState.universalTime)
 			}
 		}
 		scenePreviousRenderTime = time
 	} // end func renderer
+	
+	func updateBodies(time:Double) {
+		eve?.updatePosition(atTime:time)
+		kerbin?.updatePosition(atTime:time)
+		mun?.updatePosition(atTime:time)
+	}
 
 	
 }

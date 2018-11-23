@@ -13,15 +13,70 @@ class CelestialBody {
 	let orbit: OrbitalElements
 	let gravitationalConstant: Double
 	let radius: Double
-	let sceneNode: SCNNode
+	var sphereOfInfluenceNode: SCNNode?
+	var bodyNode: SCNNode?
+	var parentBody: CelestialBody?
 	
-	init(orbit o:OrbitalElements, gravitationalConstant gm:Double, radius r:Double, sceneNode n:SCNNode) {
+	init(orbit o:OrbitalElements, gravitationalConstant gm:Double, radius r:Double, parent:CelestialBody?) {
 		orbit = o
 		gravitationalConstant = gm
 		radius = r
-		sceneNode = n
-		// sceneNode should be a sphere with radius=1.0m, this will scale the sphere to match the radius
-		n.scale = SCNVector3(r, r, r)
+		parentBody = parent
+	}
+	
+	func loadSceneNode(fileName:String, nodeName:String) -> SCNNode {
+		// Model in file should be a sphere with radius=1.0m, this will scale the sphere to match the radius
+		let scene = SCNScene(named: "Scene.scnassets/" + fileName)!
+		let bNode = scene.rootNode.childNode(withName: nodeName, recursively: true)!
+		bNode.scale = SCNVector3(radius, radius, radius)
+		bodyNode = bNode
+		
+		// Create a SOI node with no geometry so that objects within the SOI move with it.
+		let soiNode = SCNNode(geometry: nil)
+		soiNode.addChildNode(bNode)
+		sphereOfInfluenceNode = soiNode
+		
+		// Return SOI node, which the caller should add to the universe scene.
+		return soiNode
+	}
+
+	func orbitLineNode() -> SCNNode {
+		let flatCoords = orbit.orbitPathCoordinates(divisions: 180)
+		var geoCoords = [SCNVector3]()
+		var geoElements = [SCNGeometryElement]()
+		var index = Int16(0)
+		for coord in flatCoords {
+			geoCoords.append (SCNVector3 (x:Float(coord.x), y:0.0, z:Float(coord.y) ) )
+			if index > 0 {
+				geoElements.append (SCNGeometryElement(indices: [index-1, index], primitiveType: .line) )
+			}
+			index += 1
+		}
+		let vertexSource = SCNGeometrySource(vertices: geoCoords)
+		let orbitGeometry = SCNGeometry(sources: [vertexSource], elements: geoElements)
+		
+		let orbitMaterial = orbitGeometry.firstMaterial!
+		orbitMaterial.fillMode = .lines
+		orbitMaterial.isDoubleSided = true
+		orbitMaterial.lightingModel = .constant
+		
+		return SCNNode(geometry: orbitGeometry)
+	}
+	
+	func coordinates(atTime time:Double) -> simd_double3 {
+		let GM = parentBody!.gravitationalConstant
+		let (rp, angle) = orbit.polarCoordinates(atTime: time, GM: GM)
+		// TODO: apply rotation to orbit
+		
+		let x = rp * cos(angle)
+		let y = 0.0
+		let z = -rp * sin(angle)
+		return simd_double3(x, y, z)
+	}
+
+	func updatePosition(atTime time:Double) {
+		let r = coordinates(atTime: time)
+		sphereOfInfluenceNode!.position = SCNVector3(x:Float(r.x), y:Float(r.y), z:Float(r.z))
 	}
 	
 	
