@@ -3,7 +3,7 @@
 		"name": "Sun",
 		"GM": 1e4,
 		"radius": 6.957,
-		"sceneFile": "Sun.dae",
+		"color": "FF6B08",
 		"children": 
 		[
 			{
