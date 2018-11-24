@@ -26,6 +26,7 @@ class CelestialBody {
 	}
 	
 	func loadSceneNode(fileName:String, nodeName:String) -> SCNNode {
+		// Loads a model from a file and creates a hierarchy of a SOI node and the model node inside it.
 		name = nodeName
 		
 		// Model in file should be a sphere with radius=1.0m, this will scale the sphere to match the radius
@@ -36,12 +37,42 @@ class CelestialBody {
 		bodyNode = bNode
 		
 		// Create a SOI node with no geometry so that objects within the SOI move with it.
-		let soiNode = SCNNode(geometry: nil)
-		soiNode.name = nodeName + "_SOI"
-		soiNode.addChildNode(bNode)
-		sphereOfInfluenceNode = soiNode
-		
+		let soiNode = createSOINode()
 		// Return SOI node, which the caller should add to the universe scene.
+		return soiNode
+	}
+	
+	func createSceneNodeSphere(named:String, color:UIColor) -> SCNNode {
+		name = named
+		
+		// Geometry
+		let bodySphere = SCNSphere(radius: 1.0)
+		
+		// Material
+		let bodyMaterial = bodySphere.firstMaterial!
+		bodyMaterial.diffuse.contents = color
+
+		
+		let bNode = SCNNode(geometry: bodySphere)
+		bNode.scale = SCNVector3(radius, radius, radius)
+		bNode.name = named + "_Body"
+		bodyNode = bNode
+
+		return createSOINode()
+	}
+	
+	func createSOINode() -> SCNNode {
+		// Create a SOI node with no geometry so that objects within the SOI move with it.
+		let soiNode = SCNNode(geometry: nil)
+		if let name = name {
+			soiNode.name = name + "_SOI"
+		} else {
+			soiNode.name = "Unnamed_SOI"
+		}
+		if let bNode = bodyNode {
+			soiNode.addChildNode(bNode)
+		}
+		sphereOfInfluenceNode = soiNode
 		return soiNode
 	}
 
