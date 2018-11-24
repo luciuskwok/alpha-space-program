@@ -37,6 +37,44 @@ struct OrbitalElements {
 		trueAnomalyAtEpoch = ta
 	}
 	
+	init(info:[String:Any]) {
+		if let a = info["a"] as? Double {
+			semiMajorAxis = a
+		} else {
+			semiMajorAxis = 0.0
+		}
+		
+		if let e = info["ε"] as? Double {
+			eccentricity = e
+		} else {
+			eccentricity = 0.0
+		}
+
+		if let i = info["in"] as? Double {
+			inclination = i
+		} else {
+			inclination = 0.0
+		}
+		
+		if let Ω = info["Ω"] as? Double {
+			longitudeOfAscendingNode = Ω
+		} else {
+			longitudeOfAscendingNode = 0.0
+		}
+		
+		if let ω = info["ω"] as? Double {
+			argumentOfPeriapsis = ω
+		} else {
+			argumentOfPeriapsis = 0.0
+		}
+		
+		if let θ = info["θt₀"] as? Double {
+			trueAnomalyAtEpoch = θ
+		} else {
+			trueAnomalyAtEpoch = 0.0
+		}
+	}
+	
 	// MARK: -
 	
 	func orbitalPeriod(GM: Double) -> Double {

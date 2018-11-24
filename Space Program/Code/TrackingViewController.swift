@@ -19,24 +19,13 @@ class TrackingViewController: UIViewController, SCNSceneRendererDelegate {
 	var cameraController: CameraController?
 	
 	var sun: CelestialBody?
-	var moho: CelestialBody?
-	var eve: CelestialBody?
-	var kerbin: CelestialBody?
-	var mun: CelestialBody?
-	var duna: CelestialBody?
-
 
 	// MARK: -
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		
-		// == BEGIN TEST ==
-		//OrbitalElements.runTest()
-		// == END TEST ==
-		
 		// Load "Universe.scn" scene
-		//let universeScene = SCNScene(named: "Scene.scnassets/VAB.scn")!
 		let universeScene = SCNScene(named: "Scene.scnassets/Universe.scn")!
 
 		// Add space skybox
@@ -50,8 +39,11 @@ class TrackingViewController: UIViewController, SCNSceneRendererDelegate {
 		]
 		
 		// == Solar System ==
+		let sunNode = loadSolarSystem(file:"SolarSystem")
+		universeScene.rootNode.addChildNode(sunNode)
+
 		
-		// Sun
+		/*/ Sun
 		// Sol: radius=695,700km
 		// Kerbol Sun: GM=1.172e18.
 		sun = CelestialBody(orbit: OrbitalElements(semiMajorAxis: 0.0, eccentricity: 0.0), gravitationalConstant: 1e4, radius: 6.957, parent:nil)
@@ -94,17 +86,18 @@ class TrackingViewController: UIViewController, SCNSceneRendererDelegate {
 		let dunaNode = duna!.createSceneNodeSphere(named: "Duna", color: color(rgbHexValue: "f85139"))
 		universeScene.rootNode.addChildNode(dunaNode)
 		universeScene.rootNode.addChildNode(duna!.orbitLineNode())
+		*/
 		
 		// Set initial positions
 		updateBodies(time: gameState!.universalTime)
 		
-		// == DEBUG ==
+		/*/ == DEBUG ==
 		// Print orbital periods
 		let pEve = eve!.orbit.orbitalPeriod(GM: sun!.gravitationalConstant)
 		let pKerbin = kerbin!.orbit.orbitalPeriod(GM: sun!.gravitationalConstant)
 		let pMun = mun!.orbit.orbitalPeriod(GM: kerbin!.gravitationalConstant)
 		print(String(format:"Orbits: Eve=%1.1fs K=%1.1fs Mun=%1.1fs", pEve, pKerbin, pMun))
-		// == END DEBUG ==
+		// == END DEBUG == */
 
 		if let sceneView = sceneView {
 			// Configure scene view
@@ -136,15 +129,13 @@ class TrackingViewController: UIViewController, SCNSceneRendererDelegate {
 		} // end if
 	} // end func viewDidLoad()
 	
-	func color(rgbHexValue hex:String) -> UIColor {
-		var rgbInt:UInt32 = 0
-		Scanner(string: hex).scanHexInt32(&rgbInt)
-		let maxValue = CGFloat(255.0)
-		let r = CGFloat((rgbInt >> 16) & 0xFF) / maxValue;
-		let g = CGFloat((rgbInt >> 8) & 0xFF) / maxValue;
-		let b = CGFloat((rgbInt >> 0) & 0xFF) / maxValue;
-		return UIColor(red: r, green: g, blue: b, alpha: 1.0)
+	func loadSolarSystem(file:String) -> SCNNode {
+		let info = AppDelegate.readJSON(file: file)!
+		let sunInfo = info.first!
+		sun = CelestialBody(info:sunInfo)
+		return sun!.sphereOfInfluenceNode!
 	}
+	
 	
 	@objc func handleTap(_ gesture:UIGestureRecognizer) {
 		guard let scnView = sceneView else { return }
@@ -201,11 +192,7 @@ class TrackingViewController: UIViewController, SCNSceneRendererDelegate {
 	} // end func renderer
 	
 	func updateBodies(time:Double) {
-		moho?.updatePosition(atTime:time)
-		kerbin?.updatePosition(atTime:time)
-		mun?.updatePosition(atTime:time)
-		eve?.updatePosition(atTime:time)
-		duna?.updatePosition(atTime:time)
+		sun?.updatePosition(atTime: time, recursive: true)
 	}
 
 	

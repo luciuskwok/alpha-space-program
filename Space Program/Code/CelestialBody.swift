@@ -10,68 +10,94 @@ import Foundation
 import SceneKit
 
 class CelestialBody {
+	var name: String
 	let orbit: OrbitalElements
 	let gravitationalConstant: Double
 	let radius: Double
-	var name: String?
 	var sphereOfInfluenceNode: SCNNode?
 	var bodyNode: SCNNode?
-	var parentBody: CelestialBody?
+	weak var parentBody: CelestialBody?
+	var children = [CelestialBody]()
 	
-	init(orbit o:OrbitalElements, gravitationalConstant gm:Double, radius r:Double, parent:CelestialBody?) {
-		orbit = o
-		gravitationalConstant = gm
-		radius = r
-		parentBody = parent
+	init(name:String, orbit:OrbitalElements, gravitationalConstant:Double, radius:Double) {
+		self.name = name
+		self.orbit = orbit
+		self.gravitationalConstant = gravitationalConstant
+		self.radius = radius
 	}
 	
-	func loadSceneNode(fileName:String, nodeName:String) -> SCNNode {
+	init(info:[String:Any]) {
+		// Set name before creating nodes
+		self.name = info["name"] as! String
+		
+		orbit = OrbitalElements(info:info)
+		
+		if let GM = info["GM"] as? Double {
+			gravitationalConstant = GM
+		} else {
+			gravitationalConstant = 1.0
+		}
+		
+		if let r = info["radius"] as? Double {
+			radius = r
+		} else {
+			radius = 1.0
+		}
+		
+		if let sceneFile = info["sceneFile"] as? String {
+			bodyNode = loadBodyNode(sceneFile: sceneFile)
+		} else if let hexColor = info["color"] as? String {
+			let color = AppDelegate.color(rgbHexValue: hexColor)
+			bodyNode = createBodyNode(color: color)
+		}
+		
+		let soi = createSoiNode()
+		soi.addChildNode(bodyNode!)
+		sphereOfInfluenceNode = soi
+		
+		// Add children last, since they are nested inside the SOI node
+		if let childrenInfo = info["children"] as? [[String:Any]] {
+			for childInfo in childrenInfo {
+				let childBody = CelestialBody(info: childInfo)
+				self.children.append(childBody)
+				childBody.parentBody = self
+				soi.addChildNode(childBody.sphereOfInfluenceNode!)
+				soi.addChildNode(childBody.orbitLineNode())
+			}
+		}
+	}
+	
+	func loadBodyNode(sceneFile:String) -> SCNNode {
 		// Loads a model from a file and creates a hierarchy of a SOI node and the model node inside it.
-		name = nodeName
+		// This assumes that the node name is the same as the self.name string.
 		
 		// Model in file should be a sphere with radius=1.0m, this will scale the sphere to match the radius
-		let scene = SCNScene(named: "Scene.scnassets/" + fileName)!
-		let bNode = scene.rootNode.childNode(withName: nodeName, recursively: true)!
+		let scene = SCNScene(named: "Scene.scnassets/" + sceneFile)!
+		let bNode = scene.rootNode.childNode(withName: name, recursively: true)!
 		bNode.scale = SCNVector3(radius, radius, radius)
-		bNode.name = nodeName + "_Body"
-		bodyNode = bNode
-		
-		// Create a SOI node with no geometry so that objects within the SOI move with it.
-		let soiNode = createSOINode()
-		// Return SOI node, which the caller should add to the universe scene.
-		return soiNode
+		bNode.name = name + "_Body"
+		// Return body node, which the caller should add to the SOI node.
+		return bNode
 	}
 	
-	func createSceneNodeSphere(named:String, color:UIColor) -> SCNNode {
-		name = named
-		
+	func createBodyNode(color:UIColor) -> SCNNode {
 		// Geometry
 		let bodySphere = SCNSphere(radius: 1.0)
 		
 		// Material
 		let bodyMaterial = bodySphere.firstMaterial!
 		bodyMaterial.diffuse.contents = color
-
 		
 		let bNode = SCNNode(geometry: bodySphere)
 		bNode.scale = SCNVector3(radius, radius, radius)
-		bNode.name = named + "_Body"
-		bodyNode = bNode
-
-		return createSOINode()
+		bNode.name = name + "_Body"
+		return bNode
 	}
 	
-	func createSOINode() -> SCNNode {
-		// Create a SOI node with no geometry so that objects within the SOI move with it.
+	func createSoiNode() -> SCNNode {
+		// SOI node allows moons and craft to be independent from the scale and rotation settings of the bodyNode.
 		let soiNode = SCNNode(geometry: nil)
-		if let name = name {
-			soiNode.name = name + "_SOI"
-		} else {
-			soiNode.name = "Unnamed_SOI"
-		}
-		if let bNode = bodyNode {
-			soiNode.addChildNode(bNode)
-		}
+		soiNode.name = name + "_SOI"
 		sphereOfInfluenceNode = soiNode
 		return soiNode
 	}
@@ -97,11 +123,7 @@ class CelestialBody {
 		orbitMaterial.lightingModel = .constant
 		
 		let sceneNode = SCNNode(geometry: orbitGeometry)
-		if let name = name {
-			sceneNode.name = name + "_Orbit"
-		} else {
-			sceneNode.name = "Unnamed_Orbit"
-		}
+		sceneNode.name = name + "_Orbit"
 		sceneNode.castsShadow = false
 		return sceneNode
 	}
@@ -117,9 +139,17 @@ class CelestialBody {
 		return simd_double3(x, y, z)
 	}
 
-	func updatePosition(atTime time:Double) {
-		let r = coordinates(atTime: time)
-		sphereOfInfluenceNode!.position = SCNVector3(x:Float(r.x), y:Float(r.y), z:Float(r.z))
+	func updatePosition(atTime time:Double, recursive:Bool) {
+		if orbit.semiMajorAxis > 0.0 {
+			let r = coordinates(atTime: time)
+			sphereOfInfluenceNode!.position = SCNVector3(x:Float(r.x), y:Float(r.y), z:Float(r.z))
+		}
+		
+		if recursive {
+			for child in children {
+				child.updatePosition(atTime: time, recursive: true)
+			}
+		}
 	}
 	
 	

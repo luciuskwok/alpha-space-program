@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E029D2D021A925E5009E9142 /* SolarSystem.json in Resources */ = {isa = PBXBuildFile; fileRef = E029D2CE21A925E5009E9142 /* SolarSystem.json */; };
 		E0343E96218A04B3006C8C1B /* Spacecraft.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0343E95218A04B3006C8C1B /* Spacecraft.swift */; };
 		E0343E98218A0611006C8C1B /* CraftPart.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0343E97218A0611006C8C1B /* CraftPart.swift */; };
 		E0343E9A218A3822006C8C1B /* PartNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0343E99218A3822006C8C1B /* PartNode.swift */; };
@@ -28,6 +29,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		E029D2CF21A925E5009E9142 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = Base; path = Base.lproj/SolarSystem.json; sourceTree = "<group>"; };
 		E0343E95218A04B3006C8C1B /* Spacecraft.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spacecraft.swift; sourceTree = "<group>"; };
 		E0343E97218A0611006C8C1B /* CraftPart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CraftPart.swift; sourceTree = "<group>"; };
 		E0343E99218A3822006C8C1B /* PartNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartNode.swift; sourceTree = "<group>"; };
@@ -84,6 +86,7 @@
 				E072501221882440004E4B07 /* LaunchScreen.storyboard */,
 				E072500D2188243E004E4B07 /* Main.storyboard */,
 				E0ACC4D221895224008915B2 /* Parts.json */,
+				E029D2CE21A925E5009E9142 /* SolarSystem.json */,
 				E0343E9B218A6DA9006C8C1B /* Scene.scnassets */,
 				E072501021882440004E4B07 /* Assets.xcassets */,
 				E072501521882440004E4B07 /* Info.plist */,
@@ -171,6 +174,7 @@
 			files = (
 				E0343E9C218A6DA9006C8C1B /* Scene.scnassets in Resources */,
 				E072501421882440004E4B07 /* LaunchScreen.storyboard in Resources */,
+				E029D2D021A925E5009E9142 /* SolarSystem.json in Resources */,
 				E072501121882440004E4B07 /* Assets.xcassets in Resources */,
 				E0ACC4D421895224008915B2 /* Parts.json in Resources */,
 				E072500F2188243E004E4B07 /* Main.storyboard in Resources */,
@@ -203,6 +207,14 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		E029D2CE21A925E5009E9142 /* SolarSystem.json */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E029D2CF21A925E5009E9142 /* Base */,
+			);
+			name = SolarSystem.json;
+			sourceTree = "<group>";
+		};
 		E072500D2188243E004E4B07 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (

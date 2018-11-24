@@ -48,6 +48,34 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		// Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 	}
 
+	// MARK: - Utility
+	
+	static func readJSON(file:String) -> [[String:Any]]? {
+		guard let url = Bundle.main.url(forResource: file, withExtension:"json") else {
+			print("[LK] File not found."); return nil
+		}
+		
+		do {
+			let data = try Data(contentsOf: url)
+			if let rootObject = try JSONSerialization.jsonObject(with: data, options: []) as? [[String:Any]] {
+				return rootObject
+			}
+		} catch {
+			print("[LK] Error reading JSON.")
+		}
+		return nil
+	}
+
+	static func color(rgbHexValue hex:String) -> UIColor {
+		var rgbInt:UInt32 = 0
+		Scanner(string: hex).scanHexInt32(&rgbInt)
+		let maxValue = CGFloat(255.0)
+		let r = CGFloat((rgbInt >> 16) & 0xFF) / maxValue;
+		let g = CGFloat((rgbInt >> 8) & 0xFF) / maxValue;
+		let b = CGFloat((rgbInt >> 0) & 0xFF) / maxValue;
+		return UIColor(red: r, green: g, blue: b, alpha: 1.0)
+	}
+
 
 }
 

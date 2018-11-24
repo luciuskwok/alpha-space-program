@@ -26,7 +26,7 @@ class VehicleAssemblyBuildingViewController:
 		super.viewDidLoad()
 		
 		// == Parts ==
-		parts = readJSON(file:"Parts")
+		parts = AppDelegate.readJSON(file:"Parts")
 		
 		// == 3-D Scene ==
 		
@@ -63,24 +63,6 @@ class VehicleAssemblyBuildingViewController:
 				print("[LK] Camera not found.")
 			}
 		}
-	}
-	
-	// MARK: - Parts
-	
-	func readJSON(file:String) -> [[String:Any]]? {
-		guard let url = Bundle.main.url(forResource: file, withExtension:"json") else {
-			print("[LK] File not found."); return nil
-		}
-		
-		do {
-			let data = try Data(contentsOf: url)
-			if let loadedParts = try JSONSerialization.jsonObject(with: data, options: []) as? [[String:Any]] {
-				return loadedParts
-			}
-		} catch {
-			print("[LK] Error reading JSON.")
-		}
-		return nil
 	}
 	
 	// MARK: - Collection View
