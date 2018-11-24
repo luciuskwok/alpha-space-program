@@ -51,19 +51,19 @@ struct OrbitalElements {
 		}
 
 		if let i = info["in"] as? Double {
-			inclination = i
+			inclination = Math.rad(deg:i)
 		} else {
 			inclination = 0.0
 		}
 		
 		if let Ω = info["Ω"] as? Double {
-			longitudeOfAscendingNode = Ω
+			longitudeOfAscendingNode = Math.rad(deg:Ω)
 		} else {
 			longitudeOfAscendingNode = 0.0
 		}
 		
 		if let ω = info["ω"] as? Double {
-			argumentOfPeriapsis = ω
+			argumentOfPeriapsis = Math.rad(deg:ω)
 		} else {
 			argumentOfPeriapsis = 0.0
 		}
@@ -198,7 +198,7 @@ struct OrbitalElements {
 		
 		// Test anomaly calcuations in 2 full circles
 		for deg in stride(from: -360, through: 360, by: 15) {
-			let ta = Double(deg) / 180.0 * .pi
+			let ta = Math.rad(deg:Double(deg))
 			let ea1 = testOrbit.eccentricAnomaly(fromTrueAnomaly: ta)
 			let ta1 = testOrbit.trueAnomaly(fromEccentricAnomaly: ea1)
 			let ma2 = testOrbit.meanAnomaly(fromEccentricAnomaly: ea1)

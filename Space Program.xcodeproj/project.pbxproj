@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		E029D2D021A925E5009E9142 /* SolarSystem.json in Resources */ = {isa = PBXBuildFile; fileRef = E029D2CE21A925E5009E9142 /* SolarSystem.json */; };
+		E029D2D221A9B674009E9142 /* Math.swift in Sources */ = {isa = PBXBuildFile; fileRef = E029D2D121A9B674009E9142 /* Math.swift */; };
 		E0343E96218A04B3006C8C1B /* Spacecraft.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0343E95218A04B3006C8C1B /* Spacecraft.swift */; };
 		E0343E98218A0611006C8C1B /* CraftPart.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0343E97218A0611006C8C1B /* CraftPart.swift */; };
 		E0343E9A218A3822006C8C1B /* PartNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0343E99218A3822006C8C1B /* PartNode.swift */; };
@@ -30,6 +31,7 @@
 
 /* Begin PBXFileReference section */
 		E029D2CF21A925E5009E9142 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = Base; path = Base.lproj/SolarSystem.json; sourceTree = "<group>"; };
+		E029D2D121A9B674009E9142 /* Math.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Math.swift; sourceTree = "<group>"; };
 		E0343E95218A04B3006C8C1B /* Spacecraft.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spacecraft.swift; sourceTree = "<group>"; };
 		E0343E97218A0611006C8C1B /* CraftPart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CraftPart.swift; sourceTree = "<group>"; };
 		E0343E99218A3822006C8C1B /* PartNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartNode.swift; sourceTree = "<group>"; };
@@ -98,6 +100,7 @@
 			isa = PBXGroup;
 			children = (
 				E0ACC4CD2189434B008915B2 /* AppDelegate.swift */,
+				E029D2D121A9B674009E9142 /* Math.swift */,
 				E0ACC4CC2189434B008915B2 /* SpaceCenterViewController.swift */,
 				E0ACC4CA2189434B008915B2 /* GameViewController.swift */,
 				E05F542D21A27EDA005CF95A /* TrackingViewController.swift */,
@@ -191,6 +194,7 @@
 				E0ACC4D12189434B008915B2 /* AppDelegate.swift in Sources */,
 				E09A8A5D21A7DA4100C9B5F0 /* OrbitalElements.swift in Sources */,
 				E0ACC4CE2189434B008915B2 /* GameViewController.swift in Sources */,
+				E029D2D221A9B674009E9142 /* Math.swift in Sources */,
 				E0343E9A218A3822006C8C1B /* PartNode.swift in Sources */,
 				E09A8A5F21A7F21900C9B5F0 /* CelestialBody.swift in Sources */,
 				E0343E96218A04B3006C8C1B /* Spacecraft.swift in Sources */,

@@ -19,6 +19,8 @@ class CelestialBody {
 	weak var parentBody: CelestialBody?
 	var children = [CelestialBody]()
 	
+	// MARK: -
+	
 	init(name:String, orbit:OrbitalElements, gravitationalConstant:Double, radius:Double) {
 		self.name = name
 		self.orbit = orbit
@@ -66,6 +68,8 @@ class CelestialBody {
 			}
 		}
 	}
+	
+	// MARK: -
 	
 	func loadBodyNode(sceneFile:String) -> SCNNode {
 		// Loads a model from a file and creates a hierarchy of a SOI node and the model node inside it.
