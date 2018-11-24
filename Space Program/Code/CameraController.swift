@@ -27,7 +27,9 @@ class CameraController {
 	// MARK: -
 	
 	init(camera:SCNNode) {
+		// Note: camera zFar should set in the scn file to be ≤ 10,000m in order for it to work on the device. 
 		self.cameraNode = camera
+		camera.camera?.automaticallyAdjustsZRange = true
 	}
 	
 	func addGestureRecognizers(to view:UIView) {
