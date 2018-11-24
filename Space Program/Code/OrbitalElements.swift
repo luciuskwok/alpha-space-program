@@ -109,7 +109,7 @@ struct OrbitalElements {
 	
 	func polarCoordinates(atTime t:Double, GM:Double) -> (r:Double, angle:Double) {
 		let p = orbitalPeriod(GM:GM)
-		let ma = (t / p).truncatingRemainder(dividingBy: p) * 2 * .pi
+		let ma = (t / p).truncatingRemainder(dividingBy: 1.0) * 2 * .pi
 		let ea = eccentricAnomaly(fromMeanAnomaly: ma)
 		let ta = trueAnomaly(fromEccentricAnomaly: ea)
 		let r = radius(atEccentricAnomaly: ea)
