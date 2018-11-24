@@ -13,6 +13,7 @@ class CelestialBody {
 	let orbit: OrbitalElements
 	let gravitationalConstant: Double
 	let radius: Double
+	var name: String?
 	var sphereOfInfluenceNode: SCNNode?
 	var bodyNode: SCNNode?
 	var parentBody: CelestialBody?
@@ -25,14 +26,18 @@ class CelestialBody {
 	}
 	
 	func loadSceneNode(fileName:String, nodeName:String) -> SCNNode {
+		name = nodeName
+		
 		// Model in file should be a sphere with radius=1.0m, this will scale the sphere to match the radius
 		let scene = SCNScene(named: "Scene.scnassets/" + fileName)!
 		let bNode = scene.rootNode.childNode(withName: nodeName, recursively: true)!
 		bNode.scale = SCNVector3(radius, radius, radius)
+		bNode.name = nodeName + "_Body"
 		bodyNode = bNode
 		
 		// Create a SOI node with no geometry so that objects within the SOI move with it.
 		let soiNode = SCNNode(geometry: nil)
+		soiNode.name = nodeName + "_SOI"
 		soiNode.addChildNode(bNode)
 		sphereOfInfluenceNode = soiNode
 		
@@ -60,7 +65,14 @@ class CelestialBody {
 		orbitMaterial.isDoubleSided = true
 		orbitMaterial.lightingModel = .constant
 		
-		return SCNNode(geometry: orbitGeometry)
+		let sceneNode = SCNNode(geometry: orbitGeometry)
+		if let name = name {
+			sceneNode.name = name + "_Orbit"
+		} else {
+			sceneNode.name = "Unnamed_Orbit"
+		}
+		sceneNode.castsShadow = false
+		return sceneNode
 	}
 	
 	func coordinates(atTime time:Double) -> simd_double3 {

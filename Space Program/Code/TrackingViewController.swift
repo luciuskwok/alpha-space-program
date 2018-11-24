@@ -28,8 +28,9 @@ class TrackingViewController: UIViewController, SCNSceneRendererDelegate {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		
-		// TEST
-		OrbitalElements.runTest()
+		// == BEGIN TEST ==
+		//OrbitalElements.runTest()
+		// == END TEST ==
 		
 		// Load "Universe.scn" scene
 		let universeScene = SCNScene(named: "Scene.scnassets/Universe.scn")!
@@ -63,7 +64,7 @@ class TrackingViewController: UIViewController, SCNSceneRendererDelegate {
 		universeScene.rootNode.addChildNode(kerOrbitNode)
 		
 		// Get Mun node
-		mun = CelestialBody(orbit: OrbitalElements(semiMajorAxis: 8.0, eccentricity: 0.0), gravitationalConstant: 6.5138398e10, radius: 1.08, parent:kerbin)
+		mun = CelestialBody(orbit: OrbitalElements(semiMajorAxis: 15.0, eccentricity: 0.0), gravitationalConstant: 6.5138398e10, radius: 1.08, parent:kerbin)
 		let munNode = mun!.loadSceneNode(fileName: "Mun.dae", nodeName: "Mun")
 		kerNode.addChildNode(munNode)
 
@@ -89,6 +90,7 @@ class TrackingViewController: UIViewController, SCNSceneRendererDelegate {
 		let pKerbin = kerbin!.orbit.orbitalPeriod(GM: sun!.gravitationalConstant)
 		let pMun = mun!.orbit.orbitalPeriod(GM: kerbin!.gravitationalConstant)
 		print(String(format:"Orbits: Eve=%1.1fs K=%1.1fs Mun=%1.1fs", pEve, pKerbin, pMun))
+		// == END DEBUG ==
 		
 		if let sceneView = sceneView {
 			// Configure scene view
@@ -112,7 +114,8 @@ class TrackingViewController: UIViewController, SCNSceneRendererDelegate {
 			
 			// Change camera target with double-tap
 			let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
-			//tapGesture.
+			tapGesture.numberOfTapsRequired = 1 // 2 taps can make it hard to hit a moving target
+			tapGesture.numberOfTouchesRequired = 1
 			sceneView.addGestureRecognizer(tapGesture)
 
 		} // end if
@@ -122,11 +125,33 @@ class TrackingViewController: UIViewController, SCNSceneRendererDelegate {
 		guard let scnView = sceneView else { return }
 		
 		let pt = gesture.location(in: scnView)
-		// options [.clipToRange:true, .searchMode:closest]
-		let hitResults = scnView.hitTest(pt, options: [:])
-		if hitResults.count > 0 {
-			let node = hitResults.first!.node
-			setCameraTarget(node)
+		var options = [SCNHitTestOption:Any]()
+		options[.searchMode] = SCNHitTestSearchMode.all.rawValue
+		options[.clipToZRange] = true
+		let hitResults = scnView.hitTest(pt, options: options)
+		
+		print("Hit results:")
+		for resultTest in hitResults {
+			if let nodeName = resultTest.node.name {
+				print("  ", nodeName)
+			}
+		}
+		
+		for result in hitResults {
+			if let nodeName = result.node.name {
+				if nodeName.hasSuffix("_Body") {
+					if let soiNode = result.node.parent {
+						// In order for the camera location to be correct, the camera node must be added to the body's SOI node, which is the body node's parent node.
+						setCameraTarget(soiNode)
+						break
+					}
+				} else if nodeName.hasSuffix("_Craft") {
+					// For spacecraft, target the node directly
+					setCameraTarget(result.node)
+					break
+				}
+			}
+			// Ignore other nodes, including orbit lines.
 		}
 	}
 	
