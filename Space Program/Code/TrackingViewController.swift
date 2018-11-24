@@ -42,6 +42,27 @@ class TrackingViewController: UIViewController, SCNSceneRendererDelegate {
 		let sunNode = loadSolarSystem(file:"SolarSystem")
 		universeScene.rootNode.addChildNode(sunNode)
 		
+		// Sun
+		// Modify the model properties specially for the sun.
+		let sunBody = sun!.bodyNode!
+		sunBody.castsShadow = false
+		let sunMaterial = sunBody.geometry!.firstMaterial!
+		sunMaterial.lightingModel = .constant
+		
+		// Add an omni light for the sun.
+		let sunLight = SCNLight()
+		sunLight.type = .omni
+		sunLight.color = UIColor.white
+		sunLight.intensity = 2000.0 // 2x normal
+		sunLight.temperature = 5000 // K
+		sunLight.attenuationStartDistance = 0.0
+		sunLight.attenuationEndDistance = 0.0
+		sunLight.attenuationFalloffExponent = 0.0
+		sunLight.shadowRadius = 10.0
+		sun!.sphereOfInfluenceNode!.light = sunLight
+
+		
+		
 		// Set initial positions
 		updateBodies(time: gameState!.universalTime)
 		
@@ -119,7 +140,17 @@ class TrackingViewController: UIViewController, SCNSceneRendererDelegate {
 	}
 	
 	func setCameraTarget(_ node:SCNNode) {
-		let r = node.scale.x
+		// Find the body node
+		var r = Float(1.0)
+		for child in node.childNodes {
+			if let name = child.name {
+				if name.hasSuffix("_Body") {
+					r = child.scale.x
+					break
+				}
+			}
+		}
+		
 		let ctrl = cameraController!
 		ctrl.cameraNode.removeFromParentNode()
 		node.addChildNode(ctrl.cameraNode)
