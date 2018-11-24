@@ -52,7 +52,6 @@ class VehicleAssemblyBuildingViewController:
 			// Set up camera
 			if let cameraNode = vabScene.rootNode.childNode(withName: "Camera", recursively: true) {
 				let cameraCtrl = CameraController(camera: cameraNode)
-				cameraCtrl.camera = cameraNode
 				cameraCtrl.vabMode = true
 				cameraCtrl.target = SCNVector3(x:0.0, y:5.0, z:0.0)
 				cameraCtrl.distanceMax = 20.0

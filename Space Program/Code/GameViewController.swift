@@ -105,7 +105,6 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
 			// Set up camera
 			if let cameraNode = scene.rootNode.childNode(withName: "Camera", recursively: true) {
 				let cameraCtrl = CameraController(camera: cameraNode)
-				cameraCtrl.camera = cameraNode
 				cameraCtrl.vabMode = false
 				cameraCtrl.target = SCNVector3(x:0.0, y:0.0, z:0.0)
 				cameraCtrl.distance = 10.0

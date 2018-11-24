@@ -11,7 +11,7 @@ import SceneKit
 
 
 class CameraController {
-	var camera:SCNNode
+	var cameraNode:SCNNode
 	var vabMode = true
 	var target = SCNVector3()
 	var distance = Float(5.0)
@@ -27,7 +27,7 @@ class CameraController {
 	// MARK: -
 	
 	init(camera:SCNNode) {
-		self.camera = camera
+		self.cameraNode = camera
 	}
 	
 	func addGestureRecognizers(to view:UIView) {
@@ -50,9 +50,9 @@ class CameraController {
 	
 	func updateCameraPosition() {
 		// Point camera by moving camera to target, changing its rotation, and translating by the distance while rotated.
-		camera.position = target
-		camera.eulerAngles = SCNVector3(x: -tiltAngle, y: panAngle, z:0.0)
-		camera.localTranslate(by: SCNVector3(x:0, y:0, z:distance))
+		cameraNode.position = target
+		cameraNode.eulerAngles = SCNVector3(x: -tiltAngle, y: panAngle, z:0.0)
+		cameraNode.localTranslate(by: SCNVector3(x:0, y:0, z:distance))
 	}
 	
 	@objc func handlePan(_ sender:UIGestureRecognizer) {

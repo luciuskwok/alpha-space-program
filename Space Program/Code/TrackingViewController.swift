@@ -71,7 +71,7 @@ class TrackingViewController: UIViewController, SCNSceneRendererDelegate {
 		let munOrbitNode = mun!.orbitLineNode()
 		kerNode.addChildNode(munOrbitNode)
 
-		// Get Eve nodeb
+		// Get Eve node
 		eve = CelestialBody(orbit: OrbitalElements(semiMajorAxis: 100.0, eccentricity: 0.75), gravitationalConstant: 8.172e12, radius: 2.0, parent:sun)
 		let eveNode = eve!.loadSceneNode(fileName: "Eve.dae", nodeName: "Eve")
 		universeScene.rootNode.addChildNode(eveNode)
@@ -100,24 +100,48 @@ class TrackingViewController: UIViewController, SCNSceneRendererDelegate {
 			sceneView.backgroundColor = UIColor.black
 
 			// Set up camera
-			if let cameraNode = universeScene.rootNode.childNode(withName: "Camera", recursively: true) {
-				let sunRadius = sun!.radius
-				let cameraCtrl = CameraController(camera: cameraNode)
-				cameraCtrl.camera = cameraNode
-				cameraCtrl.vabMode = false
-				cameraCtrl.target = SCNVector3(x:0.0, y:0.0, z:0.0)
-				cameraCtrl.distance = Float(sunRadius * 24.0)
-				cameraCtrl.distanceMax = Float(sunRadius * 1000.0)
-				cameraCtrl.distanceMin = Float(sunRadius * 4.0)
-				cameraCtrl.addGestureRecognizers(to: sceneView)
-				cameraCtrl.updateCameraPosition()
-				cameraController = cameraCtrl
-			} else {
-				print("[LK] Camera not found.")
-			}
+			let cameraNode = universeScene.rootNode.childNode(withName: "Camera", recursively: true)!
+			let sunRadius = sun!.radius
+			let cameraCtrl = CameraController(camera: cameraNode)
+			cameraCtrl.vabMode = false
+			cameraCtrl.target = SCNVector3(x:0.0, y:0.0, z:0.0)
+			cameraCtrl.distance = Float(sunRadius * 24.0)
+			cameraCtrl.addGestureRecognizers(to: sceneView)
+			cameraController = cameraCtrl
+			setCameraTarget(sun!.sphereOfInfluenceNode!)
 			
+			// Change camera target with double-tap
+			let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
+			//tapGesture.
+			sceneView.addGestureRecognizer(tapGesture)
+
 		} // end if
 	} // end func viewDidLoad()
+	
+	@objc func handleTap(_ gesture:UIGestureRecognizer) {
+		guard let scnView = sceneView else { return }
+		
+		let pt = gesture.location(in: scnView)
+		// options [.clipToRange:true, .searchMode:closest]
+		let hitResults = scnView.hitTest(pt, options: [:])
+		if hitResults.count > 0 {
+			let node = hitResults.first!.node
+			setCameraTarget(node)
+		}
+	}
+	
+	func setCameraTarget(_ node:SCNNode) {
+		let r = node.scale.x
+		let ctrl = cameraController!
+		ctrl.cameraNode.removeFromParentNode()
+		node.addChildNode(ctrl.cameraNode)
+		ctrl.distanceMax = Float(r * 1000.0)
+		ctrl.distanceMin = Float(r * 4.0)
+		if ctrl.distance < ctrl.distanceMin {
+			ctrl.distance = ctrl.distanceMin
+		}
+		ctrl.updateCameraPosition()
+	}
 
 	// MARK: - SceneKit
 	
