@@ -64,7 +64,7 @@ class CelestialBody {
 				self.children.append(childBody)
 				childBody.parentBody = self
 				soi.addChildNode(childBody.sphereOfInfluenceNode!)
-				soi.addChildNode(childBody.orbitLineNode())
+				soi.addChildNode(childBody.createOrbitLineNode())
 			}
 		}
 	}
@@ -106,7 +106,7 @@ class CelestialBody {
 		return soiNode
 	}
 
-	func orbitLineNode() -> SCNNode {
+	func createOrbitLineNode() -> SCNNode {
 		let flatCoords = orbit.orbitPathCoordinates(divisions: 180)
 		var geoCoords = [SCNVector3]()
 		var geoElements = [SCNGeometryElement]()
