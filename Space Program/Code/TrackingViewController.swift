@@ -27,7 +27,7 @@ class TrackingViewController: UIViewController, SCNSceneRendererDelegate {
 		
 		// Load "Universe.scn" scene
 		let universeScene = SCNScene(named: "Scene.scnassets/Universe.scn")!
-
+		
 		// Add space skybox
 		universeScene.background.contents = [
 			UIImage(named:"space_skybox_right"),
@@ -41,6 +41,8 @@ class TrackingViewController: UIViewController, SCNSceneRendererDelegate {
 		// == Solar System ==
 		let sunNode = loadSolarSystem(file:"SolarSystem")
 		universeScene.rootNode.addChildNode(sunNode)
+		
+		// Add each body's SOI as an independent node
 		
 		// Sun
 		// Modify the model properties specially for the sun.
@@ -85,7 +87,7 @@ class TrackingViewController: UIViewController, SCNSceneRendererDelegate {
 
 			// Set up camera
 			let cameraNode = universeScene.rootNode.childNode(withName: "Camera", recursively: true)!
-			let sunRadius = sun!.radius
+			let sunRadius = sun!.bodyRadius
 			let cameraCtrl = CameraController(camera: cameraNode)
 			cameraCtrl.vabMode = false
 			cameraCtrl.target = SCNVector3(x:0.0, y:0.0, z:0.0)
@@ -94,6 +96,11 @@ class TrackingViewController: UIViewController, SCNSceneRendererDelegate {
 			cameraCtrl.addGestureRecognizers(to: sceneView)
 			cameraController = cameraCtrl
 			setCameraTarget(sun!.sphereOfInfluenceNode!)
+			
+			// For testing, set the camera target to Pluto
+			if let pluto = universeScene.rootNode.childNode(withName: "Pluto_SOI", recursively: true) {
+				setCameraTarget(pluto)
+			}
 			
 			// Change camera target with tap
 			let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))

@@ -10,42 +10,38 @@ import Foundation
 import SceneKit
 
 class CelestialBody {
-	var name: String
+	let name: String
 	let orbit: OrbitalElements
 	let gravitationalConstant: Double
-	let radius: Double
-	var sphereOfInfluenceNode: SCNNode?
-	var bodyNode: SCNNode?
+	let bodyRadius: Double
+	
+	var position = simd_double3()
+	var influenceRadius = Double(0.0) // to be computed from the orbit
 	weak var parentBody: CelestialBody?
 	var children = [CelestialBody]()
+
+	var sphereOfInfluenceNode: SCNNode?
+	var bodyNode: SCNNode?
+	var orbitLineNode: SCNNode?
+
 	
 	// MARK: -
 	
-	init(name:String, orbit:OrbitalElements, gravitationalConstant:Double, radius:Double) {
+	init(name:String, orbit:OrbitalElements, gravitationalConstant:Double, bodyRadius:Double) {
 		self.name = name
 		self.orbit = orbit
 		self.gravitationalConstant = gravitationalConstant
-		self.radius = radius
+		self.bodyRadius = bodyRadius
 	}
 	
 	init(info:[String:Any]) {
-		// Set name before creating nodes
-		self.name = info["name"] as! String
+		// Read property values from the dictionary. Note that any missing or invalid values will cause a crash.
+		name = info["name"] as! String
+		gravitationalConstant = info["GM"] as! Double
+		bodyRadius = info["radius"] as! Double
 		
 		orbit = OrbitalElements(info:info)
-		
-		if let GM = info["GM"] as? Double {
-			gravitationalConstant = GM
-		} else {
-			gravitationalConstant = 1.0
-		}
-		
-		if let r = info["radius"] as? Double {
-			radius = r
-		} else {
-			radius = 1.0
-		}
-		
+
 		if let sceneFile = info["sceneFile"] as? String {
 			bodyNode = loadBodyNode(sceneFile: sceneFile)
 		} else if let hexColor = info["color"] as? String {
@@ -63,7 +59,7 @@ class CelestialBody {
 				let childBody = CelestialBody(info: childInfo)
 				self.children.append(childBody)
 				childBody.parentBody = self
-				soi.addChildNode(childBody.sphereOfInfluenceNode!)
+				//soi.addChildNode(childBody.sphereOfInfluenceNode!)
 				soi.addChildNode(childBody.createOrbitLineNode())
 			}
 		}
@@ -78,7 +74,8 @@ class CelestialBody {
 		// Model in file should be a sphere with radius=1.0m, this will scale the sphere to match the radius
 		let scene = SCNScene(named: "Scene.scnassets/" + sceneFile)!
 		let bNode = scene.rootNode.childNode(withName: name, recursively: true)!
-		bNode.scale = SCNVector3(radius, radius, radius)
+		let r = bodyRadius
+		bNode.scale = SCNVector3(r, r, r)
 		bNode.name = name + "_Body"
 		// Return body node, which the caller should add to the SOI node.
 		return bNode
@@ -93,7 +90,8 @@ class CelestialBody {
 		bodyMaterial.diffuse.contents = color
 		
 		let bNode = SCNNode(geometry: bodySphere)
-		bNode.scale = SCNVector3(radius, radius, radius)
+		let r = bodyRadius
+		bNode.scale = SCNVector3(r, r, r)
 		bNode.name = name + "_Body"
 		return bNode
 	}
@@ -129,24 +127,38 @@ class CelestialBody {
 		let sceneNode = SCNNode(geometry: orbitGeometry)
 		sceneNode.name = name + "_Orbit"
 		sceneNode.castsShadow = false
+		self.orbitLineNode = sceneNode
 		return sceneNode
 	}
 	
-	func coordinates(atTime time:Double) -> simd_double3 {
+	func localCoordinates(atTime time:Double) -> simd_double3 {
 		let GM = parentBody!.gravitationalConstant
 		let (rp, angle) = orbit.polarCoordinates(atTime: time, GM: GM)
-		// TODO: apply rotation to orbit
 		
 		let x = rp * cos(angle)
 		let y = 0.0
 		let z = -rp * sin(angle)
+		
+		// TODO: apply orbit rotations (inclination, etc.)
+
 		return simd_double3(x, y, z)
+	}
+	
+	func universeCoordinates() -> simd_double3 {
+		var r = self.position
+		var ancestor = self.parentBody
+		while ancestor != nil {
+			r += ancestor!.position
+			ancestor = ancestor!.parentBody
+		}
+		return r
 	}
 
 	func updatePosition(atTime time:Double, recursive:Bool) {
 		if orbit.semiMajorAxis > 0.0 {
-			let r = coordinates(atTime: time)
-			sphereOfInfluenceNode!.position = SCNVector3(x:Float(r.x), y:Float(r.y), z:Float(r.z))
+			let r = localCoordinates(atTime: time)
+			self.position = r
+			//sphereOfInfluenceNode!.position = SCNVector3(x:Float(r.x), y:Float(r.y), z:Float(r.z))
 		}
 		
 		if recursive {
