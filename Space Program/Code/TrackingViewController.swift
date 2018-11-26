@@ -19,6 +19,7 @@ class TrackingViewController: UIViewController, SCNSceneRendererDelegate {
 	var cameraController: CameraController?
 	
 	var sun: CelestialBody?
+	var cameraTargetBody: CelestialBody?
 
 	// MARK: -
 	
@@ -39,14 +40,14 @@ class TrackingViewController: UIViewController, SCNSceneRendererDelegate {
 		]
 		
 		// == Solar System ==
-		let sunNode = loadSolarSystem(file:"SolarSystem")
-		universeScene.rootNode.addChildNode(sunNode)
+		sun = loadSolarSystem(file:"SolarSystem")
 		
-		// Add each body's SOI as an independent node
+		// Add scene nodes for each body recursively
+		sun!.addSceneNodesRecursively(rootNode: universeScene.rootNode, parentNode: universeScene.rootNode)
 		
 		// Sun
 		// Modify the model properties specially for the sun.
-		let sunBody = sun!.bodyNode!
+		let sunBody = sun!.bodyNode
 		sunBody.castsShadow = false
 		let sunMaterial = sunBody.geometry!.firstMaterial!
 		sunMaterial.lightingModel = .constant
@@ -61,9 +62,7 @@ class TrackingViewController: UIViewController, SCNSceneRendererDelegate {
 		sunLight.attenuationEndDistance = 0.0
 		sunLight.attenuationFalloffExponent = 0.0
 		sunLight.shadowRadius = 10.0
-		sun!.sphereOfInfluenceNode!.light = sunLight
-
-		
+		sun!.sphereOfInfluenceNode.light = sunLight
 		
 		// Set initial positions
 		updateBodies(time: gameState!.universalTime)
@@ -95,10 +94,10 @@ class TrackingViewController: UIViewController, SCNSceneRendererDelegate {
 			cameraCtrl.distanceMax = Float(10000.0) // fixed at 10km
 			cameraCtrl.addGestureRecognizers(to: sceneView)
 			cameraController = cameraCtrl
-			setCameraTarget(sun!.sphereOfInfluenceNode!)
+			setCameraTarget(sun!.sphereOfInfluenceNode)
 			
 			// For testing, set the camera target to Pluto
-			if let pluto = universeScene.rootNode.childNode(withName: "Pluto_SOI", recursively: true) {
+			if let pluto = universeScene.rootNode.childNode(withName: "Pluto_Body", recursively: true) {
 				setCameraTarget(pluto)
 			}
 			
@@ -111,11 +110,10 @@ class TrackingViewController: UIViewController, SCNSceneRendererDelegate {
 		} // end if
 	} // end func viewDidLoad()
 	
-	func loadSolarSystem(file:String) -> SCNNode {
+	func loadSolarSystem(file:String) -> CelestialBody {
 		let info = AppDelegate.readJSON(file: file)!
 		let sunInfo = info.first!
-		sun = CelestialBody(info:sunInfo)
-		return sun!.sphereOfInfluenceNode!
+		return CelestialBody(info:sunInfo)
 	}
 	
 	
@@ -130,14 +128,7 @@ class TrackingViewController: UIViewController, SCNSceneRendererDelegate {
 		
 		for result in hitResults {
 			if let nodeName = result.node.name {
-				if nodeName.hasSuffix("_Body") {
-					if let soiNode = result.node.parent {
-						// In order for the camera location to be correct, the camera node must be added to the body's SOI node, which is the body node's parent node.
-						setCameraTarget(soiNode)
-						break
-					}
-				} else if nodeName.hasSuffix("_Craft") {
-					// For spacecraft, target the node directly
+				if nodeName.hasSuffix("_Body") || nodeName.hasSuffix("_Craft") {
 					setCameraTarget(result.node)
 					break
 				}
@@ -147,20 +138,28 @@ class TrackingViewController: UIViewController, SCNSceneRendererDelegate {
 	}
 	
 	func setCameraTarget(_ node:SCNNode) {
-		// Find the body node
+		// In order for the camera location to be correct, the camera node must be added to the body's SOI node, which is the body node's parent node.
 		var r = Float(1.0)
-		for child in node.childNodes {
-			if let name = child.name {
-				if name.hasSuffix("_Body") {
-					r = child.scale.x
-					break
-				}
+		var targetNode = node
+		if let name = node.name, name.hasSuffix("_Body") {
+			r = node.scale.x
+			if node.parent != nil {
+				targetNode = node.parent!
 			}
+			
+			// Store the CelestialBody associated with this node
+			if sun?.bodyNode == node {
+				cameraTargetBody = sun
+			} else if let body = sun?.child(withBodyNode: node, recursive: true) {
+				cameraTargetBody = body
+			}
+			print("Camera target is", cameraTargetBody?.name ?? "nil")
 		}
+		updateBodies(time: gameState!.universalTime)
 		
 		let ctrl = cameraController!
 		ctrl.cameraNode.removeFromParentNode()
-		node.addChildNode(ctrl.cameraNode)
+		targetNode.addChildNode(ctrl.cameraNode)
 		ctrl.distanceMin = Float(r * 4.0)
 		if ctrl.distance < ctrl.distanceMin {
 			ctrl.distance = ctrl.distanceMin
@@ -184,7 +183,11 @@ class TrackingViewController: UIViewController, SCNSceneRendererDelegate {
 	} // end func renderer
 	
 	func updateBodies(time:Double) {
-		sun?.updatePosition(atTime: time, recursive: true)
+		var offset = simd_double3()
+		if let body = cameraTargetBody {
+			offset = -body.position
+		}
+		sun?.updatePositionRecursively(atTime: time, universeOffset:offset)
 	}
 
 	

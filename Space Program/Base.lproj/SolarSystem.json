@@ -3,6 +3,7 @@
 		"name": "Sun",
 		"GM": 1e4,
 		"radius": 6.957,
+		"mass": 1.9885e30,
 		"color": "FFFFB9",
 		"children": 
 		[
@@ -16,6 +17,7 @@
 				"θt₀": 0.0,
 				"GM": 100,
 				"radius": 2.4397,
+				"mass": 3.301e23,
 				"color": "ffbf7b"
 			},
 			{
@@ -28,6 +30,7 @@
 				"θt₀": 0.0,
 				"GM": 100,
 				"radius": 6.0518,
+				"mass": 4.868e24,
 				"sceneFile": "Eve.dae",
 				"color": "ff00ff"
 			},
@@ -41,6 +44,7 @@
 				"θt₀": 0.0,
 				"GM": 200,
 				"radius": 6.371,
+				"mass": 5.972e24,
 				"sceneFile": "Earth.scn",
 				"color": "0066ff",
 				"children": 
@@ -55,6 +59,7 @@
 						"θt₀": 0.0,
 						"GM": 50,
 						"radius": 1.7371,
+						"mass": 7.32e22,
 						"sceneFile": "Mun.dae",
 						"color": "666666"
 					}
@@ -70,6 +75,7 @@
 				"θt₀": 0.0,
 				"GM": 120,
 				"radius": 3.3895,
+				"mass": 6.417e23,
 				"color": "f85139"
 			},
 			{
@@ -82,6 +88,7 @@
 				"θt₀": 0.0,
 				"GM": 60,
 				"radius": 0.473,
+				"mass": 9.393e20,
 				"color": "676871"
 			},
 			{
@@ -94,6 +101,7 @@
 				"θt₀": 0.0,
 				"GM": 800,
 				"radius": 69.911,
+				"mass": 1.898e27,
 				"color": "ffc599"
 			},
 			{
@@ -106,6 +114,7 @@
 				"θt₀": 0.0,
 				"GM": 100,
 				"radius": 1.1883e0,
+				"mass": 1.303e22,
 				"color": "fbfbfb"
 			},
 		]
