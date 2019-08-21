@@ -149,6 +149,7 @@
 				TargetAttributes = {
 					E07250032188243E004E4B07 = {
 						CreatedOnToolsVersion = 10.0;
+						LastSwiftMigration = 1030;
 					};
 				};
 			};
@@ -375,7 +376,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.felttip.Space-Program";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -393,7 +394,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.felttip.Space-Program";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
